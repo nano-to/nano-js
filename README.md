@@ -22,25 +22,32 @@ Accept non-custodial NANO payments on any website.
 </script>
 ```
 
+
+
 ### Pay Per View
 
-Monetize any website instantly. Works without backend. Content is still avaliable on DOM.
+Monetize any website element. 
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
 <script>
     nano.ppv({ 
-        element: '.premium',
+        element: '.premium', // all with class .premium
         amount: 0.1,
         address: 'YOUR_ADDRESS', 
         background: 'blue' 
         success: (block) => {
-        	// Element(s) .premium are automatically shown.
+        	// Element(s) are automatically shown.
         	console.log(block)
         }
     })
 </script>
 ```
+
+
+
+
+
 
 ### Nano.to Actions
 
@@ -58,10 +65,3 @@ Monetize any website instantly. Works without backend. Content is still avaliabl
     })
 </script>
 ```
-
-
-<<<<<<< HEAD
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-=======
-Copyright © [nano2dev](https://twitter.com/nano2dev).
->>>>>>> 8547d1b883d40948c2f3651661badd898115909f
