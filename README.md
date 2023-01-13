@@ -59,6 +59,7 @@ Monetize any website element.
 
 <script>
     nano.checkout({ 
+    	order,
         amount: 0.1,
         address: 'YOUR_ADDRESS', 
         api_key: 'YOUR_PUBLIC_API_KEY',
