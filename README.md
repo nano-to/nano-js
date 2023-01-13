@@ -1,15 +1,12 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano.to Developer Portal</h1>
-<h3 align="center">Beta</h3>
+<h1 align="center">Nano.to Developers (Beta)</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-## Nano.to Packages
+### One-time Charge
 
 Accept non-custodial NANO payments on any website.
-
-# One-time Charge
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
@@ -25,7 +22,9 @@ Accept non-custodial NANO payments on any website.
 </script>
 ```
 
-# Pay Per View
+### Pay Per View
+
+Monetize any website instantly. Works without backend. Content is still avaliable on DOM.
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
@@ -43,7 +42,7 @@ Accept non-custodial NANO payments on any website.
 </script>
 ```
 
-# Nano.to Actions
+### Nano.to Actions
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
