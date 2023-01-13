@@ -5,266 +5,265 @@
   |  _|      \ \/  \/ /     | |  | | 
  _| |_        \  /\  /     _| |_.' / 
 |_____|        \/  \/     |______.'  
-Fresh Web Designs.
 https://fwd.dev
 -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-            <title>
-                Dev - Nano.to
-            </title>
-            <style>
-                @import url('https://fonts.googleapis.com/css?family=Poppins');
-            
-            body {
-              font-family: 'Poppins';
-            }
-            
-            header > div {
-              padding: 0 25px;
-              display: flex;
-              justify-content:space-between;
-              align-items:center;
-              border-bottom: 1px solid lightgray;
-              height:55px;
-             
-            }
-            
-            .quote-generator {
-              min-width: 200px;
-              
-            }
-            
-            nav {
-              min-width: 600px;
-              
-            }
-            
-            nav ul {
-              list-style:none;
-              display:flex;
-              justify-content:space-between;
-              align-items: center;
-              }
-            
-            nav a {
-              text-decoration:none;
-              color:black;
-              margin:0px 7px;
-            }
-            
-            .blackHeart {
-              width: 20px;
-              margin-right: 10px;
-            }
-            
-            .npmLogo {
-              width: 80px;
-              margin-right: 10px;
-            }
-            
-            form .slot-form-container {
-               display: flex;
-               height:40px;
-               margin-right: 10px;
-            }
-            form{
-               width:100%;
-            }
-            
-            form input {
-              background-color: rgba(0,0,0,.05);
-              background-image:url(https://raw.githubusercontent.com/ironhack-labs/lab-html-exercise/master/images/magnifying-glass.png); 
-              background-size: 15px;
-              background-repeat: no-repeat; 
-              background-position: 10px;
-              width:100%;
-              min-width:200px;
-              padding-left:40px;
-              padding-right:30px;
-              font-family: 'Poppins';
-              font-size:15px;
-              letter-spacing:.5px;
-              border-style:none;
-            }
-            
-            form  button {
-              position:right;
-              flex-direction:flex-end;
-              background-color: #FB3B49;
-              color: white;
-              font-weight:light;
-              border-style:none;
-              font-family: 'Poppins';
-              padding: 12px 18px;
-            
-            }
-            
-            .container-search-login > a {
-              color: black;
-            
-            }
-            .nav-bar-links{
-              min-width: 155px;
-            }
-            .join-btn {
-              color:black;
-              text-align: center;
-              text-decoration: none;
-              border: .2px solid black;
-              padding: 5px 15px;
-              margin: 10px 10px;
-            }
-            
-            .login-btn {
-              color:black;
-              text-align: center;
-              text-decoration: none;
-              padding: 12px 0px;
-              margin: 10px 10px;
-            }
-            
-            #intro {
-              display: flex; 
-              height:600px;
-              background-color: rgba(232,217,217,.3);
-              flex-direction:column;
-              justify-content:center;
-              align-items: center;
-              flex-wrap:wrap;
-            }
-            h1 {
-              font-size:5em;
-              text-align: center;
-              width:900px;
-              height: 90px;
-              margin-bottom:60px;
-            }
-            
-            .intro-description {
-              max-width:450px;
-              text-align:center;
-              height: 50px;
-              flex-wrap:wrap;
-            }
-            
-            
-            .links {
-              display: flex; 
-              min-width:270px;
-            
-            }
-            
-            
-            .plans-btn {
-              background-color: #FB3B49;
-              box-shadow:8px 8px 0 rgba(251,59,73,.2);
-              color: white;
-              font-weight: bold;
-              letter-spacing: 0.5px;
-              text-align: center;
-              text-decoration: none;
-              padding: 12px 50px;
-              margin: 100px 15px;
-            }
-            
-            .joinfree-btn {
-              background-color: white;
-              color:black;
-              font-weight:900;
-              letter-spacing: 0.5px;
-              text-align: center;
-              text-decoration: none;
-              padding: 12px 50px;
-              margin: 100px 15px;
-            }
-            
-            #npm-description {
-              height:600px;
-              display: flex;
-              justify-content:center;
-              flex-direction:column;
-              align-items:center;
-              text-align: center;
-            
-            }
-            
-            .hexagon {
-              width: 275px;
-              padding: 20px 0px;
-            }
-            
-            h2 {
-               width:900px;
-                font-family: 'Poppins';
-                font-style: italic;
-                font-size:32px;
-                height: 20px;
-                background-color: rgba(255,204,53,.4);
-                transform: skew(9deg,0deg);
-                margin:50px 0px 20px 0px;
-                padding: 0px 20px 15px 20px;
-            }
-            
-            .npm-phrase {
-              font-family: 'Poppins';
-              font-size:14px;
-              width:700px;
-            }
-            
-            #features {
-               display:flex;
-               flex-direction:column;
-               align-items:center;
-            }
-            
-            h3 {
-              color:red;
-              font-family: 'Poppins';
-              font-size: 15px;
-              font-weight:900;
-            }
-            #features div{
-              display:flex;
-              flex-wrap:wrap;
-              justify-content: space-around;
-              align-content:space-between;
-              margin-left: 150px;  
-              margin-right: 150px;  
-              
-            }
-            #features article{
-               display:flex;
-               flex-direction:column;
-               align-items:center;
-            }
-            
-            #features p {
-              font-size:14px;
-              width:200px;
-            }
-            
-            #features img {
-              width: 35px;
-            
-            }
-            
-            .createorg-btn  {
-              width:200px;
-              background-color: black;
-              box-shadow:8px 8px 0 rgba(128,83,35,.2);
-              color: white;
-              font-weight: bold;
-              letter-spacing: 0.5px;
-              text-align: center;
-              text-decoration: none;
-              padding: 12px 50px;
-              margin: 50px 100px;
-            }
-            </style>
-        </meta>
+        <meta charset="utf-8"/>
+        <title>
+            Dev - Nano.to
+        </title>
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Poppins');
+        
+        body {
+          font-family: 'Poppins';
+        }
+        
+        header > div {
+          padding: 0 25px;
+          display: flex;
+          justify-content:space-between;
+          align-items:center;
+          border-bottom: 1px solid lightgray;
+          height:55px;
+         
+        }
+        
+        .quote-generator {
+          min-width: 200px;
+          
+        }
+        
+        nav {
+          min-width: 600px;
+          
+        }
+        
+        nav ul {
+          list-style:none;
+          display:flex;
+          justify-content:space-between;
+          align-items: center;
+          }
+        
+        nav a {
+          text-decoration:none;
+          color:black;
+          margin:0px 7px;
+        }
+        
+        .blackHeart {
+          width: 20px;
+          margin-right: 10px;
+        }
+        
+        .npmLogo {
+          width: 80px;
+          margin-right: 10px;
+        }
+        
+        form .slot-form-container {
+           display: flex;
+           height:40px;
+           margin-right: 10px;
+        }
+        form{
+           width:100%;
+        }
+        
+        form input {
+          background-color: rgba(0,0,0,.05);
+          background-image:url(https://raw.githubusercontent.com/ironhack-labs/lab-html-exercise/master/images/magnifying-glass.png); 
+          background-size: 15px;
+          background-repeat: no-repeat; 
+          background-position: 10px;
+          width:100%;
+          min-width:200px;
+          padding-left:40px;
+          padding-right:30px;
+          font-family: 'Poppins';
+          font-size:15px;
+          letter-spacing:.5px;
+          border-style:none;
+        }
+        
+        form  button {
+          position:right;
+          flex-direction:flex-end;
+          background-color: #FB3B49;
+          color: white;
+          font-weight:light;
+          border-style:none;
+          font-family: 'Poppins';
+          padding: 12px 18px;
+        
+        }
+        
+        .container-search-login > a {
+          color: black;
+        
+        }
+        .nav-bar-links{
+          min-width: 155px;
+        }
+        .join-btn {
+          color:black;
+          text-align: center;
+          text-decoration: none;
+          border: .2px solid black;
+          padding: 5px 15px;
+          margin: 10px 10px;
+        }
+        
+        .login-btn {
+          color:black;
+          text-align: center;
+          text-decoration: none;
+          padding: 12px 0px;
+          margin: 10px 10px;
+        }
+        
+        #intro {
+          display: flex; 
+          height:600px;
+          background-color: rgba(232,217,217,.3);
+          flex-direction:column;
+          justify-content:center;
+          align-items: center;
+          flex-wrap:wrap;
+        }
+        h1 {
+          font-size:5em;
+          text-align: center;
+          width:900px;
+          height: 90px;
+          margin-bottom:60px;
+        }
+        
+        .intro-description {
+          max-width:450px;
+          text-align:center;
+          height: 50px;
+          flex-wrap:wrap;
+        }
+        
+        
+        .links {
+          display: flex; 
+          min-width:270px;
+        
+        }
+        
+        
+        .plans-btn {
+          background-color: #FB3B49;
+          box-shadow:8px 8px 0 rgba(251,59,73,.2);
+          color: white;
+          font-weight: bold;
+          letter-spacing: 0.5px;
+          text-align: center;
+          text-decoration: none;
+          padding: 12px 50px;
+          margin: 100px 15px;
+        }
+        
+        .joinfree-btn {
+          background-color: white;
+          color:black;
+          font-weight:900;
+          letter-spacing: 0.5px;
+          text-align: center;
+          text-decoration: none;
+          padding: 12px 50px;
+          margin: 100px 15px;
+        }
+        
+        #npm-description {
+          height:600px;
+          display: flex;
+          justify-content:center;
+          flex-direction:column;
+          align-items:center;
+          text-align: center;
+        
+        }
+        
+        .hexagon {
+          width: 275px;
+          padding: 20px 0px;
+        }
+        
+        h2 {
+           width:900px;
+            font-family: 'Poppins';
+            font-style: italic;
+            font-size:32px;
+            height: 20px;
+            background-color: rgba(255,204,53,.4);
+            transform: skew(9deg,0deg);
+            margin:50px 0px 20px 0px;
+            padding: 0px 20px 15px 20px;
+        }
+        
+        .npm-phrase {
+          font-family: 'Poppins';
+          font-size:14px;
+          width:700px;
+        }
+        
+        #features {
+           display:flex;
+           flex-direction:column;
+           align-items:center;
+        }
+        
+        h3 {
+          color:red;
+          font-family: 'Poppins';
+          font-size: 15px;
+          font-weight:900;
+        }
+        #features div{
+          display:flex;
+          flex-wrap:wrap;
+          justify-content: space-around;
+          align-content:space-between;
+          margin-left: 150px;  
+          margin-right: 150px;  
+          
+        }
+        #features article{
+           display:flex;
+           flex-direction:column;
+           align-items:center;
+        }
+        
+        #features p {
+          font-size:14px;
+          width:200px;
+        }
+        
+        #features img {
+          width: 35px;
+        
+        }
+        
+        .createorg-btn  {
+          width:200px;
+          background-color: black;
+          box-shadow:8px 8px 0 rgba(128,83,35,.2);
+          color: white;
+          font-weight: bold;
+          letter-spacing: 0.5px;
+          text-align: center;
+          text-decoration: none;
+          padding: 12px 50px;
+          margin: 50px 100px;
+        }
+        </style>
+        <script src="https://metrics.bar/js/script.js" id="metrics" async defer></script>
     </head>
     <body>
         <header class="header">
