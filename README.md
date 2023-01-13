@@ -12,7 +12,7 @@ Accept non-custodial NANO payments on any website.
 <script src="https://dev.nano.to/pay.js"></script>
 
 <script>
-    nano.checkout({ 
+    nano.charge({ 
         amount: 0.1,
         address: 'YOUR_ADDRESS', 
         success: (block) => {
