@@ -44,12 +44,15 @@ Monetize any website element.
 </script>
 ```
 
+### Nano.to eCommerce (Private Beta)
 
+**Supported:**
 
+- Printful
+- WooCommerce
+- Shopify
 
-
-
-### Nano.to Actions
+> Contact hello@nano.to for Beta access.
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
