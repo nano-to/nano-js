@@ -1,7 +1,7 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 <h1 align="center">Nano.to Developer Portal</h1>
-<h3 align="center">Hosted on Github</h3>
+<h3 align="center">Beta</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
