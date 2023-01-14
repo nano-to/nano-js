@@ -6,17 +6,15 @@
 
 ## NanoPay.js
 
-Monetize any website element.
-
-> This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.
-
-#### Install
-
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
 ```
 
-#### Initialize
+Monetize any website element.
+
+> This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.
+
+#### Usage
 
 ```html
 <script>
