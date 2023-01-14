@@ -2,23 +2,28 @@
 
 <h1 align="center">NanoPay.js</h1>
 
+<h3 align="center">Monetize any website element.</h3>
+
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash.png)
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash2.png)
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash3.png)
 
+### Demo
+
+<a target="_blank" href="https://dev.nano.to">https://dev.nano.to</a>
+
+### Usage
+
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
 ```
 
-Monetize any website element.
-
 > This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.
 
-> **Demo:** <a target="_blank" href="https://dev.nano.to">https://dev.nano.to</a>
 
-#### Usage
+### Usage
 
 ```html
 <script>
@@ -41,7 +46,7 @@ Monetize any website element.
 </script>
 ```
 
-## License
+### License
 
 **Limited Commercial:**
 
@@ -53,6 +58,6 @@ Contact [@nano2dev](mailto:support@nano.to) for licensing questions.
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-## Stargazers
+### Stargazers
 
 [![Stargazers over time](https://starchart.cc/fwd/nano-pay.svg)](https://github.com/fwd/nano-pay)
