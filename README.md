@@ -5,7 +5,7 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-Monetize any website element. 
+> ## This tools is not for keeping secrets from the public. It was created to make it easier for users to support you.
 
 ## Install
 
