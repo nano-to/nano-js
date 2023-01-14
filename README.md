@@ -8,8 +8,6 @@
 
 ## NanoPay.js
 
-**Demo** https://dev.nano.to
-
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
 ```
@@ -17,6 +15,8 @@
 Monetize any website element.
 
 > This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.
+
+> **Demo:** <a target="_blank" href="https://dev.nano.to">https://dev.nano.to</a>
 
 #### Usage
 
