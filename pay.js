@@ -28,7 +28,7 @@
     
     window.nano.success = (element, data) => {
         var existing = document.getElementById('nano-pay')
-        var template = `<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.config.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"> <img src="/img/success.png" style=" max-width: 140px; "> <div style=" margin: 40px;opacity:1;">Complete</div><div style=" background: white; cursor: pointer; font-size: 21px; border-radius: 0; padding: 10px 25px; color: #000; " onclick="window.nano.cancel(); return">Done</div> <div style=" border-radius: 0; padding: 10px 25px; color: #fff; margin-top: 24px; opacity: 0.4; font-size: 17px; ">View Block</div></div>`;
+        var template = `<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"> <img src="/img/success.svg" style="max-width: 120px;filter: saturate(2);"> <div style="color: ${window.nano.dark_mode ? '#FFF' : '#000'}; margin: 40px;opacity:1;">Complete</div><div style="cursor: pointer; font-size: 21px; padding: 10px 25px; background: #1f9ce9; color: #FFF; min-width: 120px; text-align: center; border-radius: 5px;" onclick="window.nano.cancel(); return">Done</div> <div style=" border-radius: 0; padding: 10px 25px; color: ${window.nano.dark_mode ? '#FFF' : '#000'};; margin-top: 24px; opacity: 0.4; font-size: 17px; ">View Block</div></div>`;
         existing.innerHTML = template;
         var all = document.querySelectorAll(element);
         for (var i=0, max=all.length; i < max; i++) {
@@ -51,7 +51,8 @@
             setTimeout(() => {
                 window.nano.check = setInterval(async () => {
                     // console.log("Check")
-                    if (checks > 30) {
+                    if (checks > 2) {
+                        window.nano.success(element)
                         clearInterval(window.nano.check)
                     } else {
                         console.log("Check")
@@ -60,7 +61,6 @@
                     checks++
                 }, 2000)
                 // clearInterval(window.nano.check)
-                // window.nano.success(element)
             }, 2000)
         })
     }
