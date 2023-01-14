@@ -89,12 +89,13 @@
             // item.style['min-height'] = "150px"; 
             item.style.position = "relative"; 
             
-            let code = `<div class="nano-locked" style="position: absolute;background:${config.background || '#000'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 20px;min-height: 110px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
+            let code = `<div class="nano-locked" style="position: absolute;background:${config.background || '#000'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height: 110px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
     <div>
-        Unlock for ${config.amount} NANO.
+        ${ config.text || 'Unlock for ' + config.amount + ' NANO' }
     </div>
-    <div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}', '${config.title}')" style=" cursor: pointer; padding: 5px 20px; border-radius: 0; background: #FFF; margin: 10px 0; color: ${config.color || '#000'}">
-        Unlock
+    <div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}', '${config.title}', '${config.color}')" style="cursor: pointer; padding: 7px 25px; border-radius: 4px; margin: 10px 0; display: flex; align-items: center; justify-content: center; font-size: 22px; background: #FFF; color: ${config.color || '#000'}">
+        <img style="max-width: 24px; margin-right: 8px" src="/img/xno.svg" alt="">
+        ${ config.button || 'Purchase' }
     </div>
 </div>`
 
