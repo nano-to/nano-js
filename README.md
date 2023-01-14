@@ -17,8 +17,9 @@ Monetize any website element.
 ```html
 <script>
     nano.lock({ 
-        amount: 0.1,
+        debug: false,
         element: '.premium', // all with class .premium
+        amount: 0.1,
         text: 'Read',
         address: 'YOUR_ADDRESS', 
         success: (block) => {
