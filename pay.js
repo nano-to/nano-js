@@ -182,9 +182,11 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
         NANO
     </div>
     <span style="display: none; opacity: 0.3;font-size: 18px;margin-top: -25px;margin-bottom: 30px;text-transform: none;"> FEE(?): ${data.arbitrary} </span>
-    <div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">
+    <a href="nano:${address}?amount=${data.common}">
+    	<div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">
         Open Wallet 
     </div>
+    </a>
     <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
         Cancel
     </div>
