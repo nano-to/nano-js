@@ -1,19 +1,20 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">NanoPay.js (Beta)</h1>
-<h3 align="center">Non-Custodial, Backend Agnostic, Nano Payment Checking JS Library</h3>
+<h1 align="center">Nano.to Developer (Beta)</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-> ## This tools is not for keeping secrets from the public. It's to make it easier for users to support your work.
+## NanoPay.js
 
-## Install
+This tools is not for keeping secrets from the public. It's to make it easier for users to support your work.
+
+#### Install
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
 ```
 
-## Initialize
+#### Initialize
 
 ```html
 <script>
@@ -25,8 +26,8 @@
         address: 'YOUR_ADDRESS', 
         endpoint: 'https://nanolooker.com/api/rpc', // optional
         success: (block) => {
-        	// Element(s) are automatically shown.
-        	console.log(block)
+            // Element(s) are automatically shown.
+            console.log(block)
         }
     })
 </script>
