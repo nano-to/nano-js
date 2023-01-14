@@ -8,445 +8,709 @@
 NanoPay by @nano2dev 
 https://twitter.dev/@nano2dev
 -->
+
 <!DOCTYPE html>
 <html lang="en">
+    
     <head>
-        <meta charset="utf-8"/>
-        <title>
-            Dev - Nano.to
-        </title>
+        <meta charset="UTF-8">
+        <title>Birds: They&#39;re Great!</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
         <style>
-            @import url('https://fonts.googleapis.com/css?family=Poppins');
-        
-        body {
-          font-family: 'Poppins';
-        }
-        
-        header > div {
-          padding: 0 25px;
-          display: flex;
-          justify-content:space-between;
-          align-items:center;
-          border-bottom: 1px solid lightgray;
-          height:55px;
-         
-        }
-        
-        .quote-generator {
-          min-width: 200px;
-          
-        }
-        
-        nav {
-          min-width: 600px;
-          
-        }
-        
-        nav ul {
-          list-style:none;
-          display:flex;
-          justify-content:space-between;
-          align-items: center;
-          }
-        
-        nav a {
-          text-decoration:none;
-          color:black;
-          margin:0px 7px;
-        }
-        
-        .blackHeart {
-          width: 20px;
-          margin-right: 10px;
-        }
-        
-        .npmLogo {
-          width: 80px;
-          margin-right: 10px;
-        }
-        
-        form .slot-form-container {
-           display: flex;
-           height:40px;
-           margin-right: 10px;
-        }
-        form{
-           width:100%;
-        }
-        
-        form input {
-          background-color: rgba(0,0,0,.05);
-          background-image:url(https://raw.githubusercontent.com/ironhack-labs/lab-html-exercise/master/images/magnifying-glass.png); 
-          background-size: 15px;
-          background-repeat: no-repeat; 
-          background-position: 10px;
-          width:100%;
-          min-width:200px;
-          padding-left:40px;
-          padding-right:30px;
-          font-family: 'Poppins';
-          font-size:15px;
-          letter-spacing:.5px;
-          border-style:none;
-        }
-        
-        form  button {
-          position:right;
-          flex-direction:flex-end;
-          background-color: #FB3B49;
-          color: white;
-          font-weight:light;
-          border-style:none;
-          font-family: 'Poppins';
-          padding: 12px 18px;
-        
-        }
-        
-        .container-search-login > a {
-          color: black;
-        
-        }
-        .nav-bar-links{
-          min-width: 155px;
-        }
-        .join-btn {
-          color:black;
-          text-align: center;
-          text-decoration: none;
-          border: .2px solid black;
-          padding: 5px 15px;
-          margin: 10px 10px;
-        }
-        
-        .login-btn {
-          color:black;
-          text-align: center;
-          text-decoration: none;
-          padding: 12px 0px;
-          margin: 10px 10px;
-        }
-        
-        #intro {
-          display: flex; 
-          height:600px;
-          background-color: rgba(232,217,217,.3);
-          flex-direction:column;
-          justify-content:center;
-          align-items: center;
-          flex-wrap:wrap;
-        }
-        h1 {
-          font-size:5em;
-          text-align: center;
-          width:900px;
-          height: 90px;
-          margin-bottom:60px;
-        }
-        
-        .intro-description {
-          max-width:450px;
-          text-align:center;
-          height: 50px;
-          flex-wrap:wrap;
-        }
-        
-        
-        .links {
-          display: flex; 
-          min-width:270px;
-        
-        }
-        
-        
-        .plans-btn {
-          background-color: #FB3B49;
-          box-shadow:8px 8px 0 rgba(251,59,73,.2);
-          color: white;
-          font-weight: bold;
-          letter-spacing: 0.5px;
-          text-align: center;
-          text-decoration: none;
-          padding: 12px 50px;
-          margin: 100px 15px;
-        }
-        
-        .joinfree-btn {
-          background-color: white;
-          color:black;
-          font-weight:900;
-          letter-spacing: 0.5px;
-          text-align: center;
-          text-decoration: none;
-          padding: 12px 50px;
-          margin: 100px 15px;
-        }
-        
-        #npm-description {
-          height:600px;
-          display: flex;
-          justify-content:center;
-          flex-direction:column;
-          align-items:center;
-          text-align: center;
-        
-        }
-        
-        .hexagon {
-          width: 275px;
-          padding: 20px 0px;
-        }
-        
-        h2 {
-           width:900px;
-            font-family: 'Poppins';
-            font-style: italic;
-            font-size:32px;
-            height: 20px;
-            background-color: rgba(255,204,53,.4);
-            transform: skew(9deg,0deg);
-            margin:50px 0px 20px 0px;
-            padding: 0px 20px 15px 20px;
-        }
-        
-        .npm-phrase {
-          font-family: 'Poppins';
-          font-size:14px;
-          width:700px;
-        }
-        
-        #features {
-           display:flex;
-           flex-direction:column;
-           align-items:center;
-        }
-        
-        h3 {
-          color:red;
-          font-family: 'Poppins';
-          font-size: 15px;
-          font-weight:900;
-        }
-        #features div{
-          display:flex;
-          flex-wrap:wrap;
-          justify-content: space-around;
-          align-content:space-between;
-          margin-left: 150px;  
-          margin-right: 150px;  
-          
-        }
-        #features article{
-           display:flex;
-           flex-direction:column;
-           align-items:center;
-        }
-        
-        #features p {
-          font-size:14px;
-          width:200px;
-        }
-        
-        #features img {
-          width: 35px;
-        
-        }
-        
-        .createorg-btn  {
-          width:200px;
-          background-color: black;
-          box-shadow:8px 8px 0 rgba(128,83,35,.2);
-          color: white;
-          font-weight: bold;
-          letter-spacing: 0.5px;
-          text-align: center;
-          text-decoration: none;
-          padding: 12px 50px;
-          margin: 50px 100px;
-        }
-        </style>
-        <script src="https://metrics.bar/js/script.js" id="metrics" async defer></script>
-    </head>
-    <body>
-        <header class="header">
-            <div class="container-quote-nav">
-                <div class="quote-generator">
-                    <img alt="black heart" class="blackHeart" src="https://raw.githubusercontent.com/ironhack-labs/lab-html-exercise/master/images/black-heart.png"/>
-                    <span>
-                        Nifty Penguin Magic
-                    </span>
-                </div>
-                <nav class="nav-bar">
-                    <ul class="nav-bar-ul">
-                        <li>
-                            <a href="#npmenterprise">
-                                npm Enterprise
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#products">
-                                Products
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#solutions">
-                                Solutions
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#resources">
-                                Resources
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#docs">
-                                Docs
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#support">
-                                Support
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div class="container-search-login">
-                <img alt="NPM logo" class="npmLogo" src="https://raw.githubusercontent.com/ironhack-labs/lab-html-exercise/master/images/npm-logo.png">
-                    <form action="/register" class="search-form" method="post">
-                        <div class="slot-form-container">
-                            <input name="search" placeholder="Search packages" type="text">
-                                <button type="submit">
-                                    Search
-                                </button>
-                            </input>
-                        </div>
-                    </form>
-                    <div class="nav-bar-links">
-                        <a class="join-btn" href="#">
-                            Join
-                        </a>
-                        <a class="login-btn" href="#">
-                            Log In
-                        </a>
-                    </div>
-                </img>
-            </div>
-        </header>
-        <section id="intro" class="premium">
-            <h1>
-                <strong>
-                    Build amazing things
-                </strong>
-            </h1>
-            <article class="intro-description">
-                <p>
-                    Essential JavaScript development tools that help you go to market faster
-                            and build powerful applications using modern open source code.
-                </p>
-            </article>
-            <div class="links">
-                <a class="plans-btn" href="#">
-                    See plans
-                </a>
-                <a class="joinfree-btn" href="#">
-                    <span>
-                        <strong>
-                            Join for free
-                        </strong>
-                    </span>
-                </a>
-            </div>
-        </section>
-        <section  id="npm-description">
-            <img alt="hexagon icon" class="hexagon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRw%0D%0AOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2aWV3Qm94PSIwIDAgMTAwLjc5IDkwLjY4Ij48ZGVm%0D%0Acz48c3R5bGU+LmNscy0xe2lzb2xhdGlvbjppc29sYXRlO30uY2xzLTJ7b3BhY2l0eTowLjg7bWl4%0D%0ALWJsZW5kLW1vZGU6bHVtaW5vc2l0eTt9LmNscy0zLC5jbHMtNCwuY2xzLTUsLmNscy02e3N0cm9r%0D%0AZTojYzE4NzUyO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2Utd2lkdGg6MC4yN3B4O30uY2xz%0D%0ALTMsLmNscy02e29wYWNpdHk6MC4zO30uY2xzLTN7ZmlsbDp1cmwoI09yYW5nZV8yKTt9LmNscy00%0D%0ALC5jbHMtNXtvcGFjaXR5OjAuMjt9LmNscy00e2ZpbGw6dXJsKCNPcmFuZ2VfMi0yKTt9LmNscy01%0D%0Ae2ZpbGw6dXJsKCNPcmFuZ2VfMi0zKTt9LmNscy02e2ZpbGw6dXJsKCNPcmFuZ2VfMi00KTt9PC9z%0D%0AdHlsZT48bGluZWFyR3JhZGllbnQgaWQ9Ik9yYW5nZV8yIiB4MT0iLTE5NzMuOTMiIHkxPSItNTEz%0D%0ALjA0IiB4Mj0iLTE5MzIuMjciIHkyPSItNTEzLjA0IiBncmFkaWVudFRyYW5zZm9ybT0idHJhbnNs%0D%0AYXRlKDE5NjYuMzMgLTUxNC4wMikgcm90YXRlKC0zMC44MSkiIGdyYWRpZW50VW5pdHM9InVzZXJT%0D%0AcGFjZU9uVXNlIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNlM2JjYTkiLz48c3RvcCBv%0D%0AZmZzZXQ9IjAuNSIgc3RvcC1jb2xvcj0iI2Q4YTA4OSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1j%0D%0Ab2xvcj0iI2NmOGM3MiIvPjwvbGluZWFyR3JhZGllbnQ+PGxpbmVhckdyYWRpZW50IGlkPSJPcmFu%0D%0AZ2VfMi0yIiB4MT0iLTE5NzMuNTkiIHkxPSItNTI4LjY2IiB4Mj0iLTE4OTAuMzUiIHkyPSItNTI4%0D%0ALjY2IiB4bGluazpocmVmPSIjT3JhbmdlXzIiLz48bGluZWFyR3JhZGllbnQgaWQ9Ik9yYW5nZV8y%0D%0ALTMiIHgxPSItMTk3My41OSIgeTE9Ii00NzMuMTYiIHgyPSItMTg5MC4zNSIgeTI9Ii00NzMuMTYi%0D%0AIHhsaW5rOmhyZWY9IiNPcmFuZ2VfMiIvPjxsaW5lYXJHcmFkaWVudCBpZD0iT3JhbmdlXzItNCIg%0D%0AeDE9Ii0xOTMxLjg4IiB5MT0iLTQ4OC42NSIgeDI9Ii0xODkwLjIyIiB5Mj0iLTQ4OC42NSIgeGxp%0D%0Abms6aHJlZj0iI09yYW5nZV8yIi8+PC9kZWZzPjx0aXRsZT5iZXN0LW9wZW48L3RpdGxlPjxnIGNs%0D%0AYXNzPSJjbHMtMSI+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9Ikxh%0D%0AeWVyXzItMiIgZGF0YS1uYW1lPSJMYXllciAyIj48ZyBjbGFzcz0iY2xzLTIiPjxwb2x5Z29uIGNs%0D%0AYXNzPSJjbHMtMyIgcG9pbnRzPSI1Mi4wNSA0OC41NSAyOC41OSA5MC41NCAwLjE0IDQyLjg0IDIz%0D%0ALjYgMC44NSA1Mi4wNSA0OC41NSIvPjxwb2x5Z29uIGNsYXNzPSJjbHMtNCIgcG9pbnRzPSI0OC41%0D%0AOCA0Mi4wOSAwLjQ4IDQyLjc3IDIzLjg5IDAuODIgNzEuOTggMC4xNCA0OC41OCA0Mi4wOSIvPjxw%0D%0Ab2x5Z29uIGNsYXNzPSJjbHMtNSIgcG9pbnRzPSI3Ny4wMSA4OS43NiAyOC45MSA5MC40NCA1Mi4z%0D%0AMSA0OC40OCAxMDAuNDEgNDcuODEgNzcuMDEgODkuNzYiLz48cG9seWdvbiBjbGFzcz0iY2xzLTYi%0D%0AIHBvaW50cz0iMTAwLjY1IDQ3Ljk2IDc3LjE5IDg5Ljk1IDQ4Ljc0IDQyLjI1IDcyLjIgMC4yNiAx%0D%0AMDAuNjUgNDcuOTYiLz48L2c+PC9nPjwvZz48L2c+PC9zdmc+"/>
-            <div class="bring">
-                <h2>
-                    Bring the best of open source to your company
-                </h2>
-            </div>
-            <article class="npm-phrase">
-                <div>
-                    <p>
-                    npm is the tool used by over 11,000,000 JavaScript developers around the
-                            world. Your developers already use it. Your company depends on it. Create
-                            an Org and get more out of the tools your team already knows and loves.
-                </p>
-                </div>
-            </article>
-        </section>
-        <section class="premium2" id="features">
-            <div class="feature-bar">
-                <article class="title">
-                    <img alt="Image zero onfiguration" class="img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNS45%0D%0AOSAyMS4yMSI+PHRpdGxlPnplcm8tY29uZmlndXJhdGlvbjwvdGl0bGU+PGcgaWQ9IkxheWVyXzIi%0D%0AIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzItMiIgZGF0YS1uYW1lPSJMYXllciAy%0D%0AIj48cGF0aCBkPSJNMjMsMTkuMzZsLTMuNzktNC41OUwyMi41OCwxNGEuNTUuNTUsMCwwLDAsLjQz%0D%0ALS41LjU0LjU0LDAsMCwwLS4zMy0uNTZMMTMuNDcsOC44NGEuNTYuNTYsMCwwLDAtLjU5LjA4LjU5%0D%0ALjU5LDAsMCwwLS4xOS41NkwxNSwxOS4zYS41OS41OSwwLDAsMCwuNS40NEEuNTcuNTcsMCwwLDAs%0D%0AMTYsMTkuNGwxLjQxLTMuMTksMy43OSw0LjU5QTEuMTMsMS4xMywwLDAsMCwyMywxOS4zNloiLz48%0D%0AcGF0aCBkPSJNMi4xNCwxMS4zMkEyLjE0LDIuMTQsMCwwLDEsMCw5LjE4di03QTIuMTQsMi4xNCww%0D%0ALDAsMSwyLjE0LDBIMjMuODVBMi4xNCwyLjE0LDAsMCwxLDI2LDIuMTR2N2EyLjE0LDIuMTQsMCww%0D%0ALDEtMS42NiwyLjA5bC0yLjExLS43MWgxLjYzYTEuMzgsMS4zOCwwLDAsMCwxLjM4LTEuMzh2LTdB%0D%0AMS4zOCwxLjM4LDAsMCwwLDIzLjg1Ljc2SDIuMTRBMS4zOCwxLjM4LDAsMCwwLC43NiwyLjE0djdh%0D%0AMS4zOCwxLjM4LDAsMCwwLDEuMzgsMS4zOGg4LjU1bC4yNi43NloiLz48L2c+PC9nPjwvc3ZnPg=="/>
-                    <h3>
-                        Zero configuration
-                    </h3>
-                    <p>
-                        Create an org, add your team, and start collaborating. Nothing to configure,
-                                set up, or manage.
-                    </p>
-                </article>
-                <article class="title">
-                    <img alt="Image team management" class="img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOS40%0D%0AIDI3LjM4Ij48dGl0bGU+dGVhbS1tYW5hZ2VtZW50PC90aXRsZT48ZyBpZD0iTGF5ZXJfMiIgZGF0%0D%0AYS1uYW1lPSJMYXllciAyIj48ZyBpZD0iTGF5ZXJfMi0yIiBkYXRhLW5hbWU9IkxheWVyIDIiPjxw%0D%0AYXRoIGQ9Ik0xNC43NSw1LjIxYy0zLjQ1LDAtMy4zNi01LjQuMTEtNS4yQzE4LjE0LjE5LDE4LDUu%0D%0AMjEsMTQuNzUsNS4yMVptLS4wNi0uODloLjI1bC4yMiwwLC4yLS4wNkExLjY4LDEuNjgsMCwwLDAs%0D%0AMTUuNzMsNGgwYTIuNzMsMi43MywwLDAsMCwuMzUtLjMzLDEuODcsMS44NywwLDAsMCwuMzMtLjc1%0D%0ALDEuODgsMS44OCwwLDAsMCwwLS41OGgwYTIuNDIsMi40MiwwLDAsMC0uMS0uMzYsMi44MiwyLjgy%0D%0ALDAsMCwwLS4yMS0uMzhMMTYsMS41YTIuODUsMi44NSwwLDAsMC0uMjUtLjI1QTIsMiwwLDAsMCwx%0D%0ANS40LDEsMS43LDEuNywwLDAsMCwxNC44MS45aC0uMjdsLS4wNi4yMiwwLS4yMmExLjc4LDEuNzgs%0D%0AMCwwLDAtLjU0LjE3LDIuMjYsMi4yNiwwLDAsMC0uMjYuMTYsMS4zOCwxLjM4LDAsMCwwLS4zLjI5%0D%0AbC4xMS4yLS4xMy0uMThhMS44MywxLjgzLDAsMCwwLS4yMy4zOCwyLDIsMCwwLDAtLjEyLjQyLDIs%0D%0AMiwwLDAsMCwwLC40OSwyLDIsMCwwLDAsLjExLjQyLDIuNjQsMi42NCwwLDAsMCwuMi4zN2wuMDgu%0D%0AMDlhMi4yMSwyLjIxLDAsMCwwLC4yNi4yNCwxLjgsMS44LDAsMCwwLC4zNS4yMWwuMDUsMGgwQTEu%0D%0AMzgsMS4zOCwwLDAsMCwxNC42OSw0LjMyWiIvPjxwYXRoIGQ9Ik0xMS43MywxMC4wNWMtMS42OSww%0D%0ALTEuNDktMi4zMi0xLjMyLTMuNDlhMy4wNywzLjA3LDAsMCwxLDEuMTgtMmMuNjktLjQ4LDEuMjgu%0D%0AMzEuNTcuN2EyLjYsMi42LDAsMCwwLS4zOC4zNmwuMTIuMXYuMWwtLjE0LS4xNmEyLjI4LDIuMjgs%0D%0AMCwwLDAtLjQ0LDFsMCwuMmMwLC42NSwwLDEuMywwLDEuOTRsMCwuMTNoMGwwLDBoMGwuMDkuMTEu%0D%0AMDgsMCwwLS4xMS4xLS4wOCwwLC4yMS4xMywwaDYuMDhsLjEzLDAsLjA4LDBoMGwuMDUsMEwxOC4w%0D%0AOCw5bDAsMGgwbDAtLjA3LDAtLjEyYTIwLDIwLDAsMCwwLDAtMmgwQTQuNzQsNC43NCwwLDAsMCwx%0D%0AOCw2LjE1YTMuMTcsMy4xNywwLDAsMC0uMjctLjQ3bC0uMTQuMS4wOS0uMTdjLS4xOC0uMjItLjY4%0D%0ALS40OS0uNzQtLjc3LS4xMi0uNTUuNDEtLjYuNzctLjQyYTMuMTUsMy4xNSwwLDAsMSwxLjM1LDIu%0D%0AODFjMCwxLjI0LjE2LDIuNzEtMS40NSwyLjgyQzE1LjY3LDEwLjE5LDEzLjY4LDEwLjA1LDExLjcz%0D%0ALDEwLjA1WiIvPjxwYXRoIGQ9Ik00LjQ1LDIyLjQ4Yy0zLjQ2LDAtMy4zNi01LjQxLjExLTUuMjFD%0D%0ANy44NCwxNy40NSw3LjcsMjIuNDgsNC40NSwyMi40OFptMC0uOWguMjRhMi4xNywyLjE3LDAsMCww%0D%0ALC40Mi0uMTEsMiwyLDAsMCwwLC43Mi0uNTQsMS43LDEuNywwLDAsMCwuMzMtMS4zM2gwYTIuNDIs%0D%0AMi40MiwwLDAsMC0uMS0uMzYsMi44MiwyLjgyLDAsMCwwLS4yMS0uMzhsLS4wOC0uMDlhMi44NSwy%0D%0ALjg1LDAsMCwwLS4yNS0uMjUsMiwyLDAsMCwwLS4zNy0uMjEsMiwyLDAsMCwwLS40Mi0uMTJsLS4x%0D%0ANywwSDQuMjNsLS4wNS4yMiwwLS4yMmExLjcsMS43LDAsMCwwLS41NC4xNywyLjI2LDIuMjYsMCww%0D%0ALDAtLjI2LjE2LDIuMTMsMi4xMywwLDAsMC0uMzEuMjlsLjEyLjItLjEzLS4xOGEyLjE0LDIuMTQs%0D%0AMCwwLDAtLjIzLjM4LDIsMiwwLDAsMC0uMTIuNDIsMi42OCwyLjY4LDAsMCwwLDAsLjQ5LDIuOSwy%0D%0ALjksMCwwLDAsLjEyLjQyLDIuMDgsMi4wOCwwLDAsMCwuMi4zNmwwLDB2MGgwbDAsLjA1LjI1LjI1%0D%0AYTIuMzgsMi4zOCwwLDAsMCwuNDEuMjNoMGEyLjU0LDIuNTQsMCwwLDAsLjM3LjFINC40WiIvPjxw%0D%0AYXRoIGQ9Ik0xLjQzLDI3LjMxQy0uMjYsMjcuMzEtLjA2LDI1LC4xMSwyMy44MmEzLDMsMCwwLDEs%0D%0AMS4xOC0yYy42OS0uNDgsMS4yOC4zMi41Ny43YTIuMjIsMi4yMiwwLDAsMC0uMzguMzdsLjEyLjA5%0D%0AVjIzbC0uMTQtLjE2YTIuNTUsMi41NSwwLDAsMC0uMy41LDQuMjgsNC4yOCwwLDAsMC0uMTUuNTFs%0D%0AMCwuMjFWMjZsMCwuMTRIMWwuMTIuMTUsMCwwdjBsLjExLDBINy40NWwuMTQsMCwuMTEtLjA1LjA4%0D%0ALS4wNywwLS4wNWgwbDAtLjA3LDAtLjEyYTIwLDIwLDAsMCwwLDAtMi4wNWgwYTIuNzMsMi43Myww%0D%0ALDAsMC0uMTUtLjU2LDIuNDIsMi40MiwwLDAsMC0uMjYtLjQ3TDcuMywyM2wuMTEtLjE0Yy0uMTgt%0D%0ALjIyLS43LS41MS0uNzYtLjgtLjE0LS42Ny41NS0uNTcuODktLjMzYTMuMTQsMy4xNCwwLDAsMSwx%0D%0ALjIyLDIuNTJjLjA2LDEuMjYuMjMsMi45LTEuNDIsM0M1LjM5LDI3LjQ2LDMuMzgsMjcuMzEsMS40%0D%0AMywyNy4zMVoiLz48cGF0aCBkPSJNMjUuMDUsMjIuNDhjLTMuNDUsMC0zLjM2LTUuNDEuMTEtNS4y%0D%0AMUMyOC40NCwxNy40NSwyOC4zLDIyLjQ4LDI1LjA1LDIyLjQ4Wm0tLjA1LS45aC4yNGEyLjE3LDIu%0D%0AMTcsMCwwLDAsLjQyLS4xMWwuMi0uMS4xOC0uMTFoMGEzLjUxLDMuNTEsMCwwLDAsLjM0LS4zMywx%0D%0ALjg4LDEuODgsMCwwLDAsLjIxLS4zNmgwYTIuNzgsMi43OCwwLDAsMCwuMTItLjM4bC0uMTcsMGgu%0D%0AMThsLS4xLDAsLjEsMGExLjYsMS42LDAsMCwwLDAtLjQ5aDBhMi4xMiwyLjEyLDAsMCwwLS4xLS4z%0D%0ANiwyLjgyLDIuODIsMCwwLDAtLjIxLS4zOGwtLjA4LS4xLS4yNS0uMjRhMiwyLDAsMCwwLS4zNy0u%0D%0AMjEsMiwyLDAsMCwwLS40Mi0uMTJsLS4xNywwaC0uMjdsLS4wNi4yMiwwLS4yMmExLjc4LDEuNzgs%0D%0AMCwwLDAtLjU0LjE3LDIuMjYsMi4yNiwwLDAsMC0uMjYuMTYsMi4wNiwyLjA2LDAsMCwwLS4zLjI5%0D%0AbC4xMS4yLS4xMy0uMThhMi4xNCwyLjE0LDAsMCwwLS4yMy4zOCwxLjY3LDEuNjcsMCwwLDAtLjEy%0D%0ALjkxLDIsMiwwLDAsMCwuMTEuNDIsMS43NSwxLjc1LDAsMCwwLC4yOS40N2wuMjUuMjRhMiwyLDAs%0D%0AMCwwLC4zNS4ybC4wNSwwaDBhMi4wOSwyLjA5LDAsMCwwLC40My4xMUgyNVoiLz48cGF0aCBkPSJN%0D%0AMjIsMjcuMzFjLTEuNjksMC0xLjQ5LTIuMzItMS4zMi0zLjQ5YTMuMDcsMy4wNywwLDAsMSwxLjE4%0D%0ALTJjLjY5LS40OCwxLjI4LjMyLjU3LjdhMi42NSwyLjY1LDAsMCwwLS4zOC4zN2wuMTIuMDlWMjNs%0D%0ALS4xNC0uMTZhMy4xLDMuMSwwLDAsMC0uMjkuNSwyLjI5LDIuMjksMCwwLDAtLjE1LjUxbDAsLjIx%0D%0AVjI2bDAsLjE0aDBsLjExLjE1LDAsMHYwbC4xMSwwaDYuMTlsLjE0LDAsLjEyLS4wNS4wNy0uMDcs%0D%0AMC0uMDVoMGwwLS4wNywwLS4xMmEyMCwyMCwwLDAsMCwwLTIuMDVoMGE1LjEyLDUuMTIsMCwwLDAt%0D%0ALjE1LS41Niw0LjMxLDQuMzEsMCwwLDAtLjI2LS40N2wtLjE1LjFMMjgsMjIuOWMtLjE5LS4yMi0u%0D%0ANzEtLjUxLS43Ny0uOC0uMTQtLjY3LjU1LS41Ni45LS4zM2EzLjE3LDMuMTcsMCwwLDEsMS4yMiwy%0D%0ALjUyYy4wNSwxLjI2LjIyLDIuOS0xLjQzLDNDMjYsMjcuNDYsMjQsMjcuMzEsMjIsMjcuMzFaIi8+%0D%0APHBhdGggZD0iTTE0Ljc0LDE3LjQ2Yy0uNzksMC0uNDUtMi40LS40NS0yLjg0cy0uMzMtMi44NS40%0D%0ANS0yLjgzLjQ1LDIuMjkuNDUsMi43NFMxNS41MywxNy40NiwxNC43NCwxNy40NloiLz48cGF0aCBk%0D%0APSJNMTAuNiwxOS44NGMtLjc4LDAtLjM0LS43MywwLTFzLjk1LS41NSwxLjQyLS44MmwxLjcxLTFj%0D%0ALjI0LS4xNC42OS0uNTMsMS0uNTEuNzQuMDUuMzguNjksMCwuOTRhMTMuMjYsMTMuMjYsMCwwLDEt%0D%0AMS4zNy44bC0xLjc5LDFjLS4yNi4xNS0uNjguNTEtMSwuNTFaIi8+PHBhdGggZD0iTTE4Ljg3LDE5%0D%0ALjg0Yy0uMzMsMC0uNzQtLjM2LTEtLjUxbC0xLjcxLTFjLS40Ny0uMjctMS0uNTEtMS40Mi0uODJz%0D%0ALS43Ni0uOTIsMC0xYy4yOSwwLC43MS4zNC45My40N2wxLjY5LDFjLjUuMjgsMSwuNTQsMS41MS44%0D%0ANlMxOS42NywxOS44NCwxOC44NywxOS44NFoiLz48L2c+PC9nPjwvc3ZnPg=="/>
-                    <h3>
-                        Team management
-                    </h3>
-                    <p>
-                        Control who has access to what modules within your team namespace using
-                                straightforward team management capabilities.
-                    </p>
-                </article>
-                <article class="familiar-features">
-                    <img alt="Image familiar features" class="img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOS41%0D%0AOSAyMi43NSI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOm5vbmU7c3Ryb2tlOiMwMDA7c3Ryb2tl%0D%0ALW1pdGVybGltaXQ6MTA7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5mZWF0dXJlLXBhcml0eTwvdGl0%0D%0AbGU+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0iTGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzItMiIg%0D%0AZGF0YS1uYW1lPSJMYXllciAyIj48cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0yOS41OSwxNi42Mkgw%0D%0AIi8+PHJlY3QgeD0iMC4zMSIgd2lkdGg9IjExLjkzIiBoZWlnaHQ9IjYuODgiIHJ4PSIyLjQyIi8+%0D%0APHJlY3QgeD0iMC4zMSIgeT0iOCIgd2lkdGg9IjExLjkzIiBoZWlnaHQ9IjYuODgiIHJ4PSIyLjQy%0D%0AIi8+PHJlY3QgeD0iMTYuMzUiIHdpZHRoPSIxMS45MyIgaGVpZ2h0PSI2Ljg4IiByeD0iMi40MiIv%0D%0APjxyZWN0IHg9IjE2LjM1IiB5PSI4IiB3aWR0aD0iMTEuOTMiIGhlaWdodD0iNi44OCIgcng9IjIu%0D%0ANDIiLz48cG9seWxpbmUgcG9pbnRzPSIxNC40NyAxOS4wNCAxNS45IDIxLjM3IDE2Ljc1IDIyLjc1%0D%0AIDEyLjIgMjIuNzUgMTQuNDggMTkuMDQiLz48L2c+PC9nPjwvc3ZnPg=="/>
-                    <h3>
-                        Familiar features
-                    </h3>
-                    <p>
-                        npm Orgs has 100% parity with all the public npm registry features your
-                                developers already use.
-                    </p>
-                </article>
-                <article class="title">
-                    <img alt="Image npm audit" class="img" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNi45%0D%0AOCAyMS4yNiI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsLXJ1bGU6ZXZlbm9kZDt9PC9zdHlsZT48%0D%0AL2RlZnM+PHRpdGxlPm5wbS1hdWRpdDwvdGl0bGU+PGcgaWQ9IkxheWVyXzIiIGRhdGEtbmFtZT0i%0D%0ATGF5ZXIgMiI+PGcgaWQ9IkxheWVyXzItMiIgZGF0YS1uYW1lPSJMYXllciAyIj48cGF0aCBkPSJN%0D%0AMCwxNS41M1Y1LjgxYTUuODIsNS44MiwwLDAsMSwxMS42My0uMDhoMy44MUE1Ljc3LDUuNzcsMCwx%0D%0ALDEsMjcsNS44MXY5LjcyYTUuNzcsNS43NywwLDAsMS0xMS41NCwwVjExLjg5SDExLjYzdjMuNjRB%0D%0ANS44Miw1LjgyLDAsMCwxLDAsMTUuNTNabTE2Ljc0LS4wOUE0LjUyLDQuNTIsMCwwLDAsMjEuMTcs%0D%0AMjBhNC4zOCw0LjM4LDAsMCwwLDQuNDItNC40Miw0LjExLDQuMTEsMCwwLDAtMS4zLTMuMTIsNC4z%0D%0AOCw0LjM4LDAsMCwwLTYuMjQsMCw0LjYyLDQuNjIsMCwwLDAtMS4zMSwzWm0tMTUuMzUsMGE0LjQz%0D%0ALDQuNDMsMCwxLDAsOC44NS4wOSw0LjE1LDQuMTUsMCwwLDAtMS4zLTMuMTIsNC4zOSw0LjM5LDAs%0D%0AMCwwLTYuMjUsMCw0LjI1LDQuMjUsMCwwLDAtMS4zLDNaIi8+PHBhdGggY2xhc3M9ImNscy0xIiBk%0D%0APSJNNi45NCwxMi4wNmMxLjgyLjc4LDMuMjEsMi42OSwxLjgyLDQuNTFaIi8+PHBhdGggY2xhc3M9%0D%0AImNscy0xIiBkPSJNMjIuNTYsMTIuMDZjMS44Mi43OCwzLjIxLDIuNjksMS44Miw0LjUxWiIvPjwv%0D%0AZz48L2c+PC9zdmc+"/>
-                    <h3>
-                        <strong>
-                            npm audit
-                        </strong>
-                    </h3>
-                    <p>
-                        Enjoy the security auditing features built into the npm client, a zero-friction
-                                way to make open source software safer.
-                    </p>
-                </article>
-            </div>
-            <a class="createorg-btn" href="#">
-                Create and Org
-            </a>
-        </section>
-    </body>
-    <script src="/pay.js"></script>
-    <script>
-
-        nano.sell({ 
-            element: '.premium',
-            amount: 0.001,
-            debug: true,
-            // free: true,
-            text: 'Read',
-            address: 'nano_1bank1q3q7x8rimo3hf6qu6ezq3fmtximyt8kggtfaosg8kyr51qsdkm8g45', 
-            background: 'grey',
-            success: () => {
-                console.log("Yooo")
+            :root {
+                --color-bg: #3b3a3a;
+                --color-text: #c4c5c5;
+                --color-white: #fff;
+                --color-accent: #ff8b02;
+                --article-height: 100%;
+                --article-ratio: 2;
             }
-        })
+            
+            ::selection {
+                background: #ffffff20;
+            }
+            
+            * {
+                padding: 0;
+                margin: 0;
+                box-sizing: border-box;
+            }
+            
+            html {
+                scroll-behavior: smooth;
+            }
+            
+            body {
+                width: 100%;
+                height: 100%;
+                background: var(--color-bg);
+                color: var(--color-text);
+                font-family: "Cormorant", serif;
+                font-size: 16px;
+            }
+            
+            header {
+                width: 100%;
+                height: 100vh;
+                background: linear-gradient(
+                        180deg,
+                        rgba(59, 58, 58, 0) 0%,
+                        rgba(59, 58, 58, 0.0208296) 4.7%,
+                        rgba(59, 58, 58, 0.0439704) 8.9%,
+                        rgba(59, 58, 58, 0.0704) 12.8%,
+                        rgba(59, 58, 58, 0.101096) 16.56%,
+                        rgba(59, 58, 58, 0.137037) 20.37%,
+                        rgba(59, 58, 58, 0.1792) 24.4%,
+                        rgba(59, 58, 58, 0.228563) 28.83%,
+                        rgba(59, 58, 58, 0.286104) 33.84%,
+                        rgba(59, 58, 58, 0.3528) 39.6%,
+                        rgba(59, 58, 58, 0.42963) 46.3%,
+                        rgba(59, 58, 58, 0.51757) 54.1%,
+                        rgba(59, 58, 58, 0.6176) 63.2%,
+                        rgba(59, 58, 58, 0.730696) 73.76%,
+                        rgba(59, 58, 58, 0.857837) 85.97%,
+                        #3b3a3a 100%
+                    ),
+                    url(https://thumbs.gfycat.com/CanineSociableCurlew-size_restricted.gif) center
+                        center;
+                background-size: cover;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                padding: 160px 80px 56px;
+            }
+            
+            header h1 {
+                text-align: center;
+                font-size: 240px;
+                font-style: italic;
+                font-weight: 400;
+                color: var(--color-white);
+                mix-blend-mode: exclusion;
+                line-height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+            
+            header h1 span {
+                margin: 0 6px;
+            }
+            
+            nav {
+                width: 100%;
+                /*    border: 1px solid white;*/
+                z-index: 1000;
+                color: var(--color-text);
+                padding: 40px 64px 32px;
+                position: fixed;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                background: linear-gradient(
+                    180deg,
+                    #3b3a3a 0%,
+                    #3b3a3a 0.75%,
+                    rgba(59, 58, 58, 0.99763) 2.92%,
+                    rgba(59, 58, 58, 0.992) 6.37%,
+                    rgba(59, 58, 58, 0.981037) 10.97%,
+                    rgba(59, 58, 58, 0.962963) 16.59%,
+                    rgba(59, 58, 58, 0.936) 23.1%,
+                    rgba(59, 58, 58, 0.89837) 30.37%,
+                    rgba(59, 58, 58, 0.848296) 38.27%,
+                    rgba(59, 58, 58, 0.784) 46.66%,
+                    rgba(59, 58, 58, 0.703704) 55.41%,
+                    rgba(59, 58, 58, 0.60563) 64.39%,
+                    rgba(59, 58, 58, 0.488) 73.47%,
+                    rgba(59, 58, 58, 0.349037) 82.52%,
+                    rgba(59, 58, 58, 0.186963) 91.41%,
+                    rgba(59, 58, 58, 0) 100%
+                );
+            }
+            
+            nav a#home {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                font-family: "Anonymous Pro";
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                text-align: center;
+                z-index: 2;
+                color: var(--color-text);
+                text-decoration: none;
+            }
+            
+            nav #home svg {
+                width: 24px;
+                height: 24px;
+                margin-right: 16px;
+                fill: var(--color-text);
+            }
+            
+            #menuToggle {
+                width: 32px;
+                height: 32px;
+                z-index: 1;
+                -webkit-user-select: none;
+                user-select: none;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+            
+            #menuToggle input {
+                display: block;
+                width: 32px;
+                height: 32px;
+                position: absolute;
+                cursor: pointer;
+                opacity: 0;
+                z-index: 2;
+                -webkit-touch-callout: none;
+            }
+            
+            #menuToggle span {
+                display: block;
+                width: 32px;
+                height: 2px;
+                position: relative;
+            
+                background: var(--color-text);
+                z-index: 1;
+                transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1),
+                    background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.55s ease;
+            }
+            
+            #menuToggle span:first-child {
+                transform-origin: center center;
+            }
+            
+            #menuToggle span:nth-last-child {
+                transform-origin: center center;
+            }
+            
+            #menuToggle input:checked ~ span {
+                opacity: 1;
+                transform: translate(0px, 0px) rotate(45deg);
+            }
+            
+            #menuToggle input:checked ~ span:nth-child(2) {
+                opacity: 0;
+                transform: rotate(0deg) scale(0, 0);
+            }
+            
+            #menuToggle input:checked ~ span:nth-last-child(2) {
+                transform: translate(0px, -10px) rotate(-45deg);
+            }
+            
+            #menu {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background: #171717;
+                list-style: none;
+                counter-reset: li;
+                list-style-position: outside;
+                -webkit-font-smoothing: antialiased;
+                transform-origin: 0% 0%;
+                transform: translate(100%, 0);
+                transition: all 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 160px 80px 56px;
+            }
+            
+            #menu a li {
+                font-style: italic;
+                font-weight: 400;
+                font-size: 60px;
+                line-height: 100%;
+                color: var(--color-text);
+                margin-bottom: 24px;
+                counter-increment: li;
+                text-align: center;
+                margin-left: 24px;
+            }
+            
+            #menu a {
+                text-decoration: none;
+            }
+            
+            #menu a:hover li {
+                text-decoration: none;
+                color: var(--color-white);
+            }
+            
+            li::before {
+                content: counter(li, decimal-leading-zero) ".";
+                color: var(--color-accent);
+                margin-left: -24px;
+                margin-right: 24px;
+            }
+            
+            #menuToggle input:checked ~ ol {
+                transform: none;
+            }
+            
+            article {
+                width: calc(var(--article-height) / var(--article-ratio));
+                height: 100%;
+                box-sizing: border-box;
+                margin: auto;
+                position: relative;
+                margin-bottom: 120px;
+            }
+            
+            .hero-image {
+                max-width: 100%;
+            }
+            
+            img[class^="editorial-image"] {
+                width: 50%;
+                max-width: 400px;
+                margin-bottom: 32px;
+                aspect-ratio: 2 / 3;
+            }
+            
+            .editorial-image-left {
+                float: left;
+                margin-right: 32px;
+                margin-left: -80px;
+            }
+            
+            .editorial-image-right {
+                float: right;
+                margin-left: 32px;
+                margin-right: -80px;
+            }
+            
+            h2 {
+                font-style: italic;
+                font-weight: 400;
+                font-size: 64px;
+                line-height: 100%;
+                color: var(--color-text);
+                margin-bottom: 32px;
+                padding-top: 120px;
+            }
+            
+            h2:before {
+                position: absolute;
+                margin-left: -80px;
+                color: var(--color-accent);
+            }
+            
+            h2:nth-of-type(1):before {
+                content: "01.";
+            }
+            
+            h2:nth-of-type(2):before {
+                content: "02.";
+            }
+            
+            h2:nth-of-type(3):before {
+                content: "03.";
+            }
+            
+            h2:nth-of-type(4):before {
+                content: "04.";
+            }
+            
+            h2:nth-of-type(5):before {
+                content: "05.";
+            }
+            
+            p {
+                font-size: 20px;
+                line-height: 32px;
+                margin-bottom: 32px;
+            }
+            
+            blockquote {
+                font-family: "Anonymous Pro";
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                margin: 16px 54px 48px;
+                border-left: 2px solid var(--color-accent);
+                padding: 0 32px;
+                display: inline-block;
+                padding-right: 0;
+            }
+            
+            blockquote span {
+                float: right;
+                margin-top: 8px;
+            }
+            
+            @media only screen and (max-width: 1200px) {
+                :root {
+                    --article-ratio: 1.5;
+                }
+            
+                header h1 {
+                    font-size: 220px;
+                    text-align: center;
+                    justify-content: center;
+                    align-items: center;
+                }
+            
+                #menu a li {
+                    font-size: 40px;
+                    margin-bottom: 40px !important;
+                }
+            }
+            
+            @media only screen and (max-width: 600px) {
+                nav {
+                    padding: 32px;
+                }
+            
+                h2 {
+                    font-size: 40px;
+                }
+            
+                h2:before {
+                    margin-left: -56px;
+                }
+            
+                img {
+                    min-width: calc(100% + 112px);
+                    margin-left: -56px !important;
+                    margin-right: 0 !important;
+                    float: none !important;
+                }
+            
+                blockquote {
+                    margin: 16px 0 48px;
+                }
+            
+                header h1 {
+                    font-size: 200px;
+                }
+            
+                #menu a li {
+                    font-size: 32px;
+                }
+            }
+            
+            @media only screen and (max-height: 680px) {
+                header h1 {
+                    font-size: 40vh;
+                }
+                #menu a li {
+                    font-size: 24px;
+                    margin-bottom: 16px !important;
+                }
+            }
+            
+            @media only screen and (max-height: 680px) and (max-width: 1200px) {
+                header h1 {
+                    font-size: 20vh;
+                }
+            }
+        </style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+    </head>
+    
+    <body>
+        <!-- partial:index.partial.html -->
+        <nav>   <a id="home" href="#">
+        <svg viewBox="0 0 100 100">
+            <path d="M100 34.2c-.4-2.6-3.3-4-5.3-5.3-3.6-2.4-7.1-4.7-10.7-7.1-8.5-5.7-17.1-11.4-25.6-17.1-2-1.3-4-2.7-6-4-1.4-1-3.3-1-4.8 0-5.7 3.8-11.5 7.7-17.2 11.5L5.2 29C3 30.4.1 31.8 0 34.8c-.1 3.3 0 6.7 0 10v16c0 2.9-.6 6.3 2.1 8.1 6.4 4.4 12.9 8.6 19.4 12.9 8 5.3 16 10.7 24 16 2.2 1.5 4.4 3.1 7.1 1.3 2.3-1.5 4.5-3 6.8-4.5 8.9-5.9 17.8-11.9 26.7-17.8l9.9-6.6c.6-.4 1.3-.8 1.9-1.3 1.4-1 2-2.4 2-4.1V37.3c.1-1.1.2-2.1.1-3.1 0-.1 0 .2 0 0zM54.3 12.3L88 34.8 73 44.9 54.3 32.4V12.3zm-8.6 0v20L27.1 44.8 12 34.8l33.7-22.5zM8.6 42.8L19.3 50 8.6 57.2V42.8zm37.1 44.9L12 65.2l15-10.1 18.6 12.5v20.1zM50 60.2L34.8 50 50 39.8 65.2 50 50 60.2zm4.3 27.5v-20l18.6-12.5 15 10.1-33.6 22.4zm37.1-30.5L80.7 50l10.8-7.2-.1 14.4z"></path>
+        </svg>
+        Jackie Zen
+    </a>
 
-        // nano.ppv({ 
-        //     element: '.premium2',
-        //     amount: 0.1,
-        //     title: 'My Butt',
-        //     address: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-        //     background: 'blue' 
-        // })
+            <div id="menuToggle">
+                <input type="checkbox" />   <span></span>
+    <span></span>
+    <span></span>
 
-    </script>
+                <ol id="menu">  <a href="#one">
+                <li>You Gotta Love Birds</li>
+            </a>
+    <a href="#two">
+                <li>Flapping Around, Flying All Over</li>
+            </a>
+    <a href="#three">
+                <li>Building Nests, Eating Bugs</li>
+            </a>
+    <a href="#four">
+                <li>Singing Little Songs, Looking Fancy</li>
+            </a>
+    <a href="#five">
+                <li>Birds: They're Great!</li>
+            </a>
+
+                </ol>
+            </div>
+        </nav>
+        <header>
+                <h1><span>Birds,</span><span>Birds,</span><span>Birds!</span></h1>
+
+        </header>
+        <article class="premium">
+                <h2 id="one">You Gotta Love Birds</h2>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet
+                ut quam sit amet vehicula. Donec sit amet facilisis quam. Integer mollis,
+                urna accumsan tempor hendrerit, risus neque tincidunt neque, in aliquam
+                elit eros quis tortor. Sed id venenatis massa, ut malesuada sem. Nam lacinia
+                sodales tellus nec efficitur. Vestibulum fringilla nisl ac iaculis ultricies.
+                Sed commodo imperdiet metus vitae molestie. In laoreet rutrum pretium.
+                Aenean a enim ac lacus tincidunt pellentesque ac a tellus.</p>
+            <img src="https://images.unsplash.com/photo-1601168049797-351a4abb0b2f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY1MDY1NDk3Nw&ixlib=rb-1.2.1&q=85"
+            alt="a green hummingbird flying among yellow flowers" title="Photo by Geronimo Giqueaux for Unsplash"
+            class="editorial-image-right">
+            <p>Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
+                a condimentum. Praesent tincidunt, purus ac placerat posuere, lacus risus
+                suscipit lacus, et sollicitudin turpis metus in enim. Vestibulum at imperdiet
+                magna, ac vehicula magna. Praesent placerat sapien bibendum, faucibus lectus
+                at, euismod elit. Nunc velit est, faucibus et faucibus eu, tempus non nisi.
+                Fusce hendrerit auctor lectus non auctor. Vestibulum luctus metus eget
+                sapien volutpat congue. Fusce eget augue mauris. Ut egestas mi et feugiat
+                sagittis. Cras ac convallis elit.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet
+                ut quam sit amet vehicula. Donec sit amet facilisis quam. Integer mollis,
+                urna accumsan tempor hendrerit, risus neque tincidunt neque, in aliquam
+                elit eros quis tortor. Sed id venenatis massa, ut malesuada sem. Nam lacinia
+                sodales tellus nec efficitur. Vestibulum fringilla nisl ac iaculis ultricies.
+                Sed commodo imperdiet metus vitae molestie. In laoreet rutrum pretium.
+                Aenean a enim ac lacus tincidunt pellentesque ac a tellus.</p>
+            <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
+                interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
+                et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
+                Donec rhoncus nec orci eget rutrum.</p>
+                <h2 id="two">Flapping Around, Flying All Over</h2>
+
+            <p>Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
+                a condimentum. Praesent tincidunt, purus ac placerat posuere, lacus risus
+                suscipit lacus, et sollicitudin turpis metus in enim. Vestibulum at imperdiet
+                magna, ac vehicula magna. Praesent placerat sapien bibendum, faucibus lectus
+                at, euismod elit. Nunc velit est, faucibus et faucibus eu, tempus non nisi.
+                Fusce hendrerit auctor lectus non auctor. Vestibulum luctus metus eget
+                sapien volutpat congue. Fusce eget augue mauris. Ut egestas mi et feugiat
+                sagittis. Cras ac convallis elit.</p>
+            <img src="https://images.unsplash.com/photo-1574068468668-a05a11f871da?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY0ODkzOTc5OA&ixlib=rb-1.2.1&q=85"
+            alt="A hummingbird flying among yellow flowers. " title="Photo by Deepak Nautiyal for Unsplash"
+            class="editorial-image-left">
+            <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
+                in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
+                tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
+                vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
+                Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
+                quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
+                ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
+            <blockquote
+            class="pullquote">"Be like the bird who, pausing in her flight awhile on boughs too slight,
+                feels them give way beneath her, and yet sings, knowing she hath wings."
+                <br><span>&mdash; Victor Hugo</span>
+                </blockquote>
+                <p>Donec eu eros augue. Fusce blandit sed lacus ut pretium. Vivamus lacus
+                    ligula, fringilla sit amet nibh non, bibendum auctor nisi. In quis mollis
+                    mauris. Aliquam eget arcu ut arcu rhoncus posuere nec sit amet mauris.
+                    Integer consequat felis vitae quam ultricies, eu ultrices mi finibus. Cras
+                    eget nunc at nisl venenatis lacinia. Duis non tempus purus. Donec ut tristique
+                    turpis. Nunc non lacinia lectus, in ullamcorper erat.</p>
+                <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
+                    interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                    iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
+                    et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
+                    Donec rhoncus nec orci eget rutrum.</p>
+                <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
+                    in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
+                    tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
+                    vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
+                    Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
+                    quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
+                    ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
+                <p>Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
+                    a condimentum. Praesent tincidunt, purus ac placerat posuere, lacus risus
+                    suscipit lacus, et sollicitudin turpis metus in enim. Vestibulum at imperdiet
+                    magna, ac vehicula magna. Praesent placerat sapien bibendum, faucibus lectus
+                    at, euismod elit. Nunc velit est, faucibus et faucibus eu, tempus non nisi.
+                    Fusce hendrerit auctor lectus non auctor. Vestibulum luctus metus eget
+                    sapien volutpat congue. Fusce eget augue mauris. Ut egestas mi et feugiat
+                    sagittis. Cras ac convallis elit.</p>
+                <p>Etiam ac pretium erat. Nullam mollis, enim sed pretium pellentesque, urna
+                    dolor faucibus nisi, interdum luctus neque eros blandit justo. Morbi non
+                    urna scelerisque, condimentum ex nec, bibendum sem. Pellentesque ullamcorper
+                    quis dui non condimentum. Ut aliquam neque metus, in suscipit lorem volutpat
+                    eget. Mauris ac dictum nulla, eu suscipit justo.
+                    <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
+                        in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
+                        tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
+                        vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
+                        Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
+                        quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
+                        ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
+                        <h2 id="three">Building Nests, Eating Bugs</h2>
+
+                    <p>Mauris eu nunc a dolor aliquam molestie vitae non turpis. Curabitur mollis
+                        vehicula euismod. Mauris eleifend, ipsum nec tempor condimentum, massa
+                        arcu lobortis erat, eget iaculis turpis turpis id nisi. Fusce iaculis velit
+                        nibh, a molestie neque placerat interdum. Phasellus eget erat placerat,
+                        viverra quam vitae, viverra ligula. Pellentesque habitant morbi tristique
+                        senectus et netus et malesuada fames ac turpis egestas. Nulla dictum, enim
+                        vitae eleifend vehicula, augue arcu dapibus metus, non accumsan nulla urna
+                        id mauris. Nunc non mi turpis. Nullam bibendum magna in metus tincidunt,
+                        vel dapibus neque placerat. Orci varius natoque penatibus et magnis dis
+                        parturient montes, nascetur ridiculus mus. Vestibulum felis libero, consequat
+                        vel congue et, ultricies ornare arcu. Mauris vitae felis vitae nulla ornare
+                        condimentum.</p>
+                    <img src="https://images.unsplash.com/photo-1602426172655-f97717c8d8e4?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY1MDY1NTQ1MA&ixlib=rb-1.2.1&q=85"
+                    alt="A robin perched on a tree branch. " title="Photo by Alfred Kenneally for Unsplash"
+                    class="editorial-image-right">
+                    <p>Nunc nisi justo, lobortis venenatis consectetur vel, porttitor in felis.
+                        Praesent tincidunt, mi non tincidunt egestas, libero risus finibus ex,
+                        volutpat facilisis nulla libero ut arcu. Proin consequat ligula non libero
+                        viverra, ut semper sem rhoncus. Morbi at viverra nisl, in convallis lorem.
+                        Proin ut dapibus ex, eu hendrerit mi. Donec tempus arcu quis purus consequat,
+                        sed congue nulla consequat. Donec tempor posuere lacus eget placerat. Maecenas
+                        euismod congue ornare. Vestibulum tincidunt eros ut faucibus blandit.</p>
+                    <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
+                        in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
+                        tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
+                        vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
+                        Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
+                        quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
+                        ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
+                    <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
+                        interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                        iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
+                        et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
+                        Donec rhoncus nec orci eget rutrum.</p>
+                        <h2 id="four">Singing Little Songs, Looking Fancy</h2>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet
+                        ut quam sit amet vehicula. Donec sit amet facilisis quam. Integer mollis,
+                        urna accumsan tempor hendrerit, risus neque tincidunt neque, in aliquam
+                        elit eros quis tortor. Sed id venenatis massa, ut malesuada sem. Nam lacinia
+                        sodales tellus nec efficitur. Vestibulum fringilla nisl ac iaculis ultricies.
+                        Sed commodo imperdiet metus vitae molestie. In laoreet rutrum pretium.
+                        Aenean a enim ac lacus tincidunt pellentesque ac a tellus.</p>
+                    <blockquote
+                    class="pullquote">"I'd rather learn from one bird how to sing than teach ten thousand stars
+                        how not to dance"
+                        <br> <span>&mdash; e.e. cummings</span>
+                        </blockquote>
+                        <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
+                            in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
+                            tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
+                            vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
+                            Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
+                            quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
+                            ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
+                        <p>Etiam ac pretium erat. Nullam mollis, enim sed pretium pellentesque, urna
+                            dolor faucibus nisi, interdum luctus neque eros blandit justo. Morbi non
+                            urna scelerisque, condimentum ex nec, bibendum sem. Pellentesque ullamcorper
+                            quis dui non condimentum. Ut aliquam neque metus, in suscipit lorem volutpat
+                            eget. Mauris ac dictum nulla, eu suscipit justo.
+                            <p>Pellentesque suscipit metus et lorem pharetra vehicula. Maecenas luctus
+                                urna sed posuere feugiat. Proin pharetra eu nisl et vestibulum. Maecenas
+                                sollicitudin at velit non faucibus. Suspendisse faucibus at tellus rutrum
+                                tempus. Proin sollicitudin vehicula dolor sit amet efficitur. Nulla finibus
+                                massa a consectetur dapibus.</p>
+                            <img src="https://images.unsplash.com/photo-1620694563886-c3a80ec55f41?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY1MDY1NDQ3Ng&ixlib=rb-1.2.1&q=85"
+                            alt="Yellow Warbler perched in a tree with white flowers. " title="Photo by Mark Olsen for Unsplash"
+                            class="editorial-image-left">
+                            <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
+                                interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                                iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
+                                et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
+                                Donec rhoncus nec orci eget rutrum.</p>
+                            <p>Nunc nisi justo, lobortis venenatis consectetur vel, porttitor in felis.
+                                Praesent tincidunt, mi non tincidunt egestas, libero risus finibus ex,
+                                volutpat facilisis nulla libero ut arcu. Proin consequat ligula non libero
+                                viverra, ut semper sem rhoncus. Morbi at viverra nisl, in convallis lorem.
+                                Proin ut dapibus ex, eu hendrerit mi. Donec tempus arcu quis purus consequat,
+                                sed congue nulla consequat. Donec tempor posuere lacus eget placerat. Maecenas
+                                euismod congue ornare. Vestibulum tincidunt eros ut faucibus blandit.</p>
+                            <p>Donec vel tempor velit. Nulla facilisi. Praesent feugiat arcu risus, sollicitudin
+                                finibus purus sollicitudin et. Quisque a consequat nulla. Fusce eu sapien
+                                ac libero luctus posuere. Sed vulputate erat ante, sit amet varius lorem
+                                ultrices a. Nam id faucibus mi. Nunc pretium malesuada lorem, ut mollis
+                                elit aliquam ac. Morbi iaculis tellus ullamcorper, mollis tellus ut, egestas
+                                mi. Nunc convallis dolor eget sem egestas, et egestas est scelerisque.</p>
+                            <h2
+                            id="five">Birds: They're Great!</h2>
+                                <p>Donec vel mi a ipsum ornare venenatis. Etiam imperdiet nunc leo. Morbi
+                                    faucibus elit in orci viverra posuere. Nunc eget urna ac lectus sagittis
+                                    mollis vel auctor diam. Vivamus sodales, nulla id lacinia congue, massa
+                                    velit laoreet nunc, vitae interdum mauris leo sed quam. Integer tincidunt
+                                    quis sem non consectetur. Nam elementum nibh eu fermentum imperdiet. Nullam
+                                    nec quam at enim fringilla porta et non lectus. Aliquam tempus odio id
+                                    enim cursus bibendum. Nullam a metus augue. Cras elit leo, convallis in
+                                    commodo eget, tempus scelerisque mauris. Quisque ultricies dolor eget eleifend
+                                    consectetur. Nulla eu lorem dignissim nulla interdum consequat. Donec non
+                                    maximus tellus. Aliquam erat volutpat. Nulla porttitor odio in turpis convallis,
+                                    ac rhoncus tellus pellentesque.</p>
+                                <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
+                                    in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
+                                    tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
+                                    vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
+                                    Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
+                                    quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
+                                    ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
+                                <p>Nunc nisi justo, lobortis venenatis consectetur vel, porttitor in felis.
+                                    Praesent tincidunt, mi non tincidunt egestas, libero risus finibus ex,
+                                    volutpat facilisis nulla libero ut arcu. Proin consequat ligula non libero
+                                    viverra, ut semper sem rhoncus. Morbi at viverra nisl, in convallis lorem.
+                                    Proin ut dapibus ex, eu hendrerit mi. Donec tempus arcu quis purus consequat,
+                                    sed congue nulla consequat. Donec tempor posuere lacus eget placerat. Maecenas
+                                    euismod congue ornare. Vestibulum tincidunt eros ut faucibus blandit.</p>
+                                <p>Mauris eu nunc a dolor aliquam molestie vitae non turpis. Curabitur mollis
+                                    vehicula euismod. Mauris eleifend, ipsum nec tempor condimentum, massa
+                                    arcu lobortis erat, eget iaculis turpis turpis id nisi. Fusce iaculis velit
+                                    nibh, a molestie neque placerat interdum. Phasellus eget erat placerat,
+                                    viverra quam vitae, viverra ligula. Pellentesque habitant morbi tristique
+                                    senectus et netus et malesuada fames ac turpis egestas. Nulla dictum, enim
+                                    vitae eleifend vehicula, augue arcu dapibus metus, non accumsan nulla urna
+                                    id mauris. Nunc non mi turpis. Nullam bibendum magna in metus tincidunt,
+                                    vel dapibus neque placerat. Orci varius natoque penatibus et magnis dis
+                                    parturient montes, nascetur ridiculus mus. Vestibulum felis libero, consequat
+                                    vel congue et, ultricies ornare arcu. Mauris vitae felis vitae nulla ornare
+                                    condimentum.</p>
+        </article>
+        
+        <script src="/pay.js"></script>
+                <script>
+            nano.paywall({ 
+                element: '.premium', // required, all with class .premium
+                address: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', // required
+                amount: 0.001, // required
+                debug: false, // optional
+                free: false, // // optional, allow free access
+                background: '#000', // optional
+                text: 'Read', // optional
+                title: '', // optional
+                color: '', // optional
+                endpoint: 'https://nanolooker.com/api/rpc', // optional
+                success: (block) => {
+                    // Element(s) are automatically shown.
+                    console.log(block)
+                }
+            })
+        </script>
+    </body>
+
 </html>
