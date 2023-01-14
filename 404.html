@@ -429,12 +429,15 @@ https://twitter.dev/@nano2dev
 
         nano.sell({ 
             element: '.premium',
-            amount: 0.1,
-            free: true,
+            amount: 0.001,
+            debug: true,
+            // free: true,
             text: 'Read',
-            // title: 'Butt plug', // wtf
-            address: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-            background: 'grey' 
+            address: 'nano_1bank1q3q7x8rimo3hf6qu6ezq3fmtximyt8kggtfaosg8kyr51qsdkm8g45', 
+            background: 'grey',
+            success: () => {
+                console.log("Yooo")
+            }
         })
 
         // nano.ppv({ 
