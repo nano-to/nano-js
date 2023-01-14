@@ -22,6 +22,7 @@ Monetize any website element.
         amount: 0.1,
         text: 'Read',
         address: 'YOUR_ADDRESS', 
+        endpoint: 'https://nanolooker.com/api/rpc', // optional
         success: (block) => {
         	// Element(s) are automatically shown.
         	console.log(block)
