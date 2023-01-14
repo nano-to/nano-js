@@ -129,15 +129,37 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
     
     window.nano.success = (element, data, block) => {
         var existing = document.getElementById('nano-pay')
-        var template = `<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"> <img src="https://dev.nano.to/img/success.svg" style="max-width: 120px;filter: saturate(2);"> <div style="color: ${window.nano.dark_mode ? '#FFF' : '#000'}; margin: 40px;opacity:1;">Thanks</div><div style="cursor: pointer; font-size: 21px; padding: 10px 25px; background: #1f9ce9; color: #FFF; min-width: 120px; text-align: center; border-radius: 5px;" onclick="window.nano.cancel(); return">Done</div> <div style=" border-radius: 0; padding: 10px 25px; color: ${window.nano.dark_mode ? '#FFF' : '#000'};; margin-top: 24px; opacity: 0.7; font-size: 17px; ">View Block</div></div>`;
+        var template = `
+<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
+    <img src="https://dev.nano.to/img/success.svg" style="max-width: 120px;filter: saturate(2);">
+        <div style="color: ${window.nano.dark_mode ? '#FFF' : '#000'}; margin: 40px;opacity:1;">
+            Thanks
+        </div>
+        <div onclick="window.nano.cancel(); return" style="cursor: pointer; font-size: 21px; padding: 10px 25px; background: #1f9ce9; color: #FFF; min-width: 120px; text-align: center; border-radius: 5px;">
+            Done
+        </div>
+        <div style=" border-radius: 0; padding: 10px 25px; color: ${window.nano.dark_mode ? '#FFF' : '#000'};; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
+            Closing...
+        </div>
+    </img>
+</div>
+`
         if (existing) existing.innerHTML = template;
+
         var all = document.querySelectorAll(element);
+
         for (var i=0, max=all.length; i < max; i++) {
             all[i].querySelector('.nano-locked').remove()
             all[i].innerHTML = window.nano[i]
             all[i].style.position = null; 
         }
+
         if (window.user_success) window.user_success(block)
+
+        setTimeout(() => {
+        	window.nano.cancel();
+        }, 5000)
+
     }
 
     window.nano.unlock = (element, amount, address, title, color) => {
@@ -218,7 +240,7 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 
             all[i].innerHTML = ''
             
-            let code = `<div class="nano-locked" style="position: absolute;background:${config.background || 'rgb(0 0 0 / 90%)'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height: 150px; zoom: 1.1; display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
+            let code = `<div class="nano-locked" style="text-align:center;position: absolute;background:${config.background || 'rgb(0 0 0 / 90%)'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height: 150px; zoom: 1.1; display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
     <div>
         ${ config.text ? config.text + ' ' + config.amount + ' NANO' : 'Unlock for ' + config.amount + ' NANO' }
     </div>
