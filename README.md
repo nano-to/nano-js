@@ -6,8 +6,15 @@
 
 Monetize any website element. 
 
+## Install
+
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
+```
+
+## Initialize
+
+```html
 <script>
     nano.lock({ 
         amount: 0.1,
