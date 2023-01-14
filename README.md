@@ -28,6 +28,8 @@ Monetize any website element.
         text: 'Read',
         address: 'YOUR_ADDRESS', 
         endpoint: 'https://nanolooker.com/api/rpc', // optional
+        background: '#000', // optional
+        title: '',
         success: (block) => {
             // Element(s) are automatically shown.
             console.log(block)
