@@ -1,14 +1,12 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano.to Developer (Beta)</h1>
+<h1 align="center">NanoPay.js</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash.png)
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash2.png)
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash3.png)
-
-## NanoPay.js
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
