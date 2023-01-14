@@ -6,7 +6,7 @@
 
 ## NanoPay.js
 
-This tools is not for keeping secrets from the public. It's to make it easier for users to support your work.
+This tools is not for keeping secrets from the public. It was created to make it easier for users to support you.
 
 #### Install
 
