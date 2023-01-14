@@ -4,7 +4,7 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Pay Per View Website Content
+### Pay Per View
 
 Monetize any website element. 
 
