@@ -1,7 +1,8 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 <h1 align="center">NanoPay.js (Beta)</h1>
-<h2 align="center">Non-Custodial, Backend Agnotisc NAno Payment Checking JS Library</h2>
+
+### Non-Custodial, Backend Agnotisc NAno Payment Checking JS Library
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
