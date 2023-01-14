@@ -36,3 +36,19 @@ Monetize any website element.
     })
 </script>
 ```
+
+## License
+
+**Limited Commercial Use**
+
+- ✅ Personal & Open Source
+- ✅ Commercial use where NanoPay.js is **NOT** the end-product.
+- ❌ Commercial use where NanoPay.js **IS** the end-product.
+
+Contact [@nano2dev](mailto:support@nano.to) for licensing questions.
+
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
+
+## Stargazers
+
+[![Stargazers over time](https://starchart.cc/fwd/nano-pay.svg)](https://github.com/fwd/nano-pay)
