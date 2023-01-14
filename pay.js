@@ -171,7 +171,7 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
         	
     	data.common = `${amount}${data.arbitrary}`
 
-        var template = `<div id="nano-pay" style="position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
+        var template = `<div id="nano-pay" style="font-family: 'Arial'; position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
     <div style="margin: 0 0 20px 0;font-size: 38px; color:${color && color !== 'undefined' ? color : '#1f9ce9;'}">
         ${ title && title !== 'undefined' ? title : 'NanoPay'}
     </div>
@@ -182,7 +182,7 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
         NANO
     </div>
     <span style="display: none; opacity: 0.3;font-size: 18px;margin-top: -25px;margin-bottom: 30px;text-transform: none;"> FEE(?): ${data.arbitrary} </span>
-    <a href="nano:${address}?amount=${data.common}">
+    <a href="nano:${address}?amount=${data.common}" style="color: initial; text-decoration: none">
     	<div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">
         Open Wallet 
     </div>
