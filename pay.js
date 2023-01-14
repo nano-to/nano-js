@@ -112,7 +112,7 @@ window.nano.rpc = {
             text: `nano:${address}?amount=${amount}`,
             width: 300,
             height: 280,
-            logo: "https://dev.nano.to/img/xno.svg", // @todo "Failed to execute 'toDataURL' on 'HTMLCanvasElement'"
+            logo: "https://pay.nano.to/img/xno.svg", // @todo "Failed to execute 'toDataURL' on 'HTMLCanvasElement'"
           }
           new QRCode(document.getElementById("qrcode"), options);
           resolve()
@@ -131,7 +131,7 @@ window.nano.rpc = {
     
     window.nano.success = (element, data, block) => {
         var existing = document.getElementById('nano-pay')
-        var template = `<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"> <img src="/img/success.svg" style="max-width: 120px;filter: saturate(2);"> <div style="color: ${window.nano.dark_mode ? '#FFF' : '#000'}; margin: 40px;opacity:1;">Thanks</div><div style="cursor: pointer; font-size: 21px; padding: 10px 25px; background: #1f9ce9; color: #FFF; min-width: 120px; text-align: center; border-radius: 5px;" onclick="window.nano.cancel(); return">Done</div> <div style=" border-radius: 0; padding: 10px 25px; color: ${window.nano.dark_mode ? '#FFF' : '#000'};; margin-top: 24px; opacity: 0.7; font-size: 17px; ">View Block</div></div>`;
+        var template = `<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"> <img src="https://pay.nano.to/img/success.svg" style="max-width: 120px;filter: saturate(2);"> <div style="color: ${window.nano.dark_mode ? '#FFF' : '#000'}; margin: 40px;opacity:1;">Thanks</div><div style="cursor: pointer; font-size: 21px; padding: 10px 25px; background: #1f9ce9; color: #FFF; min-width: 120px; text-align: center; border-radius: 5px;" onclick="window.nano.cancel(); return">Done</div> <div style=" border-radius: 0; padding: 10px 25px; color: ${window.nano.dark_mode ? '#FFF' : '#000'};; margin-top: 24px; opacity: 0.7; font-size: 17px; ">View Block</div></div>`;
         if (existing) existing.innerHTML = template;
         var all = document.querySelectorAll(element);
         for (var i=0, max=all.length; i < max; i++) {
@@ -225,7 +225,7 @@ window.nano.rpc = {
         ${ config.text ? config.text + ' ' + config.amount + ' NANO' : 'Unlock for ' + config.amount + ' NANO' }
     </div>
     <div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}', '${config.title}', '${config.color}')" style="cursor: pointer; padding: 7px 25px; border-radius: 4px; margin: 15px 0 10px 0; display: flex; align-items: center; justify-content: center; font-size: 22px; background: #FFF; color: ${config.color || '#000'}">
-        <img style="max-width: 24px; margin-right: 8px" src="/img/xno.svg" alt="">
+        <img style="max-width: 24px; margin-right: 8px" src="https://pay.nano.to/img/xno.svg" alt="">
         ${ config.button || 'Purchase' }
     </div>
 `
