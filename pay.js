@@ -16,14 +16,52 @@
         window.nano = {}
     }
 
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      window.nano.dark_mode = true
+    }
+
+
     window.nano.cancel = (element) => {
         document.getElementById('nano-pay').remove()
+        clearInterval(window.nano.check)
     }
     
-    window.nano.unlock = (element, amount, address) => {
-        post('https://api.nano.to', { address, amount }).then((data) => {
-            var template = `<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background: #000;z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"> <img src="${data.qrcode}" style=" max-width: 200px; "> <div style=" margin: 40px; opacity: 1; ">${data.amount} NANO</div> <div style=" background: white; font-size: 21px; border-radius: 10px; padding: 10px 25px; color: #000; ">Open Wallet</div> <div onclick="window.nano.cancel(); return" style=" border-radius: 10px; padding: 10px 25px; color: #fff; margin-top: 24px; opacity: 0.4; font-size: 17px; ">Cancel</div></div>`;
+    window.nano.success = (element, data) => {
+        var existing = document.getElementById('nano-pay')
+        var template = `<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.config.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"> <img src="/img/success.png" style=" max-width: 140px; "> <div style=" margin: 40px;opacity:1;">Complete</div><div style=" background: white; cursor: pointer; font-size: 21px; border-radius: 0; padding: 10px 25px; color: #000; " onclick="window.nano.cancel(); return">Done</div> <div style=" border-radius: 0; padding: 10px 25px; color: #fff; margin-top: 24px; opacity: 0.4; font-size: 17px; ">View Block</div></div>`;
+        existing.innerHTML = template;
+        var all = document.querySelectorAll(element);
+        for (var i=0, max=all.length; i < max; i++) {
+            all[i].querySelector('.nano-locked').remove()
+        }
+    }
+
+    window.nano.request = (setting) => {
+        post('https://api.nano.to', { address: setting.address, amount: setting.amount || setting.price }).then((data) => {
+            var template = `<div id="nano-pay" style="position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"><div style="margin: 10px 0;font-size: 30px;color: #1f9ce9;">${ setting.title && setting.title !== 'undefined' ? setting.title : 'Nano.to Pay'}</div><img src="${data.qrcode}" style="max-width: 150px;border: 8px solid #1f9ce9;margin-top: 20px;border-radius: 10px;"> <div style="margin: 30px 0;opacity: 0.8;font-size: 22px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">${data.amount} NANO</div> <div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">Open Wallet</div> <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.4; font-size: 17px; ">Cancel</div></div>`;
             document.body.innerHTML += template;
+        })
+    }
+
+    window.nano.unlock = (element, amount, address, title, color) => {
+        post('https://api.nano.to', { address, amount }).then((data) => {
+            var template = `<div id="nano-pay" style="position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"><div style="margin: 10px 0 15px 0;font-size: 30px;color:${color && color !== 'undefined' ? color : '#1f9ce9;'}">${ title && title !== 'undefined' ? title : 'Nano.to Pay'}</div><img src="${data.qrcode}" style="max-width: 150px;border: 8px solid #1f9ce9;margin-top: 20px;border-radius: 10px;"> <div style="margin: 30px 0;opacity: 1;font-size: 22px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">${data.amount} NANO</div> <div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">Open Wallet</div> <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.4; font-size: 17px; ">Cancel</div></div>`;
+            document.body.innerHTML += template;
+            var checks = 0
+            setTimeout(() => {
+                window.nano.check = setInterval(async () => {
+                    // console.log("Check")
+                    if (checks > 30) {
+                        clearInterval(window.nano.check)
+                    } else {
+                        console.log("Check")
+                        // success
+                    }
+                    checks++
+                }, 2000)
+                // clearInterval(window.nano.check)
+                // window.nano.success(element)
+            }, 2000)
         })
     }
 
@@ -48,14 +86,14 @@
             
             var item = all[i]
             
-            item.style['min-height'] = "150px"; 
+            // item.style['min-height'] = "150px"; 
             item.style.position = "relative"; 
             
-            let code = `<div id="nano-locked" style="position: absolute;background:${config.background || '#000'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 20px;min-height: 110px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
+            let code = `<div class="nano-locked" style="position: absolute;background:${config.background || '#000'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 20px;min-height: 110px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
     <div>
         Unlock for ${config.amount} NANO.
     </div>
-    <div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}')" style=" cursor: pointer; padding: 5px 20px; border-radius: 15px; background: #FFF; margin: 10px 0; color: ${config.color || '#000'}">
+    <div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}', '${config.title}')" style=" cursor: pointer; padding: 5px 20px; border-radius: 0; background: #FFF; margin: 10px 0; color: ${config.color || '#000'}">
         Unlock
     </div>
 </div>`
