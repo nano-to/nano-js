@@ -29,22 +29,22 @@ Non-custodial, back-end agnostic monetization library for Nano.
 
 ```html
 <script>
-    nano.paywall({ 
-        element: '.premium', // required, all with class .premium
-        address: 'YOUR_ADDRESS', // required
-        amount: 0.1, // required
-        debug: false, // optional
-        free: false, // // optional, allow free access
-        background: '#000', // optional
-        text: 'Read', // optional
-        title: '', // optional
-        color: '', // optional
-        endpoint: 'https://nanolooker.com/api/rpc', // optional
-        success: (block) => {
-            // Element(s) are automatically shown.
-            console.log(block)
-        }
-    })
+nano.paywall({ 
+    element: '.premium', // required, all with class .premium
+    address: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', // required
+    amount: 0.001, // required
+    debug: false, // optional
+    free: false, // // optional, allow free access
+    background: '#000000de', // optional css hex
+    text: 'Read Lorem for', // optional
+    title: '', // optional
+    color: '', // optional
+    endpoint: 'https://nanolooker.com/api/rpc', // optional
+    success: (block) => {
+        // Element(s) are automatically shown.
+        console.log(block)
+    }
+})
 </script>
 ```
 
