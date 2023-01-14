@@ -5,6 +5,8 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash.png)
+![line](https://github.com/fwd/nano-pay/raw/master/img/splash2.png)
+![line](https://github.com/fwd/nano-pay/raw/master/img/splash3.png)
 
 ## NanoPay.js
 
