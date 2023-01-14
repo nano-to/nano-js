@@ -1,5 +1,8 @@
 ;(async () => {
 
+    // https://github.com/fwd/nano-dev
+    // Follow me on Twitter @nano2dev
+
     function post(endpoint, data) {
         return new Promise((resolve) => {
             var xhr = new XMLHttpRequest();
@@ -33,9 +36,8 @@
         var all = document.querySelectorAll(element);
         for (var i=0, max=all.length; i < max; i++) {
             all[i].querySelector('.nano-locked').remove()
-            // for (let index = 0; index < all[i].children.length; index++){
             all[i].innerHTML = window.nano[i]
-            // }
+            all[i].style.position = null; 
         }
     }
 
@@ -48,22 +50,11 @@
 
     window.nano.unlock = (element, amount, address, title, color) => {
         post('https://api.nano.to/charge', { address, amount }).then((data) => {
-            var template = `<div id="nano-pay" style="position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"><div style="margin: 10px 0 15px 0;font-size: 30px;color:${color && color !== 'undefined' ? color : '#1f9ce9;'}">${ title && title !== 'undefined' ? title : 'Nano.to Pay'}</div><img src="${data.qrcode}" style="max-width: 150px;border: 8px solid #1f9ce9;margin-top: 20px;border-radius: 10px;"> <div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">${data.amount.replace(data.arbitrary, '')}<span  style="opacity: 0.3; display: none">${data.arbitrary}</span> NANO</div> <div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">Open Wallet</div> <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.4; font-size: 17px; ">Cancel</div></div>`;
+            var template = `<div id="nano-pay" style="position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;"><div style="margin: 10px 0 15px 0;font-size: 30px;color:${color && color !== 'undefined' ? color : '#1f9ce9;'}">${ title && title !== 'undefined' ? title : 'Nano.to Pay'}</div><img src="${data.qrcode}" style="max-width: 150px;border: 8px solid #1f9ce9;margin-top: 20px;border-radius: 10px;"> <div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">${data.amount.replace(data.arbitrary, '')}<span  style="opacity: 0.3; display: none">${data.arbitrary}</span> NANO</div> <div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">Open Wallet</div> <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.7; font-size: 17px; ">Cancel</div></div>`;
             document.body.innerHTML += template;
-            // var checks = 0
             setTimeout(() => {
-            //     window.nano.check = setInterval(async () => {
-            //         // console.log("Check")
-            //         if (checks > 2) {
-                        window.nano.success(element)
-            //             clearInterval(window.nano.check)
-            //         } else {
-            //             console.log("Check")
-            //             // success
-            //         }
-            //         checks++
-            //     }, 2000)
-            //     // clearInterval(window.nano.check)
+                // demo
+                window.nano.success(element)
             }, 1000)
         })
     }
@@ -76,8 +67,6 @@
             config = config || {}
         }
 
-        // if (!window.nano.address && !config.address) return console.error('Nano: NANO payment address missing:', config.element)
-
         if (!config.address || !config.address.includes('nano_')) return console.error('Nano: NANO payment address invalid:', config.element)
 
         if (!config.element) return console.error('Nano: No premium element provided:', config.element)
@@ -85,20 +74,16 @@
         
         var all = document.querySelectorAll(config.element);
 
-            // document.querySelectorAll('#pages > div').forEach(el =>{
-            //     el.style.display = (el.id === pageID) ? 'block' : 'none'
-            // })
-
         for (var i=0, max=all.length; i < max; i++) {
 
+            window.nano[i] = all[i].innerHTML
 
-            window.nano[i] = all[i].innerHTML 
+            var item = all[i]
+
+            item.style['min-height'] = item.offsetHeight; 
+            item.style.position = "relative"; 
 
             all[i].innerHTML = ''
-            
-            var item = all[i]
-            
-            item.style.position = "relative"; 
             
             let code = `<div class="nano-locked" style="position: absolute;background:${config.background || '#000'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height: 110px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
     <div>
