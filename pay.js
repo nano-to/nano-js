@@ -244,6 +244,7 @@ window.nano.rpc = {
     }
 
     // for the kiddes
+    window.nano.paywall =  window.nano.sell
     window.nano.ppv =  window.nano.sell
     window.nano.premium =  window.nano.sell
     window.nano.lock =  window.nano.sell
