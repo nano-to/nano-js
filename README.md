@@ -31,7 +31,7 @@ Non-custodial, back-end agnostic monetization library for Nano.
 <script>
     nano.paywall({ 
         element: '.premium', // required, all with class .premium
-        address: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', // required
+        address: 'YOUR_ADDRESS', // required
         amount: 0.001, // required
         debug: false, // optional
         free: false, // // optional, allow free access
