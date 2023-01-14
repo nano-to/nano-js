@@ -10,7 +10,7 @@
 ## Install
 
 ```html
-<script src="https://dev.nano.to/pay.js"></script>
+<script src="https://nano.to/pay.js"></script>
 ```
 
 ## Initialize
