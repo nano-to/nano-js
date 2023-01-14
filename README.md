@@ -22,6 +22,7 @@ Monetize any website element.
 <script>
     nano.paywall({ 
         debug: false,
+        free: false,
         element: '.premium', // all with class .premium
         amount: 0.1,
         text: 'Read',
