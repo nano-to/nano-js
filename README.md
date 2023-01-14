@@ -39,7 +39,7 @@ Monetize any website element.
 
 ## License
 
-**Limited Commercial Use:**
+**Limited Commercial:**
 
 - ✅ Personal & Open Source
 - ✅ Commercial use where NanoPay.js is **NOT** the end-product.
