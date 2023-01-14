@@ -21,16 +21,16 @@ Monetize any website element.
 ```html
 <script>
     nano.paywall({ 
-        debug: false,
-        free: false, // allow free access optionally
-        element: '.premium', // all with class .premium
-        amount: 0.1,
-        text: 'Read',
-        address: 'YOUR_ADDRESS', 
-        endpoint: 'https://nanolooker.com/api/rpc', // optional
+        element: '.premium', // required, all with class .premium
+        address: 'YOUR_ADDRESS', // required
+        amount: 0.1, // required
+        debug: false, // optional
+        free: false, // // optional, allow free access
         background: '#000', // optional
-        title: '',
-        color: '',
+        text: 'Read', // optional
+        title: '', // optional
+        color: '', // optional
+        endpoint: 'https://nanolooker.com/api/rpc', // optional
         success: (block) => {
             // Element(s) are automatically shown.
             console.log(block)
