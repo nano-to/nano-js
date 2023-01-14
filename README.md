@@ -30,6 +30,7 @@ Monetize any website element.
         endpoint: 'https://nanolooker.com/api/rpc', // optional
         background: '#000', // optional
         title: '',
+        color: '',
         success: (block) => {
             // Element(s) are automatically shown.
             console.log(block)
