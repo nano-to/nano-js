@@ -6,9 +6,9 @@
 
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash.png)
 
-## Demo: https://dev.nano.to
-
 ## NanoPay.js
+
+**Demo** https://dev.nano.to
 
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
