@@ -5,7 +5,7 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-> ## This tools is not for keeping secrets. It's to make it easier for users to support your work.
+> ## This tools is not for keeping secrets from the public. It's to make it easier for users to support your work.
 
 ## Install
 
