@@ -21,7 +21,7 @@ Monetize any DOM element on your website.
 > **This library is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.**
 
 ```html
-<script src="https://dev.nano.to/pay.js"></script>
+<script src="https://nano.to/pay.js"></script>
 <script>
     nano.paywall({ 
         element: '.premium', // required, all with class .premium
@@ -47,7 +47,7 @@ Monetize any DOM element on your website.
 Accept one-time Nano payments.
 
 ```html
-<script src="https://dev.nano.to/pay.js"></script>
+<script src="https://nano.to/pay.js"></script>
 <script>
     // open up popup
     nano.charge({ 
