@@ -32,6 +32,8 @@
 <script src="https://nano.to/pay.js"></script>
 ```
 
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
+
 ### Nano Paywall
 
 Monetize any DOM element on your website.
