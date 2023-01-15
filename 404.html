@@ -441,9 +441,8 @@
         <header>
                 <h1 class="smaller">NanoPay.js</h1>
         </header>
-        <article>
+        <article class="premium">
             <h2 id="one">You Gotta Love Birds</h2>
-
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet
                 ut quam sit amet vehicula. Donec sit amet facilisis quam. Integer mollis,
                 urna accumsan tempor hendrerit, risus neque tincidunt neque, in aliquam
@@ -454,7 +453,7 @@
             <img src="https://images.unsplash.com/photo-1601168049797-351a4abb0b2f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY1MDY1NDk3Nw&ixlib=rb-1.2.1&q=85"
             alt="a green hummingbird flying among yellow flowers" title="Photo by Geronimo Giqueaux for Unsplash"
             class="editorial-image-right">
-            <p>Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
+            <p class="premium">Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
                 a condimentum. Praesent tincidunt, purus ac placerat posuere, lacus risus
                 suscipit lacus, et sollicitudin turpis metus in enim. Vestibulum at imperdiet
                 magna, ac vehicula magna. Praesent placerat sapien bibendum, faucibus lectus
@@ -638,7 +637,7 @@
                                     consectetur. Nulla eu lorem dignissim nulla interdum consequat. Donec non
                                     maximus tellus. Aliquam erat volutpat. Nulla porttitor odio in turpis convallis,
                                     ac rhoncus tellus pellentesque.</p>
-                                <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
+                                <p class="premium">In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
                                     in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
                                     tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
                                     vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
@@ -667,6 +666,7 @@
         </article>
         
         <script src="/pay.js"></script>
+        
         <script>
             nano.paywall({ 
                 element: '.premium', // required, all with class .premium
@@ -675,6 +675,7 @@
                 debug: false, // optional
                 free: false, // // optional, allow free access
                 background: '#000000f2', // optional css hex
+                button: 'Unlock', // optional css hex
                 text: 'Read Lorem for', // optional
                 title: '', // optional
                 color: '', // optional

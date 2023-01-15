@@ -23,7 +23,7 @@
 > This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.
 
 
-### Usage
+### Paywall
 
 ```html
 <script>
@@ -40,6 +40,22 @@
         endpoint: 'https://nanolooker.com/api/rpc', // optional
         success: (block) => {
             // Element(s) are automatically shown.
+            console.log(block)
+        }
+    })
+</script>
+```
+
+### Charge
+
+```html
+<script>
+    // open up popup
+    nano.charge({ 
+        address: 'YOUR_ADDRESS', // required
+        amount: 0.001, // required
+        success: (block) => {
+            // custom success logic
             console.log(block)
         }
     })

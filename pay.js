@@ -146,12 +146,16 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 `
         if (existing) existing.innerHTML = template;
 
-        var all = document.querySelectorAll(element);
+        if (element) {
+	        
+	        var all = document.querySelectorAll(element);
 
-        for (var i=0, max=all.length; i < max; i++) {
-            all[i].querySelector('.nano-locked').remove()
-            all[i].innerHTML = window.nano[i]
-            all[i].style.position = null; 
+	        for (var i=0, max=all.length; i < max; i++) {
+	            all[i].querySelector('.nano-locked').remove()
+	            all[i].innerHTML = window.nano[i]
+	            all[i].style.position = null; 
+	        }
+
         }
 
         if (window.user_success) window.user_success(block)
@@ -159,6 +163,55 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
         setTimeout(() => {
         	window.nano.cancel();
         }, 5000)
+
+    }
+
+    window.nano.charge = (data) => {
+
+    	if (data.random) data.amount = `${data.amount}000${getRandomArbitrary(10000000, 99999999)}`
+
+    	if (data.debug) window.nano.debug = data.debug 
+        if (data.success) window.user_success = data.success 
+        	
+    	data.common = `${data.amount}`
+
+        var template = `<div id="nano-pay" style="font-family: 'Arial'; position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
+    <div style="margin: 0 0 20px 0;font-size: 38px; color:${data.color && data.color !== 'undefined' ? data.color : '#1f9ce9;'}">
+        ${ data.title && data.title !== 'undefined' ? data.title : 'NanoPay'}
+    </div>
+    <div id="qrcode" style="border: 14px solid ${window.nano.dark_mode ? '#FFF' : '#000'};margin-top: 20px;border-radius: 10px;display: flex;zoom: 0.5;">
+    </div>
+    <div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">
+        ${data.amount}
+        NANO
+    </div>
+    <span style="display: none; opacity: 0.3;font-size: 18px;margin-top: -25px;margin-bottom: 30px;text-transform: none;"> FEE(?): ${data.arbitrary} </span>
+    <a href="nano:${data.address}?amount=${NanocurrencyWeb.tools.convert(data.common, 'NANO', 'RAW')}" style="color: initial; text-decoration: none">
+    	<div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">
+        Open Wallet 
+    </div>
+    </a>
+    <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
+        Cancel
+    </div>
+</div>
+
+`
+	    document.body.innerHTML += template;
+	    
+	    setTimeout(() => {
+	    	// console.log("data.common", data.common)
+	        qrcode(data.address, NanocurrencyWeb.tools.convert(data.common, 'NANO', 'RAW'))
+	    }, 5)
+	    var checks = 0
+
+	    window.nano.interval = setInterval(async () => {
+	    	if (window.nano.debug) return
+	    	if (checks < 60) {
+		    	var block = await window.nano.rpc.check(data.address, data.common)
+		    	if (block) window.nano.success(null, null, block)
+	    	} else clearInterval(window.nano.interval)
+	    }, 5000)
 
     }
 
@@ -175,7 +228,7 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
     <div style="margin: 0 0 20px 0;font-size: 38px; color:${color && color !== 'undefined' ? color : '#1f9ce9;'}">
         ${ title && title !== 'undefined' ? title : 'NanoPay'}
     </div>
-    <div id="qrcode" style="border: 14px solid #1f9ce9;margin-top: 20px;border-radius: 10px;display: flex;zoom: 0.5;">
+    <div id="qrcode" style="border: 14px solid ${window.nano.dark_mode ? '#FFF' : '#000'};margin-top: 20px;border-radius: 10px;display: flex;zoom: 0.5;">
     </div>
     <div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">
         ${data.amount.replace(data.arbitrary, '')}
@@ -196,7 +249,7 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 	    document.body.innerHTML += template;
 	    
 	    setTimeout(() => {
-	    	console.log("data.common", data.common)
+	    	// console.log("data.common", data.common)
 	        qrcode(address, NanocurrencyWeb.tools.convert(data.common, 'NANO', 'RAW'))
 	    }, 5)
 	    var checks = 0
@@ -242,7 +295,7 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 
             all[i].innerHTML = ''
             
-            let code = `<div class="nano-locked" style="padding:30px; font-family:'Arial';text-align:center;position: absolute;background:${config.background || 'rgb(0 0 0 / 90%)'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height: 180px; display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
+            let code = `<div class="nano-locked" style="padding:30px; font-family:'Arial';text-align:center;position: absolute;background:${config.background || 'rgb(0 0 0 / 90%)'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height: 180px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
     <div>
         ${ config.text ? config.text + ' ' + config.amount + ' NANO' : 'Unlock for ' + config.amount + ' NANO' }
     </div>
