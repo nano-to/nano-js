@@ -22,6 +22,8 @@
 <script src="/NanoPay.js"></script>
 ```
 
+## or
+
 **CDN:**
 ```
 <script src="https://nano.to/pay.js"></script>
@@ -68,6 +70,15 @@ Accept one-time Nano payments.
             console.log(block)
         }
     })
+</script>
+```
+
+### Coming Soon
+
+```html
+<script>
+    nano.rpc(...)
+    nano.wallet(...)
 </script>
 ```
 
