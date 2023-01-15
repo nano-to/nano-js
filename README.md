@@ -18,14 +18,14 @@
 ### Install
 
 **Local:**
-```
+```html
 <script src="/NanoPay.js"></script>
 ```
 
 **OR**
 
 **CDN:**
-```
+```html
 <script src="https://nano.to/pay.js"></script>
 ```
 
