@@ -20,10 +20,10 @@
 <script src="https://dev.nano.to/pay.js"></script>
 ```
 
-> This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.
+> **This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.**
 
 
-### Paywall
+### Nano Paywall
 
 ```html
 <script>
@@ -46,7 +46,7 @@
 </script>
 ```
 
-### Charge
+### Single Charge
 
 ```html
 <script>
@@ -55,12 +55,13 @@
         address: 'YOUR_ADDRESS', // required
         amount: 0.001, // required
         success: (block) => {
-            // custom success logic
             console.log(block)
         }
     })
 </script>
 ```
+
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ### License
 
