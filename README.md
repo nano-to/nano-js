@@ -2,7 +2,7 @@
 
 <h1 align="center">NanoPay.js</h1>
 
-<h3 align="center">Monetize any website element.</h3>
+<h3 align="center">Monetize any website element. Non-custodial, back-end agnostic javascript browser library for Nano currency.</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
@@ -19,8 +19,6 @@
 ```html
 <script src="https://dev.nano.to/pay.js"></script>
 ```
-
-Non-custodial, back-end agnostic monetization library for Nano.
 
 > This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.
 
