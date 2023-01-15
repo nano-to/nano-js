@@ -26,6 +26,7 @@
 ### Nano Paywall
 
 ```html
+<script src="https://dev.nano.to/pay.js"></script>
 <script>
     nano.paywall({ 
         element: '.premium', // required, all with class .premium
@@ -49,6 +50,7 @@
 ### Single Charge
 
 ```html
+<script src="https://dev.nano.to/pay.js"></script>
 <script>
     // open up popup
     nano.charge({ 
