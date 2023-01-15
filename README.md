@@ -66,6 +66,7 @@ Accept one-time Nano payments.
     nano.charge({ 
         address: 'YOUR_ADDRESS', // required
         amount: 0.001, // required
+        random: true, // recommended
         success: (block) => {
             console.log(block)
         }
