@@ -2,7 +2,7 @@
 
 <h1 align="center">NanoPay.js</h1>
 
-<h3 align="center">Non-custodial, back-end agnostic crypto monetization browser library. Easily monetize any DOM element on your website.</h3>
+<h3 align="center">Non-custodial, back-end agnostic crypto monetization browser library.</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
@@ -20,10 +20,11 @@
 <script src="https://dev.nano.to/pay.js"></script>
 ```
 
-> **This tools is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.**
-
-
 ### Nano Paywall
+
+Easily monetize any DOM element on your website.
+
+> **This library is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.**
 
 ```html
 <script>
@@ -47,6 +48,8 @@
 ```
 
 ### Single Charge
+
+Accept one-time Nano payments.
 
 ```html
 <script>
