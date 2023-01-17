@@ -6,17 +6,17 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
+### Demo
+
+<a target="_blank" href="https://dev.nano.to">https://dev.nano.to</a>
+
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
+
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash.png)
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash2.png)
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash3.png)
-
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-
-### Demo
-
-<a target="_blank" href="https://dev.nano.to">https://dev.nano.to</a>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
