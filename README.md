@@ -27,7 +27,7 @@
 <script src="/NanoPay.js"></script>
 ```
 
-**OR CDN:**
+**Or Cdn:**
 ```html
 <script src="https://nano.to/pay.js"></script>
 ```
