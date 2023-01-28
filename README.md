@@ -6,12 +6,6 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Demo
-
-<a target="_blank" href="https://dev.nano.to">https://dev.nano.to</a>
-
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash.png)
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 ![line](https://github.com/fwd/nano-pay/raw/master/img/splash2.png)
@@ -20,6 +14,10 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
+### Live Demo
+
+<a target="_blank" href="https://blog.nano.to">https://blog.nano.to</a>
+
 ### Install
 
 **Local:**
@@ -27,18 +25,18 @@
 <script src="/NanoPay.js"></script>
 ```
 
-**Or CDN:**
+**CDN:**
 ```html
 <script src="https://nano.to/pay.js"></script>
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Nano Paywall
+### Paywall
 
 Monetize any DOM element on your website.
 
-> **This library is not for keeping secrets from the public. It was created to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.**
+> **This library is not for keeping secrets. It is to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.**
 
 ```html
 <script>
