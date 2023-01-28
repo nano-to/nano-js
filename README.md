@@ -36,7 +36,7 @@
 
 Monetize any DOM element on your website.
 
-> **This library is not for keeping secrets. It is to make it easier for users to support you. Anyone can bypass paywalls with some tinkering.**
+> **This library is not for keeping secrets. It is to make it easier for users to support you. Anyone can bypass this kind of  paywall with some tinkering.**
 
 ```html
 <script>
