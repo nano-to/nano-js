@@ -18,6 +18,8 @@
 
 <a target="_blank" href="https://blog.nano.to">https://blog.nano.to</a>
 
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
+
 ### Install
 
 **Local:**
