@@ -2,7 +2,7 @@
 
 <h1 align="center">NanoPay.js</h1>
 
-<h3 align="center">Non-custodial, back-end agnostic crypto monetization browser library.</h3>
+<h3 align="center">Non-custodial, backend-agnostic DOM monetization library.</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
