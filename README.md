@@ -84,7 +84,7 @@ Accept one-time Nano payments.
 ### License
 
 - ✅ Personal & Open Source
-- ✅ Commercial use where NanoPay.js is a means, not an end.
+- ✅ Commercial use where NanoPay.js is a means of business.
 - ❌ Commercial use where NanoPay.js is re-sold/re-packaged.
 
 Contact [@nano2dev](mailto:support@nano.to) for licensing questions.
