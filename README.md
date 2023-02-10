@@ -14,9 +14,9 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Live Demo
+### Demo
 
-<a target="_blank" href="https://blog.nano.to">https://blog.nano.to</a>
+<a target="_blank" href="https://blog.nano.to">https://dev.nano.to</a>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
@@ -27,7 +27,7 @@
 <script src="/NanoPay.js"></script>
 ```
 
-**CDN:**
+**Cdn:**
 ```html
 <script src="https://nano.to/pay.js"></script>
 ```
@@ -79,24 +79,13 @@ Accept one-time Nano payments.
 </script>
 ```
 
-### Coming Soon
-
-```html
-<script>
-    nano.rpc(...)
-    nano.wallet(...)
-</script>
-```
-
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ### License
 
-**Limited Commercial:**
-
 - ✅ Personal & Open Source
-- ✅ Commercial use where NanoPay.js is **NOT** the end-product.
-- ❌ Commercial use where NanoPay.js **IS** the end-product.
+- ✅ Commercial use where NanoPay.js is a means, not an end.
+- ❌ Commercial use where NanoPay.js **IS** resold.
 
 Contact [@nano2dev](mailto:support@nano.to) for licensing questions.
 
