@@ -2,7 +2,7 @@
 
 <h1 align="center">NanoPay.js</h1>
 
-<h3 align="center">Monetize any website with Nano currency.</h3>
+<h3 align="center">Monetize any website with Nano crypto currency.</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
