@@ -4,7 +4,7 @@
 
 <h3 align="center">Hosted on Github</h3>
 
-### Install
+### Offline Nano Wallet
 
 **Wallet.js:**
 ```html
@@ -16,7 +16,7 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Paywall
+### Non-Custodial Nano Paywall
 
 Monetize any DOM element on your website.
 
@@ -24,6 +24,7 @@ Monetize any DOM element on your website.
 
 
 **Paywall.js:**
+
 ```html
 <!-- Local -->
 <script src="/paywall.js"></script>
@@ -52,7 +53,7 @@ Monetize any DOM element on your website.
 </script>
 ```
 
-### Single Charge
+**Single Charge**
 
 Accept one-time Nano payments.
 
@@ -74,9 +75,7 @@ Accept one-time Nano payments.
 
 ### License
 
-- ✅ Personal & Open Source
-- ✅ Commercial use where NanoPay.js is a means of business.
-- ❌ Commercial use where NanoPay.js is re-sold/re-packaged.
+MIT (No Commercial Restrictions)
 
 Contact [@nano2dev](mailto:support@nano.to) for licensing questions.
 
@@ -84,4 +83,4 @@ Contact [@nano2dev](mailto:support@nano.to) for licensing questions.
 
 ### Stargazers
 
-[![Stargazers over time](https://starchart.cc/fwd/nano-pay.svg)](https://github.com/fwd/nano-pay)
+[![Stargazers over time](https://starchart.cc/fwd/nano-js.svg)](https://github.com/fwd/nano-js)
