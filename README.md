@@ -4,6 +4,8 @@
 
 <h3 align="center">Hosted on Github</h3>
 
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
+
 ### Browser Wallet
 
 **Wallet.js:**
@@ -52,6 +54,8 @@ Monetize any DOM element on your website.
     })
 </script>
 ```
+
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 **Single Charge**
 
