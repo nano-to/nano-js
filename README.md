@@ -6,9 +6,8 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Browser Wallet
+### Offline Wallet
 
-**Wallet.js:**
 ```html
 <!-- Local -->
 <script src="/wallet.js"></script>
