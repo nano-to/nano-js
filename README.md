@@ -1,35 +1,17 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">NanoPay.js</h1>
+<h1 align="center">Non-Custodial Crypto Libraries</h1>
 
-<h3 align="center">Monetize any website with Nano crypto currency.</h3>
-
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-
-![line](https://github.com/fwd/nano-pay/raw/master/img/splash.png)
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-![line](https://github.com/fwd/nano-pay/raw/master/img/splash2.png)
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-![line](https://github.com/fwd/nano-pay/raw/master/img/splash3.png)
-
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-
-### Demo
-
-<a target="_blank" href="https://blog.nano.to">https://dev.nano.to</a>
-
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
+<h3 align="center">Hosted on Github</h3>
 
 ### Install
 
-**Local:**
+**Wallet.js:**
 ```html
-<script src="/NanoPay.js"></script>
-```
-
-**Cdn:**
-```html
-<script src="https://nano.to/pay.js"></script>
+<!-- Local -->
+<script src="/wallet.js"></script>
+<!-- CDN -->
+<script src="https://js.nano.to/wallet.js"></script>
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
@@ -39,6 +21,15 @@
 Monetize any DOM element on your website.
 
 > **This library is not for keeping secrets. It is to make it easier for users to support you. Anyone can bypass this kind of  paywall with some tinkering.**
+
+
+**Paywall.js:**
+```html
+<!-- Local -->
+<script src="/paywall.js"></script>
+<!-- CDN -->
+<script src="https://js.nano.to/paywall.js"></script>
+```
 
 ```html
 <script>
