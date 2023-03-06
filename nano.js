@@ -7,195 +7,351 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 
 // NanoPay
 // https://github.com/fwd/nano-js
-;(async () => {
+let nano = {
 
-	if (window.nano === undefined) window.nano = { debug: false }
+    endpoint: 'https://rpc.nano.to',
+    api_key: '', // Optional Api Key
 
-	window.nano.rpc = {
+    NanocurrencyWeb, // debug
 
-		   // looking for sugar nodes
-	       endpoint: 'https://rpc.nano.to',
+    wallets: [],
 
-			post(endpoint, data) {
-				return new Promise((resolve) => {
-				    var xhr = new XMLHttpRequest();
-				    xhr.open("POST", endpoint, true);
-				    xhr.setRequestHeader('Content-Type', 'application/json');
-				    xhr.send(JSON.stringify(data));
-				    xhr.onload = function() {
-				      resolve(JSON.parse(this.responseText))
-				    }
-				})
-			},
+	// get(endpoint) {
+	// 	return new Promise((resolve) => {
+	// 	    var xhr = new XMLHttpRequest();
+	// 	    xhr.open("GET", endpoint, true);
+	// 	    xhr.setRequestHeader('Content-Type', 'application/json');
+	// 	    xhr.send();
+	// 	    xhr.onload = function() {
+	// 	      resolve(JSON.parse(this.responseText))
+	// 	    }
+	// 	})
+	// },
 
-	       pending(address, count) {
-	         return new Promise((resolve) => {
-	          count = count && Number(count) > 100 ? 100 : (count || 100)
-	          this.post(this.endpoint, { 
-	            action: 'pending', 
-	            account: address,
-	            count: count,
-	            json_block: true,
-	            source: true,
-	          }).then((res) => {
-	          	console.log( )
-	            var blocks = []
-	            if (res.blocks !== "") {
-	                Object.keys(res.blocks).map(hash => {
-	                    blocks.push({ 
-	                        hash, 
-	                        account: res.blocks[hash].source, 
-	                        amount_raw: res.blocks[hash].amount,
-	                        amount: NanocurrencyWeb.tools.convert(res.blocks[hash].amount, 'RAW', 'NANO'),
-	                    })
-	                })
-	            }
-	            resolve(blocks)
-	          })
-	        })
-	       },
+	generate() {
+		return new Promise((resolve) => {
+			var new_account = NanocurrencyWeb.wallet.generate()
+				new_account = {
+				publicKey: new_account.accounts[0].address,
+				privateKey: new_account.accounts[0].privateKey,
+				// seed: new_account.seed,
+				// mnemonic: new_account.mnemonic,
+			}
+	
+		    var filename = `${new_account.publicKey.slice(0, 12)}-privateKey.txt`
+		    var string = `publicKey: ${new_account.publicKey}
+privateKey: ${new_account.privateKey}`
 
-	       history(address, count) {
-	        return new Promise((resolve) => {
-	          this.post(this.endpoint, { 
-	            action: 'account_history', 
-	            account: address,
-	            count: Number(count) ? Number(count) : 100,
-	            raw: true
-	          }).then((res) => {
-	            if (!Array.isArray(res.history)) return []
-	            resolve(res.history.map(a => {
-	                a.amount_raw = a.amount
-	                a.amount = NanocurrencyWeb.tools.convert(a.amount, 'RAW', 'NANO')
-	                return a
-	            }))
-	          })
-	        })
-	       },
+			if (typeof window !== 'undefined') {
 
-	       block(amount, dataset) {
-	       		var block = dataset.find(a => a.amount_raw === NanocurrencyWeb.tools.convert(amount, 'NANO', 'RAW') )
-	            return block ? block : false
-	       },
+			    function download(filename, text) {
 
-	       check(address, amount) {
-	        try {
-	          return this.pending(address).then(async (pending) => {
-	            var success = false
-	            var block = false
-	            if (Array.isArray(pending)) block = this.block(amount, pending)
-	            if (!block) {
-	                var _history = await this.history(address, 10) // @todo make configurable
-	                if (Array.isArray(_history)) block = this.block(amount, _history)
-	            }
-	            return block
-	          })
-	        } catch(e) {
-	          report(e.message ? e.message : 'Error Occured')
-	        }
+			      var element = document.createElement('a');
 
-	   },
+			      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+			      element.setAttribute('download', filename);
+
+			      element.style.display = 'none';
+			      document.body.appendChild(element);
+
+			      element.click();
+
+			      document.body.removeChild(element);
+
+			    }
+
+			    download(filename, string)
+			    
+			    // console.log(`Private key downloaded as ${filename}.`)
+
+			}
+
+			if (typeof process === 'object') {
+				const fs = require('fs');
+				fs.writeFile('./' + filename, string, err => {});
+				// console.log(`Private key saved as ${filename}.`)
+			}
+
+			resolve(new_account)
+
+		})
+	},
+
+	rpc(data) {
+		return new Promise((resolve) => {
+
+			// I could use Axios, but where is the vanilla in that.
+			const https = require('https');
+
+			var postData = JSON.stringify(data);
+
+			var options = {
+			  hostname: this.endpoint.replace('https://', ''),
+			  port: 443,
+			  path: '/',
+			  method: 'POST',
+			  headers: { 
+			  	'Content-Type': 'application/json', 
+			  	'Content-Length': postData.length,
+			  	'Nano-App': `github.com/fwd/nano-js`
+			  }
+			};
+
+			var req = https.request(options, (res) => {
+			  res.on('data', (d) => {
+			    resolve(JSON.parse(d.toString()))
+			  });
+			});
+
+			req.on('error', (e) => {
+			  console.error(e);
+			});
+
+			req.write(postData);
+
+			req.end();
+
+		})
+	},
+
+	pow(account) {
+		return new Promise(async (resolve, reject) => {
+			var frontier = account.frontier
+			if (!frontier || frontier === '0') frontier = (await this.rpc({ action: 'account_key', account: account.account } )).data.key
+			return (await this.rpc({ action: 'work_generate', hash: frontier, key: this.api_key } )).data
+		})
+	},
+
+	balance() {
+		return new Promise(async (resolve, reject) => {
+			var accounts = JSON.parse(JSON.stringify(this.wallets.map(a => {
+				return { address: a.publicKey }
+			})))
+			try {
+				for (var item of accounts) {
+					var resp = (await this.rpc({ action: 'account_info', account: item.address }))
+					item.balance = resp.balance ? resp.balance : "0"
+				}
+				resolve(accounts.length === 1 ? accounts[0] : accounts)
+			} catch(e) { reject(e) }
+		})
+	},
+
+	receive() {
+		return new Promise((resolve, reject) => {
+			
+			var source = this.wallets[0]
+
+			this.rpc({ 
+			    action: 'receivable', 
+			    account: source.publicKey,
+			    source: "true",
+			  }).then(async (res) => {
+
+			  	if (res.data.blocks === '' || res.data.blocks === '[]') return resolve()
+
+			    var blocks = []
+
+				Object.keys(res.data.blocks).map(hash => blocks.push({ hash, amount: res.data.blocks[hash].amount, source: res.data.blocks[hash].source, }))
+
+			    for (var hash of blocks) {
+			    	
+			    	var account = (await this.rpc({ action: 'account_info', account: source.publicKey, representative: "true" })).data
+
+			   		if (account.error) account = {}
+
+				    const data = {
+
+					    // Your current balance in RAW from account info
+					    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
+
+					    // Your address
+					    toAddress: source.publicKey,
+
+					    // From account info
+					    representativeAddress: account.representative,
+
+					    // From account info
+					    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
+					    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.publicKey } )).data.key,
+
+					    // From the pending transaction
+					    transactionHash: hash.hash,
+
+					    // From the pending transaction in RAW
+					    amountRaw: hash.amount,
+
+					    work: await this.pow({ account: source.publicKey, frontier: account.frontier }),
+
+					}
+
+					if (!data.work) return reject(data)
+
+			    	const signedBlock = NanocurrencyWeb.block.receive(data, source.privateKey)
+
+			    	await this.rpc({
+				      "action": "process",
+				      "json_block": "true",
+				      "subtype": "receive",
+				      "block": signedBlock
+				    })
+
+			    }
+
+			    resolve("Done.")
+
+			})
+		
+		})
+	},
+
+	send(config) {
+
+		return new Promise((resolve) => {
+			
+			var source = this.wallets[0]
+
+			this.rpc({ 
+			    action: 'account_info', 
+			    account: source.publicKey,
+			    representative: "true"
+			  }).then(async (res) => {
+
+			    var account = res.data
+
+			    const data = {
+			        // Your current balance in RAW from account info
+			        walletBalanceRaw: account.balance,
+			        // Your address
+			        fromAddress: source.publicKey,
+			        toAddress: config.to,
+			        // From account info
+			        representativeAddress: account.representative,
+			        frontier: account.frontier,
+			        amountRaw: config.amount === 'all' ? account.balance : convert.toRaw(config.amount),
+			        work: await this.pow({ account: source.publicKey, frontier: account.frontier }),
+			    }
+
+			    // Returns a correctly formatted and signed block ready to be sent to the blockchain
+			    const signedBlock = NanocurrencyWeb.block.send(data, source.privateKey)
+
+			    this.rpc({
+			      "action": "process",
+			      "json_block": "true",
+			      "subtype": "send",
+			      "block": signedBlock
+			    }).then((hash) => {
+			      resolve(hash.data)
+			    })
+
+			})
+
+		})
 
 	}
 
-    function getRandomArbitrary(min, max) {
-        return Math.floor(Math.random() * (max - min) + min)
-    }
+}
 
-    function qrcode(address, amount) {
-    	// console.log("qrcode", address, amount)
-        return new Promise((resolve) => {
-          var options = {
-            text: `nano:${address}?amount=${amount}`,
-            width: 300,
-            height: 280,
-            logo: "https://dev.nano.to/img/xno.svg", // @todo "Failed to execute 'toDataURL' on 'HTMLCanvasElement'"
-          }
-          new QRCode(document.getElementById("qrcode"), options);
-          resolve()
-        })
-    }
+if (typeof window !== 'undefined') {
+	
+	function getRandomArbitrary(min, max) {
+	    return Math.floor(Math.random() * (max - min) + min)
+	}
 
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      window.nano.dark_mode = true
-    }
+	function qrcode(address, amount) {
+	    return new Promise((resolve) => {
+	      var options = {
+	        text: `nano:${address}?amount=${amount}`,
+	        width: 300,
+	        height: 280,
+	        logo: "https://dev.nano.to/img/xno.svg", // @todo "Failed to execute 'toDataURL' on 'HTMLCanvasElement'"
+	      }
+	      new QRCode(document.getElementById("qrcode"), options);
+	      resolve()
+	    })
+	}
+	
+	if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+	 nano.dark_mode = true
+	}
+	
+	nano.cancel = (element) => {
+	    document.getElementById('nano-pay').remove()
+	    clearInterval(window.nano.interval)
+	}
 
+	nano.success = (element, data, block) => {
+	    var existing = document.getElementById('nano-pay')
+	    var template = `
+	<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
+	<img src="https://dev.nano.to/img/success.svg" style="max-width: 120px !important; filter: saturate(2);">
+	    <div style="color: ${window.nano.dark_mode ? '#FFF' : '#000'}; margin: 40px;opacity:1;">Success</div>
+	    <div onclick="window.nano.cancel(); return" style="cursor: pointer; font-size: 21px; padding: 8px 30px; background: #1f9ce9; color: #FFF; min-width: 120px; text-align: center; border-radius: 5px;">
+	        Done
+	    </div>
+	    <div style=" border-radius: 0; padding: 10px 25px; color: ${window.nano.dark_mode ? '#FFF' : '#000'};; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
+	        Closing..
+	    </div>
+	</img>
+	</div>
+	`
+	    if (existing) existing.innerHTML = template;
 
-    window.nano.cancel = (element) => {
-        document.getElementById('nano-pay').remove()
-        clearInterval(window.nano.interval)
-    }
-    
-    window.nano.success = (element, data, block) => {
-        var existing = document.getElementById('nano-pay')
-        var template = `
-<div id="nano-pay" style="position: fixed;width: 100%;height: 100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
-    <img src="https://dev.nano.to/img/success.svg" style="max-width: 120px !important; filter: saturate(2);">
-        <div style="color: ${window.nano.dark_mode ? '#FFF' : '#000'}; margin: 40px;opacity:1;">Success</div>
-        <div onclick="window.nano.cancel(); return" style="cursor: pointer; font-size: 21px; padding: 8px 30px; background: #1f9ce9; color: #FFF; min-width: 120px; text-align: center; border-radius: 5px;">
-            Done
-        </div>
-        <div style=" border-radius: 0; padding: 10px 25px; color: ${window.nano.dark_mode ? '#FFF' : '#000'};; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
-            Closing..
-        </div>
-    </img>
-</div>
-`
-        if (existing) existing.innerHTML = template;
-
-        if (element) {
+	    if (element) {
 	        
 	        var all = document.querySelectorAll(element);
 
 	        for (var i=0, max=all.length; i < max; i++) {
 	            all[i].querySelector('.nano-locked').remove()
-	            all[i].innerHTML = window.nano[i]
+	            all[i].innerHTML =nano[i]
 	            all[i].style.position = null; 
 				var id = all[i].getAttribute('data-id')
 				if (id) localStorage.setItem(`purchased-${id}`, true)
 	        }
 
-        }
+	    }
 
-        if (window.user_success) window.user_success(block)
+	    if (window.user_success) window.user_success(block)
 
-        setTimeout(() => {
-        	window.nano.cancel();
-        }, 3000)
+	    setTimeout(() => {
+	    	window.nano.cancel();
+	    }, 3000)
 
-    }
+	}
+	
+	nano.charge = (data) => {
 
-    window.nano.charge = (data) => {
+		if (typeof window === 'undefined') return console.error('Nano: Charge method is only available in the browser.')
 
-    	if (data.random) data.amount = `${data.amount}000${getRandomArbitrary(10000000, 99999999)}`
+		if (data.random) data.amount = `${data.amount}000${getRandomArbitrary(10000000, 99999999)}`
 
-    	if (data.debug) window.nano.debug = data.debug 
-        if (data.success) window.user_success = data.success 
-        	
-    	data.common = `${data.amount}`
+		if (data.debug)nano.debug = data.debug 
+	    if (data.success) window.user_success = data.success 
+	    	
+		data.common = `${data.amount}`
 
-        var template = `<div id="nano-pay" style="font-family: 'Arial'; position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
-    <div style="margin: 0 0 20px 0;font-size: 38px; color:${data.color && data.color !== 'undefined' ? data.color : '#1f9ce9;'}">
-        ${ data.title && data.title !== 'undefined' ? data.title : 'NanoPay'}
-    </div>
-    <div id="qrcode" style="border: 14px solid ${window.nano.dark_mode ? '#FFF' : '#ebebeb61'};margin-top: 20px;border-radius: 10px;display: flex;zoom: 0.5;">
-    </div>
-    <div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">
-        ${data.amount}
-        NANO
-    </div>
-    <span style="display: none; opacity: 0.3;font-size: 18px;margin-top: -25px;margin-bottom: 30px;text-transform: none;"> FEE(?): ${data.arbitrary} </span>
-    <a href="nano:${data.address}?amount=${NanocurrencyWeb.tools.convert(data.common, 'NANO', 'RAW')}" style="color: initial; text-decoration: none; text-decoration: none; border: 0">
-    	<div style=" background: #1f9ce9; font-size: 18px; border-radius: 5px; padding: 10px 25px; color: #FFF; border-bottom: 0">
-        Open Wallet 
-    </div>
-    </a>
-    <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
-        Cancel
-    </div>
-</div>
+	    var template = `<div id="nano-pay" style="font-family: 'Arial'; position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
+	<div style="margin: 0 0 20px 0;font-size: 38px; color:${data.color && data.color !== 'undefined' ? data.color : '#1f9ce9;'}">
+	    ${ data.title && data.title !== 'undefined' ? data.title : 'NanoPay'}
+	</div>
+	<div id="qrcode" style="border: 14px solid ${window.nano.dark_mode ? '#FFF' : '#ebebeb61'};margin-top: 20px;border-radius: 10px;display: flex;zoom: 0.5;">
+	</div>
+	<div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">
+	    ${data.amount}
+	    NANO
+	</div>
+	<span style="display: none; opacity: 0.3;font-size: 18px;margin-top: -25px;margin-bottom: 30px;text-transform: none;"> FEE(?): ${data.arbitrary} </span>
+	<a href="nano:${data.address}?amount=${NanocurrencyWeb.tools.convert(data.common, 'NANO', 'RAW')}" style="color: initial; text-decoration: none; text-decoration: none; border: 0">
+		<div style=" background: #1f9ce9; font-size: 18px; border-radius: 5px; padding: 10px 25px; color: #FFF; border-bottom: 0">
+	    Open Wallet 
+	</div>
+	</a>
+	<div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
+	    Cancel
+	</div>
+	</div>
 
-`
+	`
 	    document.body.innerHTML += template;
 	    
 	    setTimeout(() => {
@@ -204,45 +360,47 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 	    }, 5)
 	    var checks = 0
 
-	    window.nano.interval = setInterval(async () => {
+	   nano.interval = setInterval(async () => {
 	    	if (window.nano.debug) return
 	    	if (checks < 60) {
-		    	var block = await window.nano.rpc.check(data.address, data.common)
-		    	if (block) window.nano.success(null, null, block)
+		    	var block = awaitnano.rpc.check(data.address, data.common)
+		    	if (block)nano.success(null, null, block)
 	    	} else clearInterval(window.nano.interval)
 	    }, 5000)
 
-    }
+	}
 
-    window.nano.unlock = (element, amount, address, title, color) => {
+	nano.unlock = (element, amount, address, title, color) => {
 
-        var data = { 
-        	arbitrary: `000${getRandomArbitrary(10000000, 99999999)}`, 
-        	amount: amount 
-        }
-        	
-    	data.common = `${amount}${data.arbitrary}`
+		if (typeof window === 'undefined') return console.error('Nano: Unlock method is only available in the browser.')
 
-        var template = `<div id="nano-pay" style="font-family: 'Arial'; position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
-    <div style="margin: 0 0 20px 0;font-size: 34px; color:${color && color !== 'undefined' ? color : '#1f9ce9;'}">
-        ${ title && title !== 'undefined' ? title : 'NanoPay'}
-    </div>
-    <div id="qrcode" style="border: 14px solid #1f9ce9;margin-top: 20px;border-radius: 10px;display: flex;zoom: 0.5;">
-    </div>
-    <div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">
-        ${data.amount.replace(data.arbitrary, '')}
-        NANO
-    </div>
-    <span style="display: none; opacity: 0.3;font-size: 18px;margin-top: -25px;margin-bottom: 30px;text-transform: none;"> FEE(?): ${data.arbitrary} </span>
-    <a href="nano:${address}?amount=${NanocurrencyWeb.tools.convert(data.common, 'NANO', 'RAW')}" style="color: initial; text-decoration: none; border-bottom: 0 !important;">
-    	<div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">Open Wallet</div>
-    </a>
-    <div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
-        Cancel
-    </div>
-</div>
+	    var data = { 
+	    	arbitrary: `000${getRandomArbitrary(10000000, 99999999)}`, 
+	    	amount: amount 
+	    }
+	    	
+		data.common = `${amount}${data.arbitrary}`
 
-`
+	    var template = `<div id="nano-pay" style="font-family: 'Arial'; position: fixed;width: 100%;height:100%;background:${window.nano.dark_mode ? '#000' : '#FFF'};z-index: 9999;left: 0;top: 0;right: 0;bottom: 0;display: flex;align-items: center;justify-content: center;flex-direction: column;color: #FFF;font-size: 30px;">
+	<div style="margin: 0 0 20px 0;font-size: 34px; color:${color && color !== 'undefined' ? color : '#1f9ce9;'}">
+	    ${ title && title !== 'undefined' ? title : 'NanoPay'}
+	</div>
+	<div id="qrcode" style="border: 14px solid #1f9ce9;margin-top: 20px;border-radius: 10px;display: flex;zoom: 0.5;">
+	</div>
+	<div style="margin: 30px 0;opacity: 1;font-size: 27px;letter-spacing: 1px;color:${window.nano.dark_mode ? '#FFF' : '#000'}">
+	    ${data.amount.replace(data.arbitrary, '')}
+	    NANO
+	</div>
+	<span style="display: none; opacity: 0.3;font-size: 18px;margin-top: -25px;margin-bottom: 30px;text-transform: none;"> FEE(?): ${data.arbitrary} </span>
+	<a href="nano:${address}?amount=${NanocurrencyWeb.tools.convert(data.common, 'NANO', 'RAW')}" style="color: initial; text-decoration: none; border-bottom: 0 !important;">
+		<div style=" background: #1f9ce9; font-size: 21px; border-radius: 5px; padding: 10px 25px; color: #FFF; ">Open Wallet</div>
+	</a>
+	<div onclick="window.nano.cancel(); return" style=" border-radius: 0; padding: 10px 25px; color:${window.nano.dark_mode ? '#FFF' : '#000'}; margin-top: 24px; opacity: 0.7; font-size: 17px; ">
+	    Cancel
+	</div>
+	</div>
+
+	`
 	    document.body.innerHTML += template;
 	    
 	    setTimeout(() => {
@@ -251,78 +409,76 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 	    }, 5)
 	    var checks = 0
 
-	    window.nano.interval = setInterval(async () => {
+	   nano.interval = setInterval(async () => {
 	    	if (window.nano.debug) return
 	    	if (checks < 60) {
-		    	var block = await window.nano.rpc.check(address, data.common)
-		    	if (block) window.nano.success(element, null, block)
+		    	var block = awaitnano.rpc.check(address, data.common)
+		    	if (block)nano.success(element, null, block)
 	    	} else clearInterval(window.nano.interval)
 	    }, 5000)
 
-    }
+	}
 
-    window.nano.sell = (config) => {
+	nano.paywall = (config) => {
 
-        if (typeof config === 'string' && config.includes('nano_')) {
-            config = { address: config }
-        } else {
-            config = config || {}
-        }
+		if (typeof window === 'undefined') return console.error('Nano: Paywall method is only available in the browser.')
 
-        if (!config.address || !config.address.includes('nano_')) return console.error('Nano: NANO payment address invalid:', config.element)
+	    if (typeof config === 'string' && config.includes('nano_')) {
+	        config = { address: config }
+	    } else {
+	        config = config || {}
+	    }
 
-        if ( !NanocurrencyWeb.tools.validateAddress(config.address) ) return console.error('Nano: NANO payment address invalid:', config.element)
+	    if (!config.address || !config.address.includes('nano_')) return console.error('Nano: NANO payment address invalid:', config.element)
 
-        if (!config.element) return console.error('Nano: No premium element provided:', config.element)
-        if (!config.amount) return console.error('Nano: No price provided:', config.element)
-        if (config.endpoint || config.node) window.nano.rpc.endpoint = config.endpoint || config.node
-        if (config.debug) window.nano.debug = config.debug 
-        if (config.success) window.user_success = config.success 
-        
-        var all = document.querySelectorAll(config.element);
+	    if ( !NanocurrencyWeb.tools.validateAddress(config.address) ) return console.error('Nano: NANO payment address invalid:', config.element)
 
-        for (var i=0, max=all.length; i < max; i++) {
+	    if (!config.element) return console.error('Nano: No premium element provided:', config.element)
+	    if (!config.amount) return console.error('Nano: No price provided:', config.element)
+	    if (config.endpoint || config.node)nano.rpc.endpoint = config.endpoint || config.node
+	    if (config.debug)nano.debug = config.debug 
+	    if (config.success) window.user_success = config.success 
+	    
+	    var all = document.querySelectorAll(config.element);
 
-            window.nano[i] = all[i].innerHTML
+	    for (var i=0, max=all.length; i < max; i++) {
 
-            var item = all[i]
+	       nano[i] = all[i].innerHTML
 
-            item.style['min-height'] = item.offsetHeight; 
-            item.style.position = "relative"; 
-            item.style.opacity = "1"; // set opacity to 0 on your website for no flash of unstyled text, FOUC)
+	        var item = all[i]
 
-            all[i].innerHTML = ''
-            
-            let code = `<div class="nano-locked" style="font-family:'Arial';text-align:center;position: absolute;background:${config.background || 'rgb(31 156 233)'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height:250px;border-radius:10px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
-    <div>
-        ${ config.text ? config.text + ' ' + config.amount + ' NANO' : 'Unlock for ' + config.amount + ' NANO' }
-    </div>
-    <div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}', '${config.title}', '${config.color}')" style="cursor: pointer; padding: 7px 25px; border-radius: 4px; margin: 15px 0 10px 0; display: flex; align-items: center; justify-content: center; font-size: 18px; background: #FFF; color: ${config.color || '#000'}">
-        <img style="max-width: 24px;width: auto;min-width: auto;margin: 0 8px 0 0!important;float: none;" src="https://dev.nano.to/img/xno.svg" alt="">
-        ${ config.button || 'Purchase' }
-    </div>
-`
+	        item.style['min-height'] = item.offsetHeight; 
+	        item.style.position = "relative"; 
+	        item.style.opacity = "1"; // set opacity to 0 on your website for no flash of unstyled text, FOUC)
+
+	        all[i].innerHTML = ''
+	        
+	        let code = `<div class="nano-locked" style="font-family:'Arial';text-align:center;position: absolute;background:${config.background || 'rgb(31 156 233)'};width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;font-size: 24px;min-height:250px;border-radius:10px;display: flex;align-items: center;flex-direction: column;justify-content: center; color: ${config.color || '#FFF'}">
+	<div>
+	    ${ config.text ? config.text + ' ' + config.amount + ' NANO' : 'Unlock for ' + config.amount + ' NANO' }
+	</div>
+	<div onclick="window.nano.unlock('${config.element}', '${config.amount}', '${config.address}', '${config.title}', '${config.color}')" style="cursor: pointer; padding: 7px 25px; border-radius: 4px; margin: 15px 0 10px 0; display: flex; align-items: center; justify-content: center; font-size: 18px; background: #FFF; color: ${config.color || '#000'}">
+	    <img style="max-width: 24px;width: auto;min-width: auto;margin: 0 8px 0 0!important;float: none;" src="https://dev.nano.to/img/xno.svg" alt="">
+	    ${ config.button || 'Purchase' }
+	</div>
+	`
 			var id = item.getAttribute('data-id')
 
-            if (config.free || ( !config.repurchase && localStorage.getItem(`purchased-${id}`) ) ) {
-                code += `<div onclick="window.nano.success('${config.element}')" style="opacity: 0.6; zoom: 0.8; "> <hr style=" opacity: 0.3; margin: 20px 0 30px 0; "> ${ config.free && typeof config.free === 'string' ? config.free : 'Unlock for Free' }</div>`
-            }
+	        if (config.free || ( !config.repurchase && localStorage.getItem(`purchased-${id}`) ) ) {
+	            code += `<div onclick="window.nano.success('${config.element}')" style="opacity: 0.6; zoom: 0.8; "> <hr style=" opacity: 0.3; margin: 20px 0 30px 0; "> ${ config.free && typeof config.free === 'string' ? config.free : 'Unlock for Free' }</div>`
+	        }
 
-            code += '</div>'
+	        code += '</div>'
 
-            item.innerHTML += code
+	        item.innerHTML += code
 
-            window.nano.config = config
+	       nano.config = config
 
-        }
+	    }
 
-    }
+	}
 
-    // for the kiddes
-    window.nano.paywall =  window.nano.sell
-    window.nano.ppv =  window.nano.sell
-    window.nano.premium =  window.nano.sell
-    window.nano.lock =  window.nano.sell
-    window.nano.element =  window.nano.sell
+}
 
-})();
+if (typeof window !== 'undefined') window.nano = nano
+if (typeof process === 'object') module.exports = nano

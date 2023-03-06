@@ -1,40 +1,47 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Non-custodial JS Libraries</h1>
+<h1 align="center">Non-custodial Nano Browser Library</h1>
 
-<h3 align="center">Hosted on Github</h3>
-
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-
-### Offline Wallet
-
-```html
-<!-- Local -->
-<script src="/wallet.js"></script>
-<!-- CDN -->
-<script src="https://js.nano.to/wallet.js"></script>
-```
+<h3 align="center">In Development. Not ready for use.</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Crypto Paywall
-
-Monetize any DOM element on your website.
-
-> **This library is not for keeping secrets. It is to make it easier for users to support you. Anyone can bypass this kind of  paywall with some tinkering.**
-
-
-**Paywall.js:**
-
 ```html
 <!-- Local -->
-<script src="/paywall.js"></script>
-<!-- CDN -->
-<script src="https://js.nano.to/paywall.js"></script>
-```
+<script src="/nano.js"></script>
 
-```html
+<!-- Usage -->
 <script>
+
+    console.log(window.nano)
+
+    nano.endpoint = 'https://rpc.nano.to'
+
+    // Import existing Wallet
+    await nano.import({ publicKey: env.publicKey, privateKey: env.privateKey })
+
+    // Or Generate new Wallet
+    await nano.generate()
+    
+    // Check balance.
+    await nano.balance()
+
+    // Send Nano
+    await nano.send({
+        to: '@fosse',
+        amount: '0.2'
+    }) 
+
+    // Receive pending Nano
+    await nano.receive()  
+
+    // Lease a Username
+    await nano.lease('Username')  
+
+    // RPC to Public Nodes
+    await nano.rpc({ action: 'block_count' }) 
+
+    // Simple HTML Paywall
     nano.paywall({ 
         element: '.premium', // required, all with class .premium
         address: 'YOUR_ADDRESS', // required
@@ -51,18 +58,8 @@ Monetize any DOM element on your website.
             console.log(block)
         }
     })
-</script>
-```
 
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-
-**Single Charge**
-
-Accept one-time Nano payments.
-
-```html
-<script>
-    // open up popup
+    // One-time Payment
     nano.charge({ 
         address: 'YOUR_ADDRESS', // required
         amount: 0.001, // required
@@ -71,6 +68,7 @@ Accept one-time Nano payments.
             console.log(block)
         }
     })
+    
 </script>
 ```
 

@@ -1,0 +1,16 @@
+{
+  "name": "@fwd/nano",
+  "version": "0.0.1",
+  "description": "Offline wallet for Nano currency.",
+  "main": "nano.js",
+  "author": "@nano2dev <hello@fwd.dev>",
+  "license": "MIT",
+  "homepage": "https://github.com/fwd/nano-js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fwd/nano-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fwd/nano-js/issues"
+  }
+}
