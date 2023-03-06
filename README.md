@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Non-Custodial Crypto Libraries</h1>
+<h1 align="center">Non-Custodial Browser Libraries</h1>
 
 <h3 align="center">Hosted on Github</h3>
 
