@@ -1,10 +1,10 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Non-Custodial Browser Libraries</h1>
+<h1 align="center">Non-custodial JS Libraries</h1>
 
 <h3 align="center">Hosted on Github</h3>
 
-### Offline Nano Wallet
+### Browser Wallet
 
 **Wallet.js:**
 ```html
@@ -16,7 +16,7 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Non-Custodial Nano Paywall
+### Crypto Paywall
 
 Monetize any DOM element on your website.
 
