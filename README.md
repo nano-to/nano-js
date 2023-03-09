@@ -6,10 +6,17 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
+**Local:**
 ```html
-<!-- Local -->
-<script src="/nano.js"></script>
+<script src="/latest.js"></script>
+```
 
+**CDN:**
+```html
+<script src="https://offline.nano.to/latest.js"></script>
+```
+
+```html
 <!-- Usage -->
 <script>
 
