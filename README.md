@@ -20,12 +20,12 @@
 <!-- Usage -->
 <script>
 
-    console.log(window.nano)
+    // console.log(window.nano)
 
-    nano.endpoint = 'https://rpc.nano.to'
+    // nano.endpoint = 'https://rpc.nano.to'
 
     // Import existing Wallet
-    await nano.import({ publicKey: env.publicKey, privateKey: env.privateKey })
+    // await nano.import({ publicKey: env.publicKey, privateKey: env.privateKey })
 
     // Or Generate new Wallet
     await nano.generate()
