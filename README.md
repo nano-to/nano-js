@@ -35,7 +35,7 @@
 
     // Send Nano
     await nano.send({
-        to: '@fosse',
+        to: 'nano_1sj3...',
         amount: '0.2'
     }) 
 
@@ -47,34 +47,6 @@
 
     // RPC to Public Nodes
     await nano.rpc({ action: 'block_count' }) 
-
-    // Simple HTML Paywall
-    nano.paywall({ 
-        element: '.premium', // required, all with class .premium
-        address: 'YOUR_ADDRESS', // required
-        amount: 0.001, // required
-        debug: false, // optional
-        free: false, // // optional, allow free access
-        background: '#000000de', // optional css hex
-        text: 'Read Lorem for', // optional
-        title: '', // optional
-        color: '', // optional
-        endpoint: 'https://nanolooker.com/api/rpc', // optional
-        success: (block) => {
-            // Element(s) are automatically shown.
-            console.log(block)
-        }
-    })
-
-    // One-time Payment
-    nano.charge({ 
-        address: 'YOUR_ADDRESS', // required
-        amount: 0.001, // required
-        random: true, // recommended
-        success: (block) => {
-            console.log(block)
-        }
-    })
     
 </script>
 ```
