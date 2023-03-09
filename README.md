@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano.to Developer Wallet</h1>
+<h1 align="center">Nano.to Offline Wallet</h1>
 
 <h3 align="center">In Development. Not ready for use.</h3>
 
