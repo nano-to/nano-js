@@ -22,36 +22,32 @@
 const wallet = require('@fwd/nano-offline')
 ```
 
+**USAGE:**
 ```html
-<!-- Usage -->
-<script>
+// console.log(window.nano)
 
-    // console.log(window.nano)
+// nano.endpoint = 'https://rpc.nano.to'
 
-    // nano.endpoint = 'https://rpc.nano.to'
+// Import existing Wallet
+// await nano.import({ publicKey: env.publicKey, privateKey: env.privateKey })
 
-    // Import existing Wallet
-    // await nano.import({ publicKey: env.publicKey, privateKey: env.privateKey })
+// Or Generate new Wallet
+await nano.generate()
 
-    // Or Generate new Wallet
-    await nano.generate()
-    
-    // Check balance.
-    console.log( await nano.balance() )
+// Check balance.
+console.log( await nano.balance() )
 
-    // Send Nano
-    await nano.send({
-        to: 'nano_1sj3...',
-        amount: '0.2'
-    }) 
+// Send Nano
+await nano.send({
+    to: 'nano_1sj3...',
+    amount: '0.2'
+}) 
 
-    // Receive Pending Nano
-    await nano.receive()   
+// Receive Pending Nano
+await nano.receive()   
 
-    // RPC to any Public Node
-    await nano.rpc({ action: 'block_count' }) 
-    
-</script>
+// RPC to any Public Node
+await nano.rpc({ action: 'block_count' }) 
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
