@@ -10,6 +10,7 @@ let nano = {
 
     // NanocurrencyWeb, // debug
     api_key: '', // Optional Api Key
+
     wallets: [],
 
     // convert: NanocurrencyWeb.tools.convert,
@@ -45,36 +46,33 @@ let nano = {
 
 	accounts(config) {
 		return new Promise((resolve) => {
-
 			resolve(this.wallets.map(a => {
-				return { address: a.publicKey, private: config && config.export ? a.privateKey : '[HIDDEN]' }
+				return { 
+					address: a.publicKey, 
+					private: config && config.export ? a.privateKey : '[HIDDEN]' 
+				}
 			}))
-
 		})
 	},
 
 	generate() {
-
 		return new Promise((resolve) => {
-
 			var new_account = NanocurrencyWeb.wallet.generate()
 				new_account = {
+				seed: new_account.seed,
+				mnemonic: new_account.mnemonic,
 				publicKey: new_account.accounts[0].address,
 				privateKey: new_account.accounts[0].privateKey,
 			}
-
 			this.wallets.push(new_account)
-
 			resolve(new_account)
-
 		})
-
 	},
 
 	rpc(data) {
 		return new Promise((resolve) => {
 
-			// I could use Axios, but where is the vanilla in that.
+			// i could use axios, but where is the vanilla.
 			const https = require('https');
 
 			var postData = JSON.stringify(data);
@@ -137,6 +135,7 @@ let nano = {
 	  return await new Promise((resolve, reject) => {
 	  	config.account = config.account ? config.account : this.wallets[0].publicKey
 		if (!config.amount) return reject("Missing amount.")
+		// yep, just a setInterval
 	    const interval = setInterval(() => {
 	       var payment = this.rpc({ action: 'search', account: config.account, amount: config.amount })
 	      if (payment.hash) {
@@ -159,8 +158,6 @@ let nano = {
 				  }).then(async (res) => {
 
 				  	if (!res.data || !res.data.blocks) res.data = { blocks: [] }
-
-				  	// console.log("(res.data.blocks", res.data)
 
 				  	if (res.data && res.data.blocks && res.data.blocks === '') return resolve()
 
