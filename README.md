@@ -23,7 +23,7 @@ const wallet = require('@fwd/nano-offline')
 ```
 
 **USAGE:**
-```html
+```js
 // console.log(window.nano)
 
 // nano.endpoint = 'https://rpc.nano.to'
