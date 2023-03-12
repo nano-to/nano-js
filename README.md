@@ -16,6 +16,12 @@
 <script src="https://offline.nano.to/latest.js"></script>
 ```
 
+**NPM:**
+```html
+// npm install fwd/nano-offline
+const wallet = require('@fwd/nano-offline')
+```
+
 ```html
 <!-- Usage -->
 <script>
@@ -31,7 +37,7 @@
     await nano.generate()
     
     // Check balance.
-    await nano.balance()
+    console.log( await nano.balance() )
 
     // Send Nano
     await nano.send({
@@ -39,13 +45,10 @@
         amount: '0.2'
     }) 
 
-    // Receive pending Nano
-    await nano.receive()  
+    // Receive Pending Nano
+    await nano.receive()   
 
-    // Lease a Username
-    await nano.lease('Username')  
-
-    // RPC to Public Nodes
+    // RPC to any Public Node
     await nano.rpc({ action: 'block_count' }) 
     
 </script>
