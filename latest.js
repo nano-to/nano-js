@@ -12,6 +12,8 @@ let nano = {
     api_key: '', // Optional Api Key
     wallets: [],
 
+    // convert: NanocurrencyWeb.tools.convert,
+
 	import(config) {
 		return new Promise((resolve) => {
 
@@ -27,10 +29,12 @@ let nano = {
 		})
 	},
 
-	destroy(config) {
+	destroy() {
 		return new Promise((resolve) => {
 
 			this.wallets = []
+
+			console.log("Goodbye.")
 
 			resolve("Goodbye.")
 
@@ -145,18 +149,26 @@ let nano = {
 		return new Promise((resolve, reject) => {
 			
 			for (var source of (address ? [this.wallets.find(a => a.publicKey === address)] : this.wallets)) {
-	
+
 				this.rpc({ 
 				    action: 'receivable', 
 				    account: source.publicKey,
 				    source: "true",
 				  }).then(async (res) => {
 
-				  	if (res.data.blocks === '' || res.data.blocks === '[]') return resolve()
+				  	if (!res.data || !res.data.blocks) res.data = { blocks: [] }
+
+				  	// console.log("(res.data.blocks", res.data)
+
+				  	if (res.data && res.data.blocks && res.data.blocks === '') return resolve()
 
 				    var blocks = []
 
-					Object.keys(res.data.blocks).map(hash => blocks.push({ hash, amount: res.data.blocks[hash].amount, source: res.data.blocks[hash].source, }))
+					Object.keys(res.data.blocks).map(hash => blocks.push({ 
+						hash, 
+						amount: res.data.blocks[hash].amount, 
+						source: res.data.blocks[hash].source
+					}))
 
 				    for (var hash of blocks) {
 				    	
@@ -225,6 +237,8 @@ let nano = {
 
 			    var account = res.data
 
+			    if (!account) account = { balance: 0 }
+
 			    const data = {
 			        // Your current balance in RAW from account info
 			        walletBalanceRaw: account.balance,
@@ -234,7 +248,7 @@ let nano = {
 			        // From account info
 			        representativeAddress: account.representative,
 			        frontier: account.frontier,
-			        amountRaw: config.amount === 'all' ? account.balance : convert.toRaw(config.amount),
+			        amountRaw: config.amount === 'all' ? account.balance : NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
 			        work: await this.pow({ account: source.publicKey, frontier: account.frontier }),
 			    }
 
@@ -254,7 +268,7 @@ let nano = {
 
 		})
 
-	}
+	},
 
 	qrcode(address) {
 		return new Promise((resolve, reject) => {
