@@ -24,37 +24,26 @@ const wallet = require('@fwd/nano-offline')
 
 **USAGE:**
 ```js
-// console.log(window.nano)
+;(async () => {
+    
+    await wallet.generate()
 
-// nano.endpoint = 'https://rpc.nano.to'
+    console.log( await wallet.accounts() )
 
-// Import existing Wallet
-// await nano.import({ publicKey: env.publicKey, privateKey: env.privateKey })
+    // console.log( "QR Code:", await wallet.qrcode() )
 
-// Or Generate new Wallet
-var new_one = await nano.generate()
+    await wallet.wait({ amount: '0.11' })
 
-// Check balance.
-console.log( await nano.balance(new_one) )
+    await wallet.receive()
 
-// Send Nano
-await nano.send({
-    to: 'nano_1sj3...',
-    amount: '0.2',
-    from: new_one.publicKey
-}) 
+    await wallet.send({ 
+        to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
+        amount: await wallet.balance() 
+    })
 
-// Wait for an incoming payment Nano
-await nano.wait({ amount: '1.0293', account: new_one.publicKey })   
+    await wallet.destroy()
 
-// Receive Pending Nano
-await nano.receive(new_one.publicKey)   
-
-// RPC to any Public Node
-await nano.rpc({ action: 'block_count', account: new_one.publicKey }) 
-
-// Open Up Nanolooker
-await nano.nanolooker(new_one.publicKey) // https://nanolooker.com/account/nano_1address..
+})()
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
