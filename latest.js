@@ -151,6 +151,7 @@ let nano = {
 		if (!config.amount) return reject("Missing amount.")
 		// yep, just a setInterval
 	    const interval = setInterval(() => {
+	    	// RPC-2
 	       var payment = this.rpc({ endpoint: 'https://api.nano.to', action: 'search', account: config.account, amount: config.amount })
 	      if (payment.hash) {
 	        resolve(payment)
