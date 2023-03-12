@@ -48,6 +48,7 @@ let nano = {
 	accounts(config) {
 		return new Promise((resolve) => {
 			resolve(this.wallets.map(a => {
+				if (!config) config = {}
 				var item = { 
 					address: a.publicKey, 
 					private: config && config.export ? a.privateKey : '[HIDDEN]' 
