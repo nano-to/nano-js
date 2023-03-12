@@ -31,7 +31,7 @@ let nano = {
 
 	destroy() {
 		return new Promise((resolve) => {
-			
+
 			this.wallets = []
 
 			var saying = "Goodbye."
@@ -282,11 +282,10 @@ let nano = {
 	},
 
 	nanolooker(address) {
-		return new Promise((resolve, reject) => {
-			var source = address ? this.wallets.find(a => a.publicKey === address) : this.wallets[0]
-			console.log(`https://nanolooker.com/account/${source.publicKey}`)
-			return `https://nanolooker.com/account/${source.publicKey}`
-		})
+		var source = address ? this.wallets.find(a => a.publicKey === address) : this.wallets[0]
+		var string = `https://nanolooker.com/account/${source.publicKey}`
+		console.log(string)
+		return string
 	},
 
 }

@@ -31,6 +31,7 @@ const wallet = require('@fwd/nano-offline')
     console.log( await wallet.accounts() )
 
     // console.log( "QR Code:", await wallet.qrcode() )
+    // console.log( wallet.nanolooker() )
 
     await wallet.wait({ amount: '0.01' })
 
@@ -41,8 +42,8 @@ const wallet = require('@fwd/nano-offline')
         amount: (await wallet.balance()).balance
     })
 
-    // Export
     // console.log(await wallet.accounts({ export: true }))
+
     // from RAM not Blockchain :)
     await wallet.destroy()
 
