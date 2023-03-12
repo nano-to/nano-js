@@ -31,7 +31,7 @@ const nano = require('@fwd/nano-offline')
     console.log( await nano.accounts() )
 
     // console.log( "QR Code:", await wallet.qrcode() )
-    // console.log( wallet.nanolooker() )
+    // console.log( "Open Link:", wallet.nanolooker() )
 
     await nano.wait({ amount: '0.001' })
 

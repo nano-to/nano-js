@@ -288,7 +288,6 @@ let nano = {
 		return new Promise((resolve, reject) => {
 			var source = address ? this.wallets.find(a => a.publicKey === address) : this.wallets[0]
 			var string = `https://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=nano:${source.publicKey}&choe=UTF-8`
-			console.log(string)
 			return string
 		})
 	},
@@ -296,7 +295,6 @@ let nano = {
 	nanolooker(address) {
 		var source = address ? this.wallets.find(a => a.publicKey === address) : this.wallets[0]
 		var string = `https://nanolooker.com/account/${source.publicKey}`
-		console.log(string)
 		return string
 	},
 
