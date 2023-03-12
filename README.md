@@ -26,6 +26,9 @@ const wallet = require('@fwd/nano-offline')
 ```js
 ;(async () => {
     
+    // Backend only 
+    // await wallet.import({ pub:  })
+
     await wallet.generate()
 
     console.log( await wallet.accounts() )
