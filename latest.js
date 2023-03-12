@@ -86,7 +86,7 @@ let nano = {
 				  headers: { 
 				  	'Content-Type': 'application/json', 
 				  	'Content-Length': postData.length,
-				  	'Nano-App': `fwd/nano-offline`
+				  	'Nano-App': 'fwd/nano-offline'
 				  }
 				};
 
