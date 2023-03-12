@@ -436,7 +436,7 @@
         <!-- partial:index.partial.html -->
         <nav>   
             <a id="home" href="https://nano.to" target="_blank">Nano.to Presents</a>
-            <a id="home" href="https://github.com/fwd/nano-wall" target="_blank">Github</a>
+            <a id="home" href="https://github.com/fwd/nano-offline" target="_blank">Github</a>
         </nav>
         <header>
                 <h1 class="smaller">Open Console</h1>
@@ -447,13 +447,20 @@
 
             ;(async () => {
 
-                await nano.generate()
+                console.log("Welcome")
 
-                console.log( await nano.accounts() )
+                console.log("Type 'nano' to start:")
 
-                await nano.receive()
+                console.log("New Wallet: await nano.generate()")
+                console.log("List Wallets: await nano.accounts()")
 
-                await nano.destroy()
+                // await nano.generate()
+
+                // console.log( await nano.accounts() )
+
+                // await nano.receive()
+
+                // await nano.destroy()
 
             })()
 
