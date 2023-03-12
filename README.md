@@ -44,6 +44,9 @@ await nano.send({
     from: new_one.publicKey
 }) 
 
+// Wait for an incoming payment Nano
+await nano.wait({ amount: '1.0293', account: new_one.publicKey })   
+
 // Receive Pending Nano
 await nano.receive(new_one.publicKey)   
 
