@@ -8,7 +8,6 @@ let nano = {
 	// BYON (Bring your own Node)
     endpoint: 'https://rpc.nano.to',
 
-    // NanocurrencyWeb, // debug
     api_key: '', // Optional Api Key
 
     wallets: [],
@@ -299,6 +298,8 @@ let nano = {
 		console.log(string)
 		return string
 	},
+
+	NanocurrencyWeb, // have it still
 
 }
 
