@@ -38,7 +38,7 @@ const wallet = require('@fwd/nano-offline')
 
     await wallet.send({ 
         to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-        amount: await wallet.balance() 
+        amount: (await wallet.balance()).balance
     })
 
     await wallet.destroy()
