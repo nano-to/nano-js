@@ -72,36 +72,51 @@ let nano = {
 	rpc(data) {
 		return new Promise((resolve) => {
 
-			// i could use axios, but where is the vanilla.
-			const https = require('https');
+			if (typeof process === 'object')  {
 
-			var postData = JSON.stringify(data);
+				// i could use axios, but where is the vanilla.
+				const https = require('https');
 
-			var options = {
-			  hostname: this.endpoint.replace('https://', ''),
-			  port: 443,
-			  path: '/',
-			  method: 'POST',
-			  headers: { 
-			  	'Content-Type': 'application/json', 
-			  	'Content-Length': postData.length,
-			  	'Nano-App': `fwd/nano-offline`
-			  }
-			};
+				var postData = JSON.stringify(data);
 
-			var req = https.request(options, (res) => {
-			  res.on('data', (d) => {
-			    resolve(JSON.parse(d.toString()))
-			  });
-			});
+				var options = {
+				  hostname: this.endpoint.replace('https://', ''),
+				  port: 443,
+				  path: '/',
+				  method: 'POST',
+				  headers: { 
+				  	'Content-Type': 'application/json', 
+				  	'Content-Length': postData.length,
+				  	'Nano-App': `fwd/nano-offline`
+				  }
+				};
 
-			req.on('error', (e) => {
-			  console.error(e);
-			});
+				var req = https.request(options, (res) => {
+				  res.on('data', (d) => {
+				    resolve(JSON.parse(d.toString()))
+				  });
+				});
 
-			req.write(postData);
+				req.on('error', (e) => {
+				  console.error(e);
+				});
 
-			req.end();
+				req.write(postData);
+
+				req.end();
+
+			} else {
+				
+				fetch(this.endpoint, {
+				  method: "POST",
+				  headers: {'Content-Type': 'application/json'}, 
+				  body: JSON.stringify(data)
+				}).then(res => {
+				  resolve(res.data ? res.data : res)
+				});
+
+			}
+
 
 		})
 	},
@@ -148,7 +163,7 @@ let nano = {
 
 	receive(address) {
 		return new Promise((resolve, reject) => {
-			
+
 			for (var source of (address ? [this.wallets.find(a => a.publicKey === address)] : this.wallets)) {
 
 				this.rpc({ 
