@@ -26,17 +26,14 @@ const wallet = require('@fwd/nano-offline')
 ```js
 ;(async () => {
     
-    // Backend only 
-    // await wallet.import({ public: env.PUBLIC_KEY, private: env.PRIVATE_KEY })
-
-    await wallet.generate()
+    await wallet.import( await wallet.generate() )
 
     console.log( await wallet.accounts() )
 
     // console.log( "QR Code:", await wallet.qrcode() )
     // console.log( wallet.nanolooker() )
 
-    await wallet.wait({ amount: '0.01' })
+    await wallet.wait({ amount: '0.001' })
 
     await wallet.receive()
 
@@ -47,7 +44,7 @@ const wallet = require('@fwd/nano-offline')
 
     // console.log(await wallet.accounts({ export: true }))
 
-    // from RAM not Blockchain :)
+    // from RAM not Blockchain
     await wallet.destroy()
 
 })()

@@ -14,16 +14,10 @@ let nano = {
 
     convert: _NanocurrencyWeb.tools.convert,
 
-	import(config) {
+	import(account) {
 		return new Promise((resolve) => {
 
-			if (typeof process !== 'object' && !config.im_dumb) return console.error('Are you insane? No.')
-
-			var account = {
-				publicKey: config.publicKey || config.public || config.pub,
-				privateKey: config.privateKey || config.private || config.priv,
-			}
-
+			// Yep. RAM. No funny business.
 			this.wallets.push(account)
 
 			resolve("Imported.")
