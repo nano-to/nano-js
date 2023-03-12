@@ -12,10 +12,12 @@ let nano = {
 
     wallets: [],
 
-    // convert: NanocurrencyWeb.tools.convert,
+    convert: NanocurrencyWeb.tools.convert,
 
 	import(config) {
 		return new Promise((resolve) => {
+
+			if (typeof process !== 'object' && !config.im_dumb) return console.error('Are you insane? No.')
 
 			var account = {
 				publicKey: config.publicKey || config.public || config.pub,
@@ -299,7 +301,7 @@ let nano = {
 		return string
 	},
 
-	NanocurrencyWeb, // have it still
+	NanocurrencyWeb, // have it all, at the end
 
 }
 
