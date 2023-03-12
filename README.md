@@ -17,7 +17,7 @@
 ```
 
 **NPM:**
-```html
+```js
 // npm install fwd/nano-offline
 const wallet = require('@fwd/nano-offline')
 ```
