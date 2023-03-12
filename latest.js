@@ -79,7 +79,7 @@ let nano = {
 				var postData = JSON.stringify(data);
 
 				var options = {
-				  hostname: this.endpoint.replace('https://', ''),
+				  hostname: data.endpoint ? data.endpoint : this.endpoint.replace('https://', ''),
 				  port: 443,
 				  path: '/',
 				  method: 'POST',
@@ -106,7 +106,7 @@ let nano = {
 
 			} else {
 				
-				fetch(this.endpoint, {
+				fetch(data.endpoint ? data.endpoint : this.endpoint, {
 				  method: "POST",
 				  headers: {'Content-Type': 'application/json'}, 
 				  body: JSON.stringify(data)
@@ -151,7 +151,7 @@ let nano = {
 		if (!config.amount) return reject("Missing amount.")
 		// yep, just a setInterval
 	    const interval = setInterval(() => {
-	       var payment = this.rpc({ action: 'search', account: config.account, amount: config.amount })
+	       var payment = this.rpc({ endpoint: 'https://api.nano.to', action: 'search', account: config.account, amount: config.amount })
 	      if (payment.hash) {
 	        resolve(payment)
 	        clearInterval(interval)
