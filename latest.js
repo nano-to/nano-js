@@ -15,13 +15,33 @@ let nano = {
 		return new Promise((resolve) => {
 
 			var account = {
-				publicKey: config.publicKey || config.public || || config.pub,
-				privateKey: config.privateKey || config.private || || config.priv,
+				publicKey: config.publicKey || config.public || config.pub,
+				privateKey: config.privateKey || config.private || config.priv,
 			}
 
 			this.wallets.push(account)
 
 			resolve("Imported.")
+
+		})
+	},
+
+	destroy(config) {
+		return new Promise((resolve) => {
+
+			this.wallets = []
+
+			resolve("Goodbye.")
+
+		})
+	},
+
+	accounts(config) {
+		return new Promise((resolve) => {
+
+			resolve(this.wallets.map(a => {
+				return { address: a.publicKey, private: config && config.export ? a.privateKey : '[HIDDEN]' }
+			}))
 
 		})
 	},
@@ -103,6 +123,38 @@ let nano = {
 				}
 				resolve(source ? accounts[0] : accounts)
 			} catch(e) { reject(e) }
+		})
+	},
+
+	async wait(config) {
+	  return await new Promise((resolve, reject) => {
+	  	config.account = config.account ? config.account : this.wallets[0].publicKey
+		if (!config.amount) return reject("Missing amount.")
+	    const interval = setInterval(() => {
+	       var payment = this.rpc({ action: 'search', account: config.account, amount: config.amount })
+	      if (payment.hash) {
+	        resolve(payment)
+	        clearInterval(interval)
+	      };
+	    }, 1000)
+	  })
+	},
+
+	qrcode(address) {
+		return new Promise((resolve, reject) => {
+			var source = address ? this.wallets.find(a => a.publicKey === address) : this.wallets[0]
+			var string = `https://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=nano:${source.publicKey}&choe=UTF-8`
+			console.log(string)
+			return string
+		})
+	},
+
+	qrcode(address) {
+		return new Promise((resolve, reject) => {
+			var source = address ? this.wallets.find(a => a.publicKey === address) : this.wallets[0]
+			var string = `https://chart.apis.google.com/chart?chs=150x150&cht=qr&chl=nano:${source.publicKey}&choe=UTF-8`
+			console.log(string)
+			return string
 		})
 	},
 
