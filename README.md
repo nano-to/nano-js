@@ -32,7 +32,7 @@ const wallet = require('@fwd/nano-offline')
 
     // console.log( "QR Code:", await wallet.qrcode() )
 
-    await wallet.wait({ amount: '0.11' })
+    await wallet.wait({ amount: '0.01' })
 
     await wallet.receive()
 
