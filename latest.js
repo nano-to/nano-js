@@ -237,6 +237,41 @@ let nano = {
 		})
 	},
 
+	block(config) {
+
+		return new Promise((resolve) => {
+			
+			var source = config.from ? this.wallets.find(a => a.publicKey === config.from) : this.wallets[0]
+
+			this.rpc({ 
+			    action: 'account_info', 
+			    account: source.publicKey,
+			    representative: "true"
+			  }).then(async (res) => {
+
+			    var account = res.data
+
+			    if (!account) account = { balance: 0 }
+
+			    const data = {
+			        walletBalanceRaw: account.balance,
+			        fromAddress: source.publicKey,
+			        toAddress: config.to,
+			        representativeAddress: account.representative,
+			        frontier: account.frontier,
+			        amountRaw: config.amount === 'all' ? account.balance : _NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
+			        work: await this.pow({ account: source.publicKey, frontier: account.frontier }),
+			    }
+
+			    // Returns a correctly formatted and signed block ready to be sent to the blockchain
+			    return _NanocurrencyWeb.block.send(data, source.privateKey)
+
+			})
+
+		})
+
+	},
+
 	send(config) {
 
 		return new Promise((resolve) => {
