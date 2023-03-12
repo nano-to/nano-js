@@ -32,22 +32,26 @@ const wallet = require('@fwd/nano-offline')
 // await nano.import({ publicKey: env.publicKey, privateKey: env.privateKey })
 
 // Or Generate new Wallet
-await nano.generate()
+var new_one = await nano.generate()
 
 // Check balance.
-console.log( await nano.balance() )
+console.log( await nano.balance(new_one) )
 
 // Send Nano
 await nano.send({
     to: 'nano_1sj3...',
-    amount: '0.2'
+    amount: '0.2',
+    from: new_one.publicKey
 }) 
 
 // Receive Pending Nano
-await nano.receive()   
+await nano.receive(new_one.publicKey)   
 
 // RPC to any Public Node
-await nano.rpc({ action: 'block_count' }) 
+await nano.rpc({ action: 'block_count', account: new_one.publicKey }) 
+
+// Open Up Nanolooker
+await nano.nanolooker(new_one.publicKey) // https://nanolooker.com/account/nano_1address..
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)

@@ -6,11 +6,28 @@ var NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use st
 let nano = {
 
     endpoint: 'https://rpc.nano.to',
-    api_key: '', // Optional Api Key
+
     // NanocurrencyWeb, // debug
+    api_key: '', // Optional Api Key
     wallets: [],
 
+	import(config) {
+		return new Promise((resolve) => {
+
+			var account = {
+				publicKey: config.publicKey || config.public || || config.pub,
+				privateKey: config.privateKey || config.private || || config.priv,
+			}
+
+			this.wallets.push(account)
+
+			resolve("Imported.")
+
+		})
+	},
+
 	generate() {
+
 		return new Promise((resolve) => {
 
 			var new_account = NanocurrencyWeb.wallet.generate()
@@ -24,6 +41,7 @@ let nano = {
 			resolve(new_account)
 
 		})
+
 	},
 
 	rpc(data) {
@@ -42,7 +60,7 @@ let nano = {
 			  headers: { 
 			  	'Content-Type': 'application/json', 
 			  	'Content-Length': postData.length,
-			  	'Nano-App': `github.com/fwd/nano-js`
+			  	'Nano-App': `fwd/nano-offline`
 			  }
 			};
 
@@ -65,92 +83,104 @@ let nano = {
 
 	pow(account) {
 		return new Promise(async (resolve, reject) => {
+			if (!account.frontier) return reject("Bad data provided to POW method.")
 			var frontier = account.frontier
 			if (!frontier || frontier === '0') frontier = (await this.rpc({ action: 'account_key', account: account.account } )).data.key
 			return (await this.rpc({ action: 'work_generate', hash: frontier, key: this.api_key } )).data
 		})
 	},
 
-	balance() {
+	balance(source) {
 		return new Promise(async (resolve, reject) => {
-			var accounts = JSON.parse(JSON.stringify(this.wallets.map(a => {
-				return { address: a.publicKey }
-			})))
+			var accounts = source ? [source] : this.wallets
+				accounts = JSON.parse(JSON.stringify(accounts.map(a => {
+					return { address: a.publicKey }
+				})))
 			try {
 				for (var item of accounts) {
 					var resp = (await this.rpc({ action: 'account_info', account: item.address }))
 					item.balance = resp.balance ? resp.balance : "0"
 				}
-				resolve(accounts.length === 1 ? accounts[0] : accounts)
+				resolve(source ? accounts[0] : accounts)
 			} catch(e) { reject(e) }
 		})
 	},
 
-	receive() {
+	nanolooker(address) {
+		return new Promise((resolve, reject) => {
+			var source = address ? this.wallets.find(a => a.publicKey === address) : this.wallets[0]
+			console.log(`https://nanolooker.com/account/${source.publicKey}`)
+			return `https://nanolooker.com/account/${source.publicKey}`
+		})
+	},
+
+	receive(address) {
 		return new Promise((resolve, reject) => {
 			
-			var source = this.wallets[0]
+			for (var source of (address ? [this.wallets.find(a => a.publicKey === address)] : this.wallets)) {
+	
+				this.rpc({ 
+				    action: 'receivable', 
+				    account: source.publicKey,
+				    source: "true",
+				  }).then(async (res) => {
 
-			this.rpc({ 
-			    action: 'receivable', 
-			    account: source.publicKey,
-			    source: "true",
-			  }).then(async (res) => {
+				  	if (res.data.blocks === '' || res.data.blocks === '[]') return resolve()
 
-			  	if (res.data.blocks === '' || res.data.blocks === '[]') return resolve()
+				    var blocks = []
 
-			    var blocks = []
+					Object.keys(res.data.blocks).map(hash => blocks.push({ hash, amount: res.data.blocks[hash].amount, source: res.data.blocks[hash].source, }))
 
-				Object.keys(res.data.blocks).map(hash => blocks.push({ hash, amount: res.data.blocks[hash].amount, source: res.data.blocks[hash].source, }))
+				    for (var hash of blocks) {
+				    	
+				    	var account = (await this.rpc({ action: 'account_info', account: source.publicKey, representative: "true" })).data
 
-			    for (var hash of blocks) {
-			    	
-			    	var account = (await this.rpc({ action: 'account_info', account: source.publicKey, representative: "true" })).data
+				   		if (account.error) account = {}
 
-			   		if (account.error) account = {}
+					    const data = {
 
-				    const data = {
+						    // Your current balance in RAW from account info
+						    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
 
-					    // Your current balance in RAW from account info
-					    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
+						    // Your address
+						    toAddress: source.publicKey,
 
-					    // Your address
-					    toAddress: source.publicKey,
+						    // From account info
+						    representativeAddress: account.representative,
 
-					    // From account info
-					    representativeAddress: account.representative,
+						    // From account info
+						    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
+						    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.publicKey } )).data.key,
 
-					    // From account info
-					    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
-					    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.publicKey } )).data.key,
+						    // From the pending transaction
+						    transactionHash: hash.hash,
 
-					    // From the pending transaction
-					    transactionHash: hash.hash,
+						    // From the pending transaction in RAW
+						    amountRaw: hash.amount,
 
-					    // From the pending transaction in RAW
-					    amountRaw: hash.amount,
+						    work: await this.pow({ account: source.publicKey, frontier: account.frontier }),
 
-					    work: await this.pow({ account: source.publicKey, frontier: account.frontier }),
+						}
 
-					}
+						if (!data.work) return reject(data)
 
-					if (!data.work) return reject(data)
+				    	const signedBlock = NanocurrencyWeb.block.receive(data, source.privateKey)
 
-			    	const signedBlock = NanocurrencyWeb.block.receive(data, source.privateKey)
+				    	await this.rpc({
+					      "action": "process",
+					      "json_block": "true",
+					      "subtype": "receive",
+					      "block": signedBlock
+					    })
 
-			    	await this.rpc({
-				      "action": "process",
-				      "json_block": "true",
-				      "subtype": "receive",
-				      "block": signedBlock
-				    })
+				    }
 
-			    }
+				    resolve("Done.")
 
-			    resolve("Done.")
+				})
 
-			})
-		
+			}
+ 
 		})
 	},
 
@@ -158,7 +188,7 @@ let nano = {
 
 		return new Promise((resolve) => {
 			
-			var source = this.wallets[0]
+			var source = config.from ? this.wallets.find(a => a.publicKey === config.from) : this.wallets[0]
 
 			this.rpc({ 
 			    action: 'account_info', 
@@ -201,5 +231,7 @@ let nano = {
 
 }
 
+// Browser
 if (typeof window !== 'undefined') window.nano = nano
+// NodeJS
 if (typeof process === 'object') module.exports = nano
