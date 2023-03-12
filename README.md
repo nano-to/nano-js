@@ -27,7 +27,7 @@ const wallet = require('@fwd/nano-offline')
 ;(async () => {
     
     // Backend only 
-    // await wallet.import({ pub:  })
+    // await wallet.import({ public: env.PUBLIC_KEY, private: env.PRIVATE_KEY })
 
     await wallet.generate()
 
