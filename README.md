@@ -11,11 +11,6 @@
 <script src="/latest.js"></script>
 ```
 
-**CDN:**
-```html
-<script src="https://offline.nano.to/latest.js"></script>
-```
-
 **NPM:**
 ```js
 // npm install fwd/nano-offline
