@@ -116,7 +116,7 @@ let nano = {
 				  headers: {'Content-Type': 'application/json'}, 
 				  body: JSON.stringify(data)
 				}).then(res => {
-				  resolve(res.data ? res.data : res)
+				  resolve(res.json())
 				});
 
 			}
