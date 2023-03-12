@@ -31,12 +31,14 @@ let nano = {
 
 	destroy() {
 		return new Promise((resolve) => {
-
+			
 			this.wallets = []
 
-			console.log("Goodbye.")
+			var saying = "Goodbye."
 
-			resolve("Goodbye.")
+			console.log(saying)
+
+			resolve(saying)
 
 		})
 	},
