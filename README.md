@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Localhost Nano Wallet</h1>
+<h1 align="center">Local Nano Wallet</h1>
 
 <h3 align="center">In Development. Not ready for use.</h3>
 
@@ -19,25 +19,25 @@
 **NPM:**
 ```js
 // npm install fwd/nano-offline
-const wallet = require('@fwd/nano-offline')
+const nano = require('@fwd/nano-offline')
 ```
 
 **USAGE:**
 ```js
 ;(async () => {
     
-    await wallet.import( await wallet.generate() )
+    await nano.import( await nano.generate() )
 
-    console.log( await wallet.accounts() )
+    console.log( await nano.accounts() )
 
     // console.log( "QR Code:", await wallet.qrcode() )
     // console.log( wallet.nanolooker() )
 
-    await wallet.wait({ amount: '0.001' })
+    await nano.wait({ amount: '0.001' })
 
-    await wallet.receive()
+    await nano.receive()
 
-    await wallet.send({ 
+    await nano.send({ 
         to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
         amount: (await wallet.balance()).balance
     })
@@ -45,7 +45,7 @@ const wallet = require('@fwd/nano-offline')
     // console.log(await wallet.accounts({ export: true }))
 
     // from RAM not Blockchain
-    await wallet.destroy()
+    await nano.destroy()
 
 })()
 ```
