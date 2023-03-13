@@ -1,8 +1,8 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Local Nano Wallet</h1>
+<h1 align="center">Developer Nano Wallet</h1>
 
-<h3 align="center">In Development. Not ready for use.</h3>
+<h3 align="center">In Beta. Use with caution and report bugs.</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
