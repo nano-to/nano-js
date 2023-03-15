@@ -2,7 +2,7 @@
 
 <h1 align="center">Developer Nano Wallet</h1>
 
-<h3 align="center">In Beta. Use with caution and report bugs.</h3>
+<h3 align="center">In Beta. Testing and Issues Welcomed.</h3>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
