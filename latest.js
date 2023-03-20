@@ -233,7 +233,7 @@ let nano = {
 	        resolve(payment)
 	        clearInterval(interval)
 	      };
-	    }, 1000)
+	    }, config.interval || 2000)
 	  })
 	},
 
