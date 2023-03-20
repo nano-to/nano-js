@@ -45,7 +45,12 @@ const nano = require('@fwd/nano-offline')
     })
 
      await nano.disburse({ 
-        to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', '@bot' ], 
+        to: [ 
+            '@bot',
+            '@fosse',
+            'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
+            '@keeri',
+        ], 
         amount: '0.001'
     })
 
