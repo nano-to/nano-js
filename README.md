@@ -44,7 +44,7 @@ await nano.send({
         '@keeri',
         // ... 500 more
     ], 
-    amount: '0.0001',
+    amount: nano.convert(0.0001, 'NANO', 'RAW'),
     // key: 'POW_KEY' 
     // node: 'https://nanolooker.com'
 })
