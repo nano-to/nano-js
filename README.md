@@ -31,8 +31,8 @@ console.log( await nano.accounts() )
 
 await nano.wait({ 
     amount: '0.001',
-    receive: true,
-    webhook: 'https://your.secret.stuff/post'
+    receive: true, // oh yeah.
+    // webhook: 'https://your.secret.stuff/post' // nice, huh
 })
 
 await nano.send({ 
