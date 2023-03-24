@@ -22,7 +22,7 @@ const nano = require('@fwd/nano-offline')
 
 **USAGE:**
 ```js
-nano.import( await nano.generate() )
+nano.import( nano.generate() )
 
 console.log( await nano.accounts() )
 
@@ -55,7 +55,7 @@ await nano.send({
 // console.log(await wallet.accounts({ export: true }))
 
 // from RAM not Blockchain
-await nano.destroy()
+nano.destroy()
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
