@@ -29,7 +29,11 @@ console.log( await nano.accounts() )
 // console.log( "QR Code:", await wallet.qrcode() )
 // console.log( "Open Link:", wallet.nanolooker() )
 
-await nano.wait({ amount: '0.001' })
+await nano.wait({ 
+    amount: '0.001',
+    receive: true,
+    webhook: 'https://your.secret.stuff/post'
+})
 
 await nano.send({ 
     to: [ 
