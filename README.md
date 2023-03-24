@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano Offline</h1>
+<h1 align="center">Offline.js</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
