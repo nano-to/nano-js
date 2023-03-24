@@ -15,14 +15,7 @@ let nano = {
     convert: _NanocurrencyWeb.tools.convert,
 
 	import(wallet) {
-		return new Promise((resolve) => {
-
-			// Yep. RAM. No funny business.
-			this.wallets = [wallet]
-
-			resolve("Imported.")
-
-		})
+		this.wallets = [wallet]
 	},
 
 	destroy() {
