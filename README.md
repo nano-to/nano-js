@@ -26,8 +26,8 @@ nano.import( await nano.generate() )
 
 console.log( await nano.accounts() )
 
-// console.log( "QR Code:", await wallet.qrcode() )
-// console.log( "Open Link:", wallet.nanolooker() )
+// console.log( "QR Code:", await nano.qrcode() )
+// console.log( "Open Link:", nano.nanolooker() )
 
 await nano.wait({ 
     amount: '0.001',
