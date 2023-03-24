@@ -52,7 +52,7 @@ await nano.send({
     amount: (await wallet.balance()).balance // or 'all'
 })
 
-// console.log(await wallet.accounts({ export: true }))
+// console.log(wallet.accounts({ export: true }))
 
 // from RAM not Blockchain
 nano.destroy()
