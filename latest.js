@@ -18,6 +18,8 @@ let nano = {
 
 	wait_rpc: 'https://api.nano.to',
 
+	known: 'https://nano.to/known.json',
+
 	import(wallet) {
 		this.wallets = [wallet]
 	},
@@ -343,7 +345,7 @@ let nano = {
 			if (!accounts || !Array.isArray(accounts)) return console.error('Invalid accounts array.', accounts)
 
 			if (accounts.find(a => a.includes('@'))) {
-					var known = (await this.get(`https://nano.to/known.json`))
+					var known = (await this.get(this.known))
 					accounts = accounts.map(a => {
 						if (a && a.includes('@')) {
 							a = known.find(b => b.name.toLowerCase() === a.toLowerCase().replace('@', '')).address
@@ -353,7 +355,7 @@ let nano = {
 			}
 
 			for (var account of accounts) {
-				await this.process({ account, amount: config.amount })
+				await this.process({ account, amount: config.amount, endpoint: config.endpoint || config.node, key: config.key })
 			}
 
 			console.log("Done.")
@@ -371,14 +373,16 @@ let nano = {
 			var account = config.account || config.to
 
 			if (account.includes('@')) {
-				var known = (await this.get(`https://nano.to/known.json`))
+				var known = (await this.get(this.known))
 				account = known.find(b => b.name.toLowerCase() === account.toLowerCase().replace('@', '')).address
 			}
 
 			this.rpc({ 
 			    action: 'account_info', 
 			    account: source.address,
-			    representative: "true"
+			    representative: "true",
+				endpoint: config.endpoint,
+				key: config.key,
 			  }).then(async (res) => {
 
 			    var _account = res
@@ -386,26 +390,28 @@ let nano = {
 			    if (!_account.balance) return console.error('Not enough funds.')
 
 			    const data = {
-				// Your current balance in RAW from account info
-				walletBalanceRaw: _account.balance,
-				// Your address
-				fromAddress: source.address,
-				toAddress: account,
-				// From account info
-				representativeAddress: _account.representative || this.default_rep,
-				frontier: _account.frontier,
-				amountRaw: config.amount === 'all' ? _account.balance : _NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
-				work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: _account.frontier, key: config.key }),
+					// Your current balance in RAW from account info
+					walletBalanceRaw: _account.balance,
+					// Your address
+					fromAddress: source.address,
+					toAddress: account,
+					// From account info
+					representativeAddress: _account.representative || this.default_rep,
+					frontier: _account.frontier,
+					amountRaw: config.amount === 'all' ? _account.balance : _NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
+					work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: _account.frontier, key: config.key }),
 			    }
 
 			    // Returns a correctly formatted and signed block ready to be sent to the blockchain
 			    const signedBlock = _NanocurrencyWeb.block.send(data, source.private)
 
 			    this.rpc({
-			      "action": "process",
-			      "json_block": "true",
-			      "subtype": "send",
-			      "block": signedBlock
+					"action": "process",
+					"json_block": "true",
+					"subtype": "send",
+					"block": signedBlock,
+					endpoint: config.endpoint,
+					key: config.key,
 			    }).then((hash) => {
 			      resolve(hash.data)
 			    })
@@ -434,5 +440,6 @@ let nano = {
 
 // Browser
 if (typeof window !== 'undefined') window.nano = nano
+
 // NodeJS
 if (typeof process === 'object') module.exports = nano
