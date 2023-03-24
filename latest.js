@@ -27,9 +27,12 @@ let nano = {
 	},
 
 	accounts(config) {
+		
+		config = config || {}
+		
+		if (config.export) return this.wallets
+		
 		return new Promise((resolve) => {
-
-			config = config || {}
 
 			var resp = { 
 				accounts: []
@@ -41,19 +44,8 @@ let nano = {
 				console.warn("Nano: No wallet setup.")
 				return []
 			}
-
-			if (config.export) {
-				resp.seed = account.seed
-				resp.mnemonic = account.mnemonic
-			} 
-
-			resp.accounts = account.accounts.map(a => {
-				if (config.export) {
-					return a
-				} else {
-					return { address: a.address, private: config && config.export ? a.private : '[HIDDEN]'  }
-				}
-			})
+			
+			resp.accounts = account.accounts.map(a => { address: a.address, private: config && config.export ? a.private : '[HIDDEN]'  })
 
 			resolve(account)
 
