@@ -2,6 +2,8 @@
 
 <h1 align="center">Offline.js</h1>
 
+<h2 align="center">Local Nano Wallet</h2>
+
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 **LOCAL:**
