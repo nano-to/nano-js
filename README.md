@@ -33,7 +33,6 @@ const nano = require('@fwd/nano-offline')
 
     await nano.wait({ amount: '0.001' })
 
-    // nano.key = 'POW_KEY'
     await nano.disburse({ 
         to: [ 
             '@bot',
@@ -41,7 +40,8 @@ const nano = require('@fwd/nano-offline')
             'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
             '@keeri',
         ], 
-        amount: '0.0001'
+        amount: '0.0001',
+        key: 'POW_KEY'
     })
     
     await nano.send({ 
