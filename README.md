@@ -24,9 +24,7 @@ const nano = require('@fwd/nano-offline')
 ```js
 ;(async () => {
 
-    // nano.key = 'POW_KEY'
-
-    await nano.import( await nano.generate() )
+    nano.import( await nano.generate() )
 
     console.log( await nano.accounts() )
 
@@ -35,21 +33,20 @@ const nano = require('@fwd/nano-offline')
 
     await nano.wait({ amount: '0.001' })
 
-    await nano.receive()
-
-    await nano.send({ 
-        to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-        amount: (await wallet.balance()).balance // or 'all'
-    })
-
-     await nano.disburse({ 
+    // nano.key = 'POW_KEY'
+    await nano.disburse({ 
         to: [ 
             '@bot',
             '@fosse',
             'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
             '@keeri',
         ], 
-        amount: '0.001'
+        amount: '0.0001'
+    })
+    
+    await nano.send({ 
+        to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
+        amount: (await wallet.balance()).balance // or 'all'
     })
 
     // console.log(await wallet.accounts({ export: true }))
