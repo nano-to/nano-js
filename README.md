@@ -45,7 +45,8 @@ await nano.send({
         // ... 500 more
     ], 
     amount: '0.0001',
-    key: 'POW_KEY'
+    // key: 'POW_KEY' 
+    // node: 'https://nanolooker.com'
 })
 
 await nano.send({ 
