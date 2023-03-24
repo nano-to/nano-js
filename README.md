@@ -24,8 +24,8 @@ const nano = require('@fwd/nano-offline')
 ```js
 nano.import( nano.generate() )
 
-console.log( await nano.accounts() ) // with live balance
-// console.log( nano.accounts({ export: true }) )
+console.log( await nano.accounts() ) 
+// console.log( nano.accounts({ export: true }) ) // why bother
 
 // console.log( "QR Code:", await nano.qrcode() )
 // console.log( "Open Link:", nano.nanolooker() )
