@@ -24,7 +24,8 @@ const nano = require('@fwd/nano-offline')
 ```js
 nano.import( nano.generate() )
 
-console.log( await nano.accounts() )
+console.log( await nano.accounts() ) // with live balance
+// console.log( nano.accounts({ export: true }) )
 
 // console.log( "QR Code:", await nano.qrcode() )
 // console.log( "Open Link:", nano.nanolooker() )
@@ -51,8 +52,6 @@ await nano.send({
     to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
     amount: (await wallet.balance()).balance // or 'all'
 })
-
-// console.log(wallet.accounts({ export: true }))
 
 // from RAM not Blockchain
 nano.destroy()
