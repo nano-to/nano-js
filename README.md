@@ -4,7 +4,7 @@
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**Local:**
+**LOCAL:**
 ```html
 <script src="/latest.js"></script>
 ```
