@@ -22,39 +22,36 @@ const nano = require('@fwd/nano-offline')
 
 **USAGE:**
 ```js
-;(async () => {
+nano.import( await nano.generate() )
 
-    nano.import( await nano.generate() )
+console.log( await nano.accounts() )
 
-    console.log( await nano.accounts() )
+// console.log( "QR Code:", await wallet.qrcode() )
+// console.log( "Open Link:", wallet.nanolooker() )
 
-    // console.log( "QR Code:", await wallet.qrcode() )
-    // console.log( "Open Link:", wallet.nanolooker() )
+await nano.wait({ amount: '0.001' })
 
-    await nano.wait({ amount: '0.001' })
+await nano.send({ 
+    to: [ 
+        '@bot',
+        '@fosse',
+        'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
+        '@keeri',
+        // ... 500 more
+    ], 
+    amount: '0.0001',
+    key: 'POW_KEY'
+})
 
-    await nano.disburse({ 
-        to: [ 
-            '@bot',
-            '@fosse',
-            'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-            '@keeri',
-        ], 
-        amount: '0.0001',
-        key: 'POW_KEY'
-    })
-    
-    await nano.send({ 
-        to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-        amount: (await wallet.balance()).balance // or 'all'
-    })
+await nano.send({ 
+    to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
+    amount: (await wallet.balance()).balance // or 'all'
+})
 
-    // console.log(await wallet.accounts({ export: true }))
+// console.log(await wallet.accounts({ export: true }))
 
-    // from RAM not Blockchain
-    await nano.destroy()
-
-})()
+// from RAM not Blockchain
+await nano.destroy()
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
