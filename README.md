@@ -1,12 +1,12 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Local Nano Wallet</h1>
+<h1 align="center">Offline.js</h1>
 
-<h3 align="center">In Development. Not ready for use.</h3>
+<h2 align="center">Local Nano Wallet</h2>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**Local:**
+**LOCAL:**
 ```html
 <script src="/latest.js"></script>
 ```
@@ -24,30 +24,40 @@ const nano = require('@fwd/nano-offline')
 
 **USAGE:**
 ```js
-;(async () => {
-    
-    await nano.import( await nano.generate() )
+nano.import( nano.generate() )
 
-    console.log( await nano.accounts() )
+console.log( await nano.accounts() ) 
+// console.log( nano.accounts({ export: true }) ) 
 
-    // console.log( "QR Code:", await wallet.qrcode() )
-    // console.log( "Open Link:", wallet.nanolooker() )
+// console.log( "QR Code:", await nano.qrcode() )
+// console.log( "Open Link:", nano.nanolooker() )
 
-    await nano.wait({ amount: '0.001' })
+await nano.wait({ 
+    amount: '0.001',
+    receive: true, // oh yeah.
+    // webhook: 'https://your.secret.stuff/post' // nice, huh
+})
 
-    await nano.receive()
+await nano.send({ 
+    to: [ 
+        '@bot',
+        '@fosse',
+        'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
+        '@keeri',
+        // ... 500 more
+    ], 
+    amount: nano.convert(0.0001, 'NANO', 'RAW'),
+    // key: 'POW_KEY' 
+    // node: 'https://nanolooker.com'
+})
 
-    await nano.send({ 
-        to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-        amount: (await wallet.balance()).balance
-    })
+await nano.send({ 
+    to: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
+    amount: (await wallet.balance()).balance // or 'all'
+})
 
-    // console.log(await wallet.accounts({ export: true }))
-
-    // from RAM not Blockchain
-    await nano.destroy()
-
-})()
+// from RAM not Blockchain
+nano.destroy()
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
