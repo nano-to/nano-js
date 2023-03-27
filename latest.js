@@ -131,9 +131,9 @@ let nano = {
 				  path: '/',
 				  method: 'POST',
 				  headers: { 
-					'Content-Type': 'application/json', 
-					'Content-Length': postData.length,
-					'Nano-App': `fwd/nano-offline`
+				  	'Content-Type': 'application/json', 
+				  	'Content-Length': postData.length,
+				  	'Nano-App': 'fwd/nano-offline'
 				  }
 				};
 
