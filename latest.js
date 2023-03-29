@@ -28,9 +28,10 @@ let nano = {
 
 	import(wallet) {
 		if (typeof wallet === 'string') {
-			var decrypted = CryptoJS.AES.decrypt(wallet, config.secret)
+			// if (true) {}
+			var decrypted = CryptoJS.AES.decrypt(wallet, wallet)
 			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
-			this.persist(this.encrypt(JSON.stringify(existing), config.secret).toString())
+			this.persist(this.encrypt(JSON.stringify(existing), wallet).toString())
 			return existing.accounts.map(a => {
 				return { index: a.accountIndex, address: a.address }
 			})
@@ -55,8 +56,8 @@ let nano = {
 		var existing = localStorage.getItem(`nano-offline-${this.version}`)
 		if (!existing) return console.error("No wallet to download.")
 		var element = document.createElement('a')
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(existing))
-		element.setAttribute('download', `${filename || 'NanoWallet'}.wallet`)
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent('nano-offline::' + existing))
+		element.setAttribute('download', `${filename || 'NanoOffline'}.wallet`)
 		element.style.display = 'none'
 		document.body.appendChild(element)
 		element.click()
