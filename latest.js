@@ -47,7 +47,12 @@ let nano = {
 				return []
 			}
 			
-			resp.accounts = account.accounts.map(a => { address: a.address, private: config && config.export ? a.private : '[HIDDEN]'  })
+			resp.accounts = account.accounts.map(a => {
+				return { 
+					address: a.address, 
+					private: (config && config.export ? a.private : '[HIDDEN]')  
+				}
+			})
 
 			resolve(account)
 
@@ -191,12 +196,12 @@ let nano = {
 		})
 	},
 
-	async wait(config) {
-	  return await new Promise((resolve, reject) => {
+	wait(config) {
+	  return new Promise((resolve, reject) => {
 		config.account = config.account ? config.account : this.wallets[0].accounts[0].address
 		if (!config.amount) return reject("Missing amount.")
 		// yep, just a setInterval
-	    const interval = setInterval(() => {
+	    const interval = setInterval(async () => {
 			var payment = this.rpc({ endpoint: this.wait_rpc, action: 'search', account: config.account, amount: config.amount })
 			if (payment.hash) {
 				if (config.receive) await this.receive(config.account)
