@@ -694,13 +694,13 @@
                 nano.download(this.accounts[0].address.slice(0, 14), 'AES-256::')
               },
 
-                destroy() {
-                  var sure = window.confirm('Are you sure?')
-                  if (!sure) return
-                  nano.logout()
-                  localStorage.clear()
-                  window.location.reload()
-                },
+              destroy() {
+                var sure = window.confirm('Are you sure?')
+                if (!sure) return
+                nano.logout()
+                localStorage.clear()
+                window.location.reload()
+              },
 
               handleBlankImport() {
 
