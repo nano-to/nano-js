@@ -446,7 +446,7 @@
                     padding-top: 15px;
                 }
             }
-            #import {
+            .import {
               position: absolute;
               opacity: 0;
               left: 0;
@@ -465,7 +465,16 @@
         <div id="app" class="main-container">
 
             <div v-if="loading" id="loader">
-              <div class="main-title"> <b>Nano</b>Offline</div>
+              <div>
+                <div class="main-title"> <b>Nano</b>Offline</div>
+                <div style="display: none;" :style="`${persisted ? 'display:none' : 'display:block'}`">
+                  <div style="position: relative;">
+                    <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet" />
+                    IMPORT
+                  </div>
+                  <div @click="new_wallet()">CREATE</div>
+                </div>
+              </div>
             </div>
 
             <div class="main-container__left">
@@ -491,7 +500,7 @@
                     <hr>
                     <div class="tools">
                         <div class="tool" style="position: relative;">
-                            <input @change="handleImport" type="file" id="import" ref="import" accept=".wallet" />
+                            <input @change="handleImport" type="file" class="import" ref="import" accept=".wallet" />
                             <svg style="transform: rotate(270deg);" width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
                                 fill="#7C7A7A" />
@@ -649,7 +658,8 @@
               secret: 'super-duper-secret',
               title: 'Accounts',
               message: 'Hello World',
-              accounts: []
+              accounts: [],
+              persisted: (typeof localStorage.getItem(`nano-offline`) == 'string')
 
             },
             mounted() {
@@ -658,7 +668,6 @@
 
             },
             watch: {},
-            computed: {},
             methods: {
 
                 destroy() {
@@ -667,7 +676,7 @@
                   window.location.reload()
                 },
 
-               handleImport() {
+               handleBlankImport() {
 
                 const reader = new FileReader()
                 
@@ -675,8 +684,35 @@
                   var string = event.target.result
                   var check = 'nano-offline::'
                   if (!string.includes(check)) return alert('Wallet Not Supported.')
+                    // console.log(string.replace(check, ''))
+                  nano.import({
+                    string: string.replace(check, ''), 
+                    secret: window.prompt('UNLOCK:'),
+                    persist: true
+                  })
+                  // alert('Welcome back.')
+                  window.location.reload()
+                }
+                
+                reader.onerror = error => reject(error)
+
+                reader.readAsText(this.$refs.blankImport.files[0]) 
+
+              },
+
+              handleImport() {
+
+                const reader = new FileReader()
+
+                return console.log( this.$refs.import.files )
+                
+                reader.onload = event => {
+                  var string = event.target.result
+                  var check = 'nano-offline::'
+                  if (!string.includes(check)) return alert('Wallet Not Supported.')
                   nano.import( string.replace(check, '') )
-                  alert('Welcome back.')
+                  // alert('Welcome back.')
+                  window.location.reload()
                 }
                 
                 reader.onerror = error => reject(error)
@@ -685,28 +721,39 @@
 
               },
 
+              new_wallet() {
+
+                var password = window.prompt('NEW SECRET:')
+
+                if (password.length < 6) {
+                  window.alert('6 characters or more.')
+                  password = window.prompt('NEW SECRET:')
+                  if (password.length < 6) return
+                }
+
+                this.accounts = nano.import({
+                  password,
+                  persist: true
+                })
+              },
+
               load() {
 
                   var secret = ''
 
-                  if (!localStorage.getItem(`nano-offline`)) {
-                    secret = window.prompt('NEW SECRET:')
-                    if (secret.length < 6) {
-                      window.alert('For YOUR security. Must be 6 characters or more.')
-                      secret = window.prompt('NEW SECRET:')
-                      if (secret.length < 6) return
-                    }
+                  if (localStorage.getItem(`nano-offline`)) {
+
+                    secret = window.prompt('UNLOCK:')
+
+                    nano.localStorage(secret).then((accounts) => {
+                      this.accounts = accounts
+                      this.loading = false
+                    }).catch((e) => {
+                      window.alert('Bad Secret.')
+                      window.location.reload()
+                    })
+
                   }
-
-                  if (!secret) secret = window.prompt('UNLOCK:')
-
-                  nano.localStorage(secret).then((accounts) => {
-                    this.accounts = accounts
-                    this.loading = false
-                  }).catch((e) => {
-                    window.alert('Bad Secret.')
-                    window.location.reload()
-                  })
 
               },
 

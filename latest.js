@@ -26,16 +26,33 @@ let nano = {
 
 	known: 'https://nano.to/known.json',
 
-	import(wallet) {
+	import(wallet, secret) {
+
 		if (typeof wallet === 'string') {
-			var decrypted = CryptoJS.AES.decrypt(wallet, wallet)
+			var decrypted = CryptoJS.AES.decrypt(wallet, secret)
 			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
-			this.persist(this.encrypt(JSON.stringify(existing), wallet).toString())
+			// this.persist(this.encrypt(JSON.stringify(existing), secret).toString())
 			return existing.accounts.map(a => {
 				return { index: a.accountIndex, address: a.address }
 			})
 		}
+
+		if (wallet && wallet.password) {
+			if (wallet.secret) {
+				var decrypted = CryptoJS.AES.decrypt(wallet.secret, wallet.password)
+			} else {
+				var existing = this.generate()
+			}
+			if (wallet.persist || wallet.localStorage) this.persist(this.encrypt(JSON.stringify(existing), wallet.password).toString())
+			return existing.accounts.map(a => {
+				return { index: a.accountIndex, address: a.address }
+			})
+		}
+		
 		this.wallets = [wallet]
+		
+		return this.wallets
+
 	},
 
 	decrypt(string, secret) {
@@ -100,6 +117,7 @@ let nano = {
 
 	localStorage(config) {
 		return new Promise((resolve, reject) => {
+
 			try {
 
 				if (typeof config === "string") config = { secret: config }
@@ -111,7 +129,9 @@ let nano = {
 				if (!config.secret) return console.error("Secret phrase to encrypt seed not provided.")
 				
 				if (!window.localStorage) return console.error("Invalid Env.")
+			
 				var existing = localStorage.getItem(`nano-offline`)
+
 				if (existing) {
 					var decrypted = CryptoJS.AES.decrypt(existing, config.secret);
 					existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
@@ -119,8 +139,11 @@ let nano = {
 						return { index: a.accountIndex, address: a.address }
 					}))
 				}
+
 				var wallet = this.generate()
+				
 				this.persist(this.encrypt(JSON.stringify(wallet), config.secret).toString())
+				
 				resolve(wallet.accounts.map(a => {
 					return { index: a.accountIndex, address: a.address }
 				}))
@@ -128,6 +151,7 @@ let nano = {
 			} catch(e) {
 				reject(e)
 			}
+
 		})
 	},
 
