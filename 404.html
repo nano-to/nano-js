@@ -7,12 +7,22 @@
 |_____|        \/  \/     |______.'  
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" manifest="appcache">
     <head>
         
-        <meta charset="UTF-8">
-        
-        <title>Nano - Offline</title>
+    <title>Nano - Offline</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0">
+    <meta name="author" content="https://twitter.com/nano2dev"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="transparent">
+    <meta name="apple-mobile-web-app-title" content="Offline">
+    <meta property="og:title" content="NanoOffline">
+    <!-- <meta property="og:image" content="https://dist/images/cover.png"> -->
+    <!-- <meta property="twitter:image" content="dist/images/cover.png"> -->
+    <link rel="apple-touch-icon" href="https://nano.to/dist/images/new_icon.png">
+    <link rel="icon" type="image/png" href="https://nano.to/dist/favicon.png">
 
         <style>
 
@@ -649,19 +659,12 @@
         </div>
 
         <!-- partial -->
-        <script src="/latest.js"></script>
-
-        <!-- <script src="https://offline.nano.to/latest.js"></script> -->
+        <script src="https://offline.nano.to/latest.js?v=1.0.0"></script>
+        <!-- <script src="/latest.js"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
 
         <script>
-
-        // var encrypted = CryptoJS.AES.encrypt("Message", "Secret Passphrase");
-        // //U2FsdGVkX18ZUVvShFSES21qHsQEqZXMxQ9zgHy+bu0=
-
-        // var decrypted = CryptoJS.AES.decrypt(encrypted, "Secret Passphrase");
-        // //4d657373616765
 
         var app = new Vue({
             
