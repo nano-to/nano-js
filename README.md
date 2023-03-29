@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Browser UI + JS Library</h1>
+<h1 align="center">Non-Custodial JS Nano Wallet</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
