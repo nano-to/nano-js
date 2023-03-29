@@ -38,15 +38,23 @@ let nano = {
 		}
 
 		if (wallet && wallet.password) {
+
 			if (wallet.secret) {
 				var decrypted = CryptoJS.AES.decrypt(wallet.secret, wallet.password)
+				var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
 			} else {
 				var existing = this.generate()
 			}
-			if (wallet.persist || wallet.localStorage) this.persist(this.encrypt(JSON.stringify(existing), wallet.password).toString())
-			return existing.accounts.map(a => {
+
+			if (existing.accounts && wallet.persist) {
+				this.persist(this.encrypt(JSON.stringify(existing), wallet.password).toString())
+			}
+
+			// console.log("existing", existing)
+			return existing.accounts ? existing.accounts.map(a => {
 				return { index: a.accountIndex, address: a.address }
-			})
+			}) : existing
+
 		}
 		
 		this.wallets = [wallet]
@@ -67,12 +75,12 @@ let nano = {
 		localStorage.setItem(`nano-offline`, string)
 	},
 
-    download(filename) {
+    download(filename, prefix) {
 		if (!localStorage) return console.error("Invalid Env.")
 		var existing = localStorage.getItem(`nano-offline`)
 		if (!existing) return console.error("No wallet to download.")
 		var element = document.createElement('a')
-		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent('nano-offline::' + existing))
+		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent((prefix ? prefix : '') + existing))
 		element.setAttribute('download', `${filename || 'NanoOffline'}.wallet`)
 		element.style.display = 'none'
 		document.body.appendChild(element)
