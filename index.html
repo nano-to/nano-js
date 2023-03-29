@@ -542,6 +542,21 @@
               border-radius: 6px;
               margin-bottom: 9px;
             }
+            .send-btn {
+              background: #1f60b7;
+              text-align: center;
+              padding: 10px;
+              margin: 20px 0 12px 0;
+              border-radius: 18px;
+              color: #FFF;
+              font-weight: bold;
+              letter-spacing: 0.5px;
+              cursor: pointer;
+            }
+            .send-btn.inactive {
+              opacity: 0.5;
+              filter: grayscale(1);
+            }
         </style>
     </head>
     
@@ -571,11 +586,14 @@
               </div>
               <div class="flex grouped">
                 <div>
-                  <h4>Balance</b>: <br><b>0</b>
+                  <h4><b>Ӿ 0</b><br><b style="opacity:.5">Balance</b></h4>
                 </div>
                 <div>
-                  <h4>Pending</b>: <br><b>0</b>
+                  <h4><b>Ӿ 0</b><br><b style="opacity:.5">Pending</b></h4>
                 </div>
+              </div>
+              <div>
+                <div :class="`send-btn ${0 == 0 ? 'inactive' : ''}`">Send</div>
               </div>
               <div>
                 <img style="width: 100%;border: 15px solid #00000042;margin: 10px 0;" :src="`https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${active.address}&choe=UTF-8`" alt="">
