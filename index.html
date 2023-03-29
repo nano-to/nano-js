@@ -79,14 +79,14 @@
               font-size: 14px;
               position: absolute;
               left: 40px;
-              color: #7c7a7a;
+/*              color: #7c7a7a;*/
             }
             .main-container .tabs .first {
               border-right: 5px solid #152a46;
               /*margin-bottom: 30px;*/
             }
             .main-container .tabs .first .desc {
-              color: #152a46;
+/*              color: #152a46;*/
             }
             .main-container .tools-con {
               padding-top: 170px;
@@ -96,7 +96,7 @@
               border: 0.2px solid #7c7a7a;
             }
             .main-container .tools-con .tools {
-              color: #7c7a7a;
+/*              color: #7c7a7a;*/
               padding-top: 15px;
             }
             .main-container .tools-con .tools .tool {
@@ -209,7 +209,7 @@
               transition: 280ms all 120ms ease-out;
             }
             .main-container__right .dropdown .dropdown__menu a {
-              color: #444;
+/*              color: #444;*/
               padding: 0.5em;
               font-size: 14px;
               font-weight: 600;
@@ -227,7 +227,7 @@
             }
             .main-container__right .content .Accounts-con .sub {
               font-size: 15px;
-              color: #152a46;
+              color: inherit;
               display: flex;
               align-items: center;
               text-decoration: none;
@@ -246,6 +246,7 @@
               height: 137px;
               border-radius: 8px;
               cursor: pointer;
+              color: #FFF;
             }
             .main-container__right .content .Accounts-con .Accounts .card:hover {
               zoom: 1.2;
@@ -284,7 +285,7 @@
               height: 20px;
               font-size: 30px;
               line-height: 0.8;
-              color: #d2cdcd;
+/*              color: #d2cdcd;*/
             }
             .main-container__right .content .Accounts-con .Accounts .card-2 {
               overflow: hidden;
@@ -345,7 +346,7 @@
               right: 25px;
             }
             .main-container__right .content .Accounts-con .Accounts .card .content {
-              color: #ffffff;
+/*              color: #ffffff;*/
               padding: 25px 0;
               padding-left: 20px;
             }
@@ -376,7 +377,7 @@
               font-weight: 600;
               font-size: 18px;
               padding: 30px 0;
-              color: #06101e;
+/*              color: #06101e;*/
               text-align: left;
             }
             .main-container__right .content .table-con td {
@@ -402,7 +403,7 @@
               font-family: "Inter", sans-serif;
             }
             .main-container__right .content .table-con tbody .logo .red {
-              color: #f43737;
+/*              color: #f43737;*/
               background: #fcc8c8;
               width: fit-content;
               margin-left: auto;
@@ -410,7 +411,7 @@
               padding: 0 5px;
             }
             .main-container__right .content .table-con tbody .logo .blue {
-              color: #0653ba;
+/*              color: #0653ba;*/
               background: #c2dbfd;
               width: fit-content;
               margin-left: auto;
@@ -418,7 +419,7 @@
               padding: 0 5px;
             }
             .main-container__right .content .table-con tbody .logo .green {
-              color: #6fcf97;
+/*              color: #6fcf97;*/
               background: #e2f5ea;
               width: fit-content;
               margin-left: auto;
@@ -432,7 +433,7 @@
             .main-container__right .content .table-con tbody td {
               padding: 0 40px;
               font-size: 14px;
-              color: #06101E;
+/*              color: #06101E;*/
             }
             #loader {
     position: fixed;
@@ -483,8 +484,63 @@
             }
             .btn:hover {
               background: #000;
-              color: #FFF;
+/*              color: #FFF;*/
               cursor: pointer;
+            }
+            #active {
+              position: fixed;
+              background: white;
+              right: 0;
+              top: 0;
+              bottom: 0;
+              width: 290px;
+              padding: 30px;
+              z-index: 9;
+              box-shadow: 1px 5px 9px #00000030;
+              overflow-y: auto;
+            }
+            .flex {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+            .button {
+              background: #FFF;
+              padding: 10px;
+              text-align: CENTER;
+              width: 100%;
+              display: block;
+              margin: 10px 0;
+              border-radius: 4px;
+              border: 3px solid #00000021;
+              text-decoration: none;
+              color: #000;
+            }
+            .title {
+              margin: 10px 0 5px 0;
+              opacity: 0.8;
+              font-weight: bold;
+              font-size: 14px;
+              letter-spacing: 1px;
+            }
+            input, textarea {
+              width: 100%;
+              background: #FFF;
+              height: 40px;
+              appearance: none;
+              border: 3px solid #00000021;
+              padding: 10px;
+              border-radius: 4px;
+            }
+            textarea {
+              height: 100px;
+            }
+            .grouped {
+              border: 3px solid #00000021;
+              padding: 0 20px;
+              margin-top: 21px;
+              border-radius: 6px;
+              margin-bottom: 9px;
             }
         </style>
     </head>
@@ -505,6 +561,42 @@
                     <div class="btn" @click="new_wallet()">Start New</div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div v-if="active" id="active">
+              <div class="flex">
+                <div>Primary</div>
+                <div @click="active = false">X</div>
+              </div>
+              <div class="flex grouped">
+                <div>
+                  <h4>Balance</b>: <b>0</b>
+                </div>
+                <div>
+                  <h4>Pending</b>: <b>0</b>
+                </div>
+              </div>
+              <div>
+                <img style="width: 100%;border: 15px solid #00000042;margin: 10px 0;" :src="`https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${active.address}&choe=UTF-8`" alt="">
+              </div>
+              <div>
+                <div class="title">NICKNAME</div>
+                <input v-model="active.nickname" placeholder="Primary"/>
+              </div>
+              <div>
+                <div class="title">ADDRESS</div>
+                <textarea disabled>{{ active.address }}</textarea>
+              </div>
+              <!-- <div @click="export_account(active)">
+                <div class="title">PRIVATE</div>
+                <textarea disabled>{{ private ? private : '[HIDDEN]' }}</textarea>
+              </div> -->
+              <div>
+                <div class="title">NANOLOOKER</div>
+                <a class="button" :href="`https://nanolooker.com/account/${active.address}`" target="_blank">
+                  Open Link
+                </a>
               </div>
             </div>
 
@@ -567,13 +659,13 @@
                         </div>
                         <!-- end of Accounts title -->
                         <div class="Accounts">
-                            <div v-for="account in accounts" class="card card-1">
+                            <div @click="active = account" v-for="account in accounts" class="card card-1">
                                 <div class="rec-1"></div>
                                 <div class="rec-2"></div>
                                 <div class="content">
                                     <div class="amount">NANO_</div>
                                     <div class="pin">{{ account.address.replace('nano_', '') }}</div>
-                                    <div class="expiry">{{ account.name || account.index || 'Primary' }}</div>
+                                    <div class="expiry">{{ account.name || account.index || account.nickname || 'Primary' }}</div>
                                 </div>
                                 <div class="card-icon">Ӿ</div>
                                 <!--Icon -->
@@ -677,6 +769,8 @@
             el: '#app',
 
             data: { 
+              private: false,
+              active: false,
               loading: true,
               accounts: [],
               persisted: typeof localStorage.getItem(`nano-offline`) === 'string'
@@ -686,6 +780,10 @@
             },
             watch: {},
             methods: {
+
+              export_account(account) {
+                console.log( export_account )
+              },
 
               export_file() {
                 nano.download(this.accounts[0].address.slice(0, 14), 'AES-256::')
