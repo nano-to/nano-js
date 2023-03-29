@@ -672,25 +672,17 @@
 
         <script>
 
-        var app = new Vue({
+        new Vue({
             
             el: '#app',
 
             data: { 
-
               loading: true,
-              
-              secret: 'super-duper-secret',
-              title: 'Accounts',
-              message: 'Hello World',
               accounts: [],
               persisted: typeof localStorage.getItem(`nano-offline`) === 'string'
-
             },
             mounted() {
-
               this.load()
-
             },
             watch: {},
             methods: {
