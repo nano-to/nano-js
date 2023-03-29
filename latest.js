@@ -28,7 +28,6 @@ let nano = {
 
 	import(wallet) {
 		if (typeof wallet === 'string') {
-			// if (true) {}
 			var decrypted = CryptoJS.AES.decrypt(wallet, wallet)
 			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
 			this.persist(this.encrypt(JSON.stringify(existing), wallet).toString())
@@ -48,12 +47,12 @@ let nano = {
 	},
 
 	persist(string) {
-		localStorage.setItem(`nano-offline-${this.version}`, string)
+		localStorage.setItem(`nano-offline`, string)
 	},
 
     download(filename) {
 		if (!localStorage) return console.error("Invalid Env.")
-		var existing = localStorage.getItem(`nano-offline-${this.version}`)
+		var existing = localStorage.getItem(`nano-offline`)
 		if (!existing) return console.error("No wallet to download.")
 		var element = document.createElement('a')
 		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent('nano-offline::' + existing))
@@ -75,7 +74,7 @@ let nano = {
 
 			if (!localStorage) return console.error("Invalid Env.")
 
-			var existing = localStorage.getItem(`nano-offline-${this.version}`)
+			var existing = localStorage.getItem(`nano-offline`)
 
 			if (!existing) return console.error("Wallet Not Found.")
 		
@@ -100,32 +99,42 @@ let nano = {
 	},
 
 	localStorage(config) {
-		return new Promise((resolve) => {
-			if (!config) return console.error("Config Object not provided.")
-			if (typeof config === "string") config = { secret: config }
-			if (config.private) return console.error("Invalid config. Only secret phrase required.")
-			if (!config.secret) return console.error("Secret phrase to encrypt seed not provided.")
-			if (!window.localStorage) return console.error("Invalid Env.")
-			var existing = localStorage.getItem(`nano-offline-${this.version}`)
-			if (existing) {
-				var decrypted = CryptoJS.AES.decrypt(existing, config.secret);
-				existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
-				return resolve(existing.accounts.map(a => {
+		return new Promise((resolve, reject) => {
+			try {
+
+				if (typeof config === "string") config = { secret: config }
+				
+				if (!config) return console.error("Config Object not provided.")
+
+				if (config.private) return console.error("Invalid config. Only secret phrase required.")
+				
+				if (!config.secret) return console.error("Secret phrase to encrypt seed not provided.")
+				
+				if (!window.localStorage) return console.error("Invalid Env.")
+				var existing = localStorage.getItem(`nano-offline`)
+				if (existing) {
+					var decrypted = CryptoJS.AES.decrypt(existing, config.secret);
+					existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
+					return resolve(existing.accounts.map(a => {
+						return { index: a.accountIndex, address: a.address }
+					}))
+				}
+				var wallet = this.generate()
+				this.persist(this.encrypt(JSON.stringify(wallet), config.secret).toString())
+				resolve(wallet.accounts.map(a => {
 					return { index: a.accountIndex, address: a.address }
 				}))
+
+			} catch(e) {
+				reject(e)
 			}
-			var wallet = this.generate()
-			this.persist(this.encrypt(JSON.stringify(wallet), config.secret).toString())
-			resolve(wallet.accounts.map(a => {
-				return { index: a.accountIndex, address: a.address }
-			}))
 		})
 	},
 
 	localstorage: this.localStorage,
 
 	logout() {
-		localStorage.removeItem(`nano-offline-${this.version}`)
+		localStorage.removeItem(`nano-offline`)
 	},
 
 	destroy() {

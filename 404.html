@@ -424,7 +424,15 @@
               color: #06101E;
             }
             #loader {
-                position: fixed;
+    position: fixed;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
             }
             @media (max-width: 1024px) {
                 .main-container__left {
@@ -438,6 +446,17 @@
                     padding-top: 15px;
                 }
             }
+            #import {
+              position: absolute;
+              opacity: 0;
+              left: 0;
+              width: 100%;
+              top: 0;
+              bottom: 0;
+              height: 100%;
+              z-index: 9;
+              cursor: pointer;
+            }
         </style>
     </head>
     
@@ -445,12 +464,8 @@
         <!-- partial:index.partial.html -->
         <div id="app" class="main-container">
 
-            <div id="loader"></div>
-
-            <div id="pin">
-                <div class="pad">
-                    
-                </div>
+            <div v-if="loading" id="loader">
+              <div class="main-title"> <b>Nano</b>Offline</div>
             </div>
 
             <div class="main-container__left">
@@ -475,7 +490,8 @@
                 <div class="tools-con">
                     <hr>
                     <div class="tools">
-                        <div class="tool">
+                        <div class="tool" style="position: relative;">
+                            <input @change="handleImport" type="file" id="import" ref="import" accept=".wallet" />
                             <svg style="transform: rotate(270deg);" width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
                                 fill="#7C7A7A" />
@@ -487,7 +503,7 @@
                                 <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
                                 fill="#7C7A7A" />
                             </svg>
-                            <div class="desc">Export</div>
+                            <div class="desc" onclick="nano.download()">Export</div>
                         </div>
                         <div class="tool">
                             <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -516,7 +532,7 @@
                                 <div class="content">
                                     <div class="amount">NANO_</div>
                                     <div class="pin">{{ account.address.replace('nano_', '') }}</div>
-                                    <div class="expiry">{{ account.index }}</div>
+                                    <div class="expiry">{{ account.name || account.index || 'Primary' }}</div>
                                 </div>
                                 <div class="card-icon">Ӿ</div>
                                 <!--Icon -->
@@ -627,6 +643,8 @@
             el: '#app',
 
             data: { 
+
+              loading: true,
               
               secret: 'super-duper-secret',
               title: 'Accounts',
@@ -643,18 +661,46 @@
             computed: {},
             methods: {
 
-              load() {
+               handleImport() {
+
+                const reader = new FileReader()
                 
-                    nano.localStorage(this.secret).then((accounts) => {
-                        
-                        this.accounts = accounts
+                reader.onload = event => {
+                  var string = event.target.result
+                  var check = 'nano-offline::'
+                  if (!string.includes(check)) return alert('Wallet Not Supported.')
+                  nano.import( string.replace(check, '') )
+                  alert('Welcome back.')
+                }
+                
+                reader.onerror = error => reject(error)
 
-                        var filename = accounts[0].address
+                reader.readAsText(this.$refs.import.files[0]) 
 
-                        nano.download(filename)
+              },
 
-                    })
+              load() {
 
+                  var secret = ''
+
+                  if (!localStorage.getItem(`nano-offline`)) {
+                    secret = window.prompt('NEW SECRET:')
+                    if (secret.length < 6) {
+                      window.alert('For YOUR security. Must be 6 characters or more.')
+                      secret = window.prompt('NEW SECRET:')
+                      if (secret.length < 6) return
+                    }
+                  }
+
+                  if (!secret) secret = window.prompt('UNLOCK:')
+
+                  nano.localStorage(secret).then((accounts) => {
+                    this.accounts = accounts
+                    this.loading = false
+                  }).catch((e) => {
+                    window.alert('Bad Secret.')
+                    window.location.reload()
+                  })
 
               },
 
