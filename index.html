@@ -723,11 +723,11 @@
 
               new_wallet() {
 
-                var password = window.prompt('NEW SECRET:')
+                var password = window.prompt('NEW WALLET (passphrase):')
 
                 if (password.length < 6) {
                   window.alert('6 characters or more.')
-                  password = window.prompt('NEW SECRET:')
+                  password = window.prompt('NEW WALLET (passphrase):')
                   if (password.length < 6) return
                 }
 
