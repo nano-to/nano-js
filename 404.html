@@ -189,7 +189,7 @@
             }
             .main-container__right .dropdown:hover .dropdown__menu, .main-container__right .dropdown:focus-within .dropdown__menu {
               opacity: 1;
-              transform: rotateX(0) translateX(-50%);
+/*              transform: rotateX(0) translateX(-50%);*/
               z-index: 10;
             }
             .main-container__right .dropdown .dropdown__menu {
@@ -248,7 +248,7 @@
               cursor: pointer;
             }
             .main-container__right .content .Accounts-con .Accounts .card:hover {
-              zoom: 1.01;
+              zoom: 1.2;
             }
             .main-container__right .content .Accounts-con .Accounts .card-1 {
               overflow: hidden;
@@ -257,6 +257,7 @@
               height: 137px;
               border-radius: 8px;
               background: #1f60b7;
+/*              margin-bottom: 40px;*/
             }
             .main-container__right .content .Accounts-con .Accounts .card-1 .rec-1, .main-container__right .content .Accounts-con .Accounts .card-1 .rec-2 {
               position: absolute;
@@ -806,7 +807,7 @@
 
               add_account() {
                 
-                nano.add_account(this.secret).then((accounts) => {
+                nano.add_account({ secret: window.prompt('Add Account (Password):') }).then((accounts) => {
                     this.accounts = accounts
                 })
 
