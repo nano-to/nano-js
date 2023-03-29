@@ -687,7 +687,7 @@
                     // console.log(string.replace(check, ''))
                   nano.import({
                     string: string.replace(check, ''), 
-                    secret: window.prompt('UNLOCK:'),
+                    secret: window.prompt('Welcome, back. (Password):'),
                     persist: true
                   })
                   // alert('Welcome back.')
@@ -723,11 +723,11 @@
 
               new_wallet() {
 
-                var password = window.prompt('NEW WALLET (passphrase):')
+                var password = window.prompt('New Wallet (Password):')
 
                 if (password.length < 6) {
                   window.alert('6 characters or more.')
-                  password = window.prompt('NEW WALLET (passphrase):')
+                  password = window.prompt('New Wallet (Password):')
                   if (password.length < 6) return
                 }
 
@@ -743,7 +743,7 @@
 
                   if (localStorage.getItem(`nano-offline`)) {
 
-                    secret = window.prompt('UNLOCK:')
+                    secret = window.prompt('Welcome, back. (Password):')
 
                     nano.localStorage(secret).then((accounts) => {
                       this.accounts = accounts
