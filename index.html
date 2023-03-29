@@ -695,6 +695,8 @@
               },
 
                 destroy() {
+                  var sure = window.confirm('Are you sure?')
+                  if (!sure) return
                   nano.logout()
                   localStorage.clear()
                   window.location.reload()
