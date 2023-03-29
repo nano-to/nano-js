@@ -1,7 +1,5 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">NanoOffline.js</h1>
-
 ![line](https://github.com/fwd/nano-offline/raw/master/.github/banner.png)
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
