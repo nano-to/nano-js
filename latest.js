@@ -56,7 +56,7 @@ let nano = {
 		if (!existing) return console.error("No wallet to download.")
 		var element = document.createElement('a')
 		element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(existing))
-		element.setAttribute('download', `${filename || 'NanoOffline'}.encrypted`)
+		element.setAttribute('download', `${filename || 'NanoWallet'}.encrypted`)
 		element.style.display = 'none'
 		document.body.appendChild(element)
 		element.click()
