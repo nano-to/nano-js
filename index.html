@@ -457,6 +457,19 @@
               z-index: 9;
               cursor: pointer;
             }
+            .group {
+              display: flex;
+              font-size: 22px;
+              margin-top: 20px;
+              align-items: center;
+              justify-content: space-between;
+            }
+            .btn {
+              position: relative;
+              border-radius: 5px;
+              border: 2px solid;
+              padding: 2px 10px;
+            }
         </style>
     </head>
     
@@ -465,14 +478,16 @@
         <div id="app" class="main-container">
 
             <div v-if="loading" id="loader">
-              <div>
-                <div class="main-title"> <b>Nano</b>Offline</div>
+              <div class="main-title">
+                <b>Nano</b>Offline
                 <div style="display: none;" :style="`${persisted ? 'display:none' : 'display:block'}`">
-                  <div style="position: relative;">
-                    <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet" />
-                    IMPORT
+                  <div class="group">
+                    <div class="btn">
+                      <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet" />
+                      Import
+                    </div>
+                    <div class="btn" @click="new_wallet()">Start New</div>
                   </div>
-                  <div @click="new_wallet()">CREATE</div>
                 </div>
               </div>
             </div>
@@ -524,6 +539,7 @@
                     </div>
                 </div>
             </div>
+
             <!-- right container -->
             <div class="main-container__right">
 
@@ -659,7 +675,7 @@
               title: 'Accounts',
               message: 'Hello World',
               accounts: [],
-              persisted: (typeof localStorage.getItem(`nano-offline`) == 'string')
+              persisted: typeof localStorage.getItem(`nano-offline`) === 'string'
 
             },
             mounted() {
@@ -735,6 +751,8 @@
                   password,
                   persist: true
                 })
+
+                console.log("Imported", this.accounts)
               },
 
               load() {
