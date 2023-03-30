@@ -233,10 +233,10 @@
               border-bottom: 1px solid #152a46;
             }
             .main-container__right .content .Accounts-con .Accounts {
-              display: grid;
-              grid-gap: 20px;
-              grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-              justify-items: center;
+              display: flex;
+/*              grid-gap: 20px;*/
+/*              grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));*/
+/*              justify-items: center;*/
             }
             .main-container__right .content .Accounts-con .Accounts .card {
               overflow: hidden;
@@ -257,7 +257,7 @@
               height: 137px;
               border-radius: 8px;
               background: #1f60b7;
-/*              margin-bottom: 40px;*/
+              margin-right: 40px;
             }
             .main-container__right .content .Accounts-con .Accounts .card-1 .rec-1, .main-container__right .content .Accounts-con .Accounts .card-1 .rec-2 {
               position: absolute;
@@ -865,6 +865,7 @@
                   }).then(() => {
                     this.refresh()
                     window.alert('Sent.')
+                    this.sending = false
                     this.send.to = ''
                     this.send.amount = ''
                   }).catch(e => {
@@ -892,6 +893,11 @@
               },
 
               activate(account) {
+                if (this.sending) {
+                   this.send.to = account.address
+                   this.$forceUpdate()
+                  return
+                }
                 this.active = account
                 this.interval = setInterval(() => {
                   this.refresh()
