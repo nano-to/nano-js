@@ -868,25 +868,25 @@
               },
 
               refresh(account) {
-                nano.rpc({ action: "account_info", account: account.address }).then((info) => {
+                nano.rpc({ action: "account_info", account: this.active.address }).then((info) => {
                   if (info.balance_nano) this.active.balance = info.balance_nano
                   if (info.pending_nano) this.active.pending = info.pending_nano
                     this.$forceUpdate()
                 })
-                nano.rpc({ action: "receivable", account: account.address }).then(async (res) => {
+                nano.rpc({ action: "receivable", account: this.active.address }).then(async (res) => {
                   if (res.blocks && res.blocks.length) await nano.receive_all({
-                    address: account.address, 
+                    address: this.active.address, 
                     password: this.password
                   })
                 })
               },
 
               activate(account) {
-                this.interval = setInterval(() => {
-                  this.refresh(account)
-                }, 5000)
-                this.refresh(account)
                 this.active = account
+                this.interval = setInterval(() => {
+                  this.refresh()
+                }, 10000)
+                this.refresh()
               },
 
               export_account(account) {
