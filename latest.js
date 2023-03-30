@@ -167,62 +167,71 @@ let nano = {
 
 	sendWithPassword(config) {
 
-		return new Promise(async (resolve) => {
+		return new Promise(async (resolve, reject) => {
 
-			if (!localStorage) return console.error("Invalid Env.")
+			try {
+	
+				if (!localStorage) return console.error("Invalid Env.")
 
-			if (!localStorage.getItem(`nano-offline`)) return console.error("Wallet not setup.")
+				if (!localStorage.getItem(`nano-offline`)) return console.error("Wallet not setup.")
 
-			var decrypted = CryptoJS.AES.decrypt(localStorage.getItem(`nano-offline`), config.password)
+				var decrypted = CryptoJS.AES.decrypt(localStorage.getItem(`nano-offline`), config.password)
 
-			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
+				var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
 
-			if (!existing) return console.error("Wallet not found.")
+				if (!existing) return console.error("Wallet not found.")
 
-			var source = existing.accounts.find(a => a.address === (config.from || config.address))
+				var source = existing.accounts.find(a => a.address === (config.from || config.address))
 
-		// console.log("source", source)
+				if (!source) return console.error("Account not found.")
 
-			if (!source) return console.error("Account not found.")
+				var accounts = config.accounts || config.to
 
-			var accounts = config.accounts || config.to
+				if (!accounts) return console.error("Account not found.")
+				
+				if ( accounts.includes(',') ) accounts = accounts.split(',')
 
-			if (!accounts) return console.error("Account not found.")
-			
-			if ( accounts.includes(',') ) accounts = accounts.split(',')
+				if ( typeof accounts === "string" ) accounts = [accounts]
 
-			if ( typeof accounts === "string" ) accounts = [accounts]
+				// yes or no ?
+				// if ( accounts.includes('http://') || accounts.includes('https://') ) {
+				// 	accounts = (await this.get(accounts))
+				// }
 
-			// yes or no ?
-			// if ( accounts.includes('http://') || accounts.includes('https://') ) {
-			// 	accounts = (await this.get(accounts))
-			// }
+				if (!accounts || !Array.isArray(accounts)) return console.error('Invalid accounts array.', accounts)
 
-			if (!accounts || !Array.isArray(accounts)) return console.error('Invalid accounts array.', accounts)
+				if (accounts.find(a => a.includes('@'))) {
+						var known = (await this.get(this.known))
+						accounts = accounts.map(a => {
+							if (a && a.includes('@')) {
+								var b = known.find(b => b.name.toLowerCase() === a.toLowerCase().replace('@', ''))
+								if (!b) reject(`Username ${a} not found.`)
+								if (b) a = b.address
+							}
+							return a
+						}) 
+				}
 
-			if (accounts.find(a => a.includes('@'))) {
-					var known = (await this.get(this.known))
-					accounts = accounts.map(a => {
-						if (a && a.includes('@')) {
-							a = known.find(b => b.name.toLowerCase() === a.toLowerCase().replace('@', '')).address
-						}
-						return a
-					}) 
+				for (var account of accounts) {
+					await this._send({ 
+						source,
+						account, 
+						amount: config.amount, 
+						endpoint: config.endpoint || config.node, 
+						key: config.key 
+					})
+				}
+
+				// console.log("Done.")
+
+				resolve()
+
+			} catch(e) {
+
+				resolve(e)
+
 			}
 
-			for (var account of accounts) {
-				await this._send({ 
-					source,
-					account, 
-					amount: config.amount, 
-					endpoint: config.endpoint || config.node, 
-					key: config.key 
-				})
-			}
-
-			// console.log("Done.")
-
-			resolve()
 
 		})
 
@@ -230,7 +239,7 @@ let nano = {
 
 	_send(config) {
 
-		return new Promise(async (resolve) => {
+		return new Promise(async (resolve, reject) => {
 
 			var account = config.account || config.to
 
@@ -238,7 +247,9 @@ let nano = {
 
 			if (account.includes('@')) {
 				var known = (await this.get(this.known))
-				account = known.find(b => b.name.toLowerCase() === account.toLowerCase().replace('@', '')).address
+				var found = known.find(b => b.name.toLowerCase() === account.toLowerCase().replace('@', ''))
+				if (!found) return reject("Username not found.")
+				account = found.address
 			}
 
 			this.rpc({ 
@@ -712,7 +723,8 @@ let nano = {
 					var known = (await this.get(this.known))
 					accounts = accounts.map(a => {
 						if (a && a.includes('@')) {
-							a = known.find(b => b.name.toLowerCase() === a.toLowerCase().replace('@', '')).address
+							var b = known.find(b => b.name.toLowerCase() === a.toLowerCase().replace('@', ''))
+							if (b) a = n.address
 						}
 						return a
 					}) 
@@ -738,7 +750,8 @@ let nano = {
 
 			if (account.includes('@')) {
 				var known = (await this.get(this.known))
-				account = known.find(b => b.name.toLowerCase() === account.toLowerCase().replace('@', '')).address
+				var found = known.find(b => b.name.toLowerCase() === account.toLowerCase().replace('@', ''))
+				if (found) account = found.address
 			}
 
 			this.rpc({ 

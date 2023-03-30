@@ -540,7 +540,7 @@
               color: #000;
             }
             .title {
-              margin: 10px 0 5px 0;
+              margin: 15px 0 5px 0;
               opacity: 0.8;
               font-weight: bold;
               font-size: 14px;
@@ -554,6 +554,7 @@
               border: 3px solid #00000021;
               padding: 10px;
               border-radius: 4px;
+              font-size: 14px;
             }
             textarea {
               height: 100px;
@@ -630,9 +631,15 @@
                 <textarea disabled>{{ active.address }}</textarea>
               </div>
               <div>
+                <div class="title">WALLET URI</div>
+                <a class="button" :href="`nano:${active.address}`" target="_blank">
+                  Open Wallet
+                </a>
+              </div>
+              <div>
                 <div class="title">NANOLOOKER</div>
                 <a class="button" :href="`https://nanolooker.com/account/${active.address}`" target="_blank">
-                  Open Link
+                  Open Explorer
                 </a>
               </div>
             </div>
@@ -856,9 +863,12 @@
                     from: this.active.address, 
                     password: window.prompt('Confirm Send. (Password):'),
                   }).then(() => {
+                    this.refresh()
                     window.alert('Sent.')
                     this.send.to = ''
                     this.send.amount = ''
+                  }).catch(e => {
+                    alert(e)
                   })
               },
 
