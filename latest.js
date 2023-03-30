@@ -165,6 +165,223 @@ let nano = {
 
 	localstorage: this.localStorage,
 
+	sendWithPassword(config) {
+
+		return new Promise(async (resolve) => {
+
+			if (!localStorage) return console.error("Invalid Env.")
+
+			if (!localStorage.getItem(`nano-offline`)) return console.error("Wallet not setup.")
+
+			var decrypted = CryptoJS.AES.decrypt(localStorage.getItem(`nano-offline`), config.password)
+
+			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
+
+			if (!existing) return console.error("Wallet not found.")
+
+			var source = existing.accounts.find(a => a.address === (config.from || config.address))
+
+		// console.log("source", source)
+
+			if (!source) return console.error("Account not found.")
+
+			var accounts = config.accounts || config.to
+
+			if (!accounts) return console.error("Account not found.")
+			
+			if ( accounts.includes(',') ) accounts = accounts.split(',')
+
+			if ( typeof accounts === "string" ) accounts = [accounts]
+
+			// yes or no ?
+			// if ( accounts.includes('http://') || accounts.includes('https://') ) {
+			// 	accounts = (await this.get(accounts))
+			// }
+
+			if (!accounts || !Array.isArray(accounts)) return console.error('Invalid accounts array.', accounts)
+
+			if (accounts.find(a => a.includes('@'))) {
+					var known = (await this.get(this.known))
+					accounts = accounts.map(a => {
+						if (a && a.includes('@')) {
+							a = known.find(b => b.name.toLowerCase() === a.toLowerCase().replace('@', '')).address
+						}
+						return a
+					}) 
+			}
+
+			for (var account of accounts) {
+				await this._send({ 
+					source,
+					account, 
+					amount: config.amount, 
+					endpoint: config.endpoint || config.node, 
+					key: config.key 
+				})
+			}
+
+			// console.log("Done.")
+
+			resolve()
+
+		})
+
+	},
+
+	_send(config) {
+
+		return new Promise(async (resolve) => {
+
+			var account = config.account || config.to
+
+			if (!config.source) return console.error(config)
+
+			if (account.includes('@')) {
+				var known = (await this.get(this.known))
+				account = known.find(b => b.name.toLowerCase() === account.toLowerCase().replace('@', '')).address
+			}
+
+			this.rpc({ 
+			    action: 'account_info', 
+			    account: config.source.address,
+			    representative: "true",
+				endpoint: config.endpoint,
+				key: config.key,
+			  }).then(async (res) => {
+
+			    var _account = res
+
+			    if (!_account.balance) return console.error('Not enough funds.')
+
+			    const data = {
+					// Your current balance in RAW from account info
+					walletBalanceRaw: _account.balance,
+					// Your address
+					fromAddress: config.source.address,
+					toAddress: account,
+					// From account info
+					representativeAddress: _account.representative || this.default_rep,
+					frontier: _account.frontier,
+					amountRaw: config.amount === 'all' ? _account.balance : _NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
+					work: config.pow ? config.pow : await this.pow({ account: config.source.address, frontier: _account.frontier, key: config.key }),
+			    }
+
+			    // Returns a correctly formatted and signed block ready to be sent to the blockchain
+			    const signedBlock = _NanocurrencyWeb.block.send(data, config.source.private)
+
+			    this.rpc({
+					"action": "process",
+					"json_block": "true",
+					"subtype": "send",
+					"block": signedBlock,
+					endpoint: config.endpoint,
+					key: config.key,
+			    }).then((hash) => {
+			      resolve(hash.data)
+			    })
+
+			})
+
+		})
+
+	},
+
+	receive_all(config) {
+		return new Promise((resolve, reject) => {
+
+			if (!localStorage) return console.error("Invalid Env.")
+
+			if (!localStorage.getItem(`nano-offline`)) return console.error("Wallet not setup.")
+
+			var decrypted = CryptoJS.AES.decrypt(localStorage.getItem(`nano-offline`), config.password)
+
+			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
+
+			if (!existing) return console.error("Wallet not found.")
+
+			var source = existing.accounts.find(a => a.address === config.address)
+
+			if (!source) return console.error("Account not found.")
+
+			try {
+
+				this.rpc({ 
+					action: 'receivable', 
+					account: source.address,
+					source: "true",
+				}).then(async (res) => {
+
+					if (res.error) return console.warn(res.message)
+
+					if (!res || !res.blocks) res.data = { blocks: [] }
+
+					if (res && res.blocks && res.blocks === '') return resolve()
+
+				    var blocks = []
+
+					Object.keys(res.blocks).map(hash => blocks.push({ 
+						hash, 
+						amount: res.blocks[hash].amount, 
+						source: res.blocks[hash].source
+					}))
+
+				    for (var hash of blocks) {
+
+						var account = (await this.rpc({ action: 'account_info', account: source.address, representative: "true" }))
+
+						if (!account || account.error) account = { frontier: '' }
+
+					    const data = {
+
+						    // Your current balance in RAW from account info
+						    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
+
+						    // Your address
+						    toAddress: source.address,
+
+						    // From account info
+						    representativeAddress: account.representative || this.default_rep,
+
+						    // From account info
+						    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
+						    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
+
+						    // From the pending transaction
+						    transactionHash: hash.hash,
+
+						    // From the pending transaction in RAW
+						    amountRaw: hash.amount,
+
+							work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: account.frontier, key: config.key }),
+
+						}
+
+						// return console.error(data)
+						if (!data.work) return console.error(data)
+
+						const signedBlock = _NanocurrencyWeb.block.receive(data, source.private)
+
+						await this.rpc({
+							"action": "process",
+							"json_block": "true",
+							"subtype": "receive",
+							"block": signedBlock
+						})
+
+				    }
+
+				    resolve("Done.")
+
+				})
+
+			} catch (e) {
+				console.error(e)
+			}
+
+		})
+
+	},
+
 	logout() {
 		localStorage.removeItem(`nano-offline`)
 	},
@@ -244,10 +461,10 @@ let nano = {
 
 			} else {
 
-				fetch(data.endpoint ? data.endpoint : this.endpoint, {
-				  method: "POST",
-				  headers: {'Content-Type': 'application/json'}, 
-				  body: JSON.stringify(data)
+				fetch(endpoint ? endpoint : this.endpoint, {
+				  method: "GET",
+				  // headers: {'Content-Type': 'application/json'}, 
+				  // body: JSON.stringify(data)
 				}).then(res => {
 				  resolve(res.json())
 				});
@@ -351,7 +568,10 @@ let nano = {
 	  })
 	},
 
-	receive(address) {
+	receive(address, password) {
+		
+		// if (address && address.password) return this.receive_all(address.address, address.password)
+
 		return new Promise((resolve, reject) => {
 
 			var source = address ? this.wallets.find(a => a.accounts && a.accounts.find(b => b.address === address)) : this.wallets[0].accounts[0]
@@ -380,7 +600,6 @@ let nano = {
 							source: res.blocks[hash].source
 						}))
 
-
 					    for (var hash of blocks) {
 
 							var account = (await this.rpc({ action: 'account_info', account: source.address, representative: "true" }))
@@ -408,12 +627,14 @@ let nano = {
 							    // From the pending transaction in RAW
 							    amountRaw: hash.amount,
 
-							work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: _account.frontier, key: config.key }),
+								work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: _account.frontier, key: config.key }),
 							    // work: await this.pow({ account: source.address, frontier: account.frontier }),
 
 							}
 
-							if (!data.work) return console.error(data)
+							if (!data.work) {
+								return console.error("PoW:", data)
+							}
 
 						const signedBlock = _NanocurrencyWeb.block.receive(data, source.private)
 
@@ -422,7 +643,7 @@ let nano = {
 						      "json_block": "true",
 						      "subtype": "receive",
 						      "block": signedBlock
-						    })
+					    })
 
 					    }
 

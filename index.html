@@ -189,7 +189,6 @@
             }
             .main-container__right .dropdown:hover .dropdown__menu, .main-container__right .dropdown:focus-within .dropdown__menu {
               opacity: 1;
-/*              transform: rotateX(0) translateX(-50%);*/
               z-index: 10;
             }
             .main-container__right .dropdown .dropdown__menu {
@@ -402,29 +401,52 @@
               padding: 0 20px;
               font-family: "Inter", sans-serif;
             }
-            .main-container__right .content .table-con tbody .logo .red {
-/*              color: #f43737;*/
-              background: #fcc8c8;
+            .main-container__right .content .table-con tbody .logo .red,
+            .main-container__right .content .table-con tbody .logo .blue,
+            .main-container__right .content .table-con tbody .logo .green {
+/*                  background: #fcc8c8;*/
               width: fit-content;
               margin-left: auto;
               margin-right: auto;
-              padding: 0 5px;
+              font-size: 18px;
+              text-transform: uppercase;
+              padding: 6px 12px;
+              border-radius: 12px;
+              zoom: 0.7;
+            }
+            .main-container__right .content .table-con tbody tr:nth-child(3n), 
+            .main-container__right .content .table-con tbody tr:nth-child(3n-1), 
+            .main-container__right .content .table-con tbody tr:nth-child(3n-2) {
+              background: #fff;
+              border-bottom: 1px solid #00000024;
+              cursor: pointer;
+            }
+             tbody tr:hover {
+              opacity: 0.7;
+             }
+            .main-container__right .content .table-con tbody .logo .red {
+/*              color: #f43737;*/
+              background: #fcc8c8;
+             /* width: fit-content;
+              margin-left: auto;
+              margin-right: auto;
+              padding: 0 5px;*/
             }
             .main-container__right .content .table-con tbody .logo .blue {
 /*              color: #0653ba;*/
               background: #c2dbfd;
-              width: fit-content;
+          /*    width: fit-content;
               margin-left: auto;
               margin-right: auto;
-              padding: 0 5px;
+              padding: 0 5px;*/
             }
             .main-container__right .content .table-con tbody .logo .green {
 /*              color: #6fcf97;*/
               background: #e2f5ea;
-              width: fit-content;
+             /* width: fit-content;
               margin-left: auto;
               margin-right: auto;
-              padding: 0 5px;
+              padding: 0 5px;*/
             }
             .main-container__right .content .table-con tbody .enable,
             .main-container__right .content .table-con tbody .disable {
@@ -487,6 +509,7 @@
               color: #FFF;
               cursor: pointer;
             }
+            #send,
             #active {
               position: fixed;
               background: white;
@@ -543,7 +566,7 @@
               margin-bottom: 9px;
             }
             .send-btn {
-              background: #1f60b7;
+              background: #1275f9;
               text-align: center;
               padding: 10px;
               margin: 20px 0 12px 0;
@@ -582,38 +605,68 @@
             <div v-if="active" id="active">
               <div class="flex">
                 <div>Primary</div>
-                <div @click="active = false">X</div>
+                <div @click="cancel()">X</div>
               </div>
               <div class="flex grouped">
                 <div>
-                  <h4><b>Ӿ 0</b><br><b style="opacity:.5">Balance</b></h4>
+                  <h4><b>Ӿ {{ active.balance || "0" }}</b><br><b style="opacity:.5">Balance</b></h4>
                 </div>
                 <div>
-                  <h4><b>Ӿ 0</b><br><b style="opacity:.5">Pending</b></h4>
+                  <h4><b>Ӿ {{ active.pending || "0" }}</b><br><b style="opacity:.5">Pending</b></h4>
                 </div>
               </div>
               <div>
-                <div :class="`send-btn ${0 == 0 ? 'inactive' : ''}`">Send</div>
+                <div @click="sending = {}" :class="`send-btn ${Number(active.balance) > 0 ? '' : 'inactive'}`">Send</div>
               </div>
               <div>
                 <img style="width: 100%;border: 15px solid #00000042;margin: 10px 0;" :src="`https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${active.address}&choe=UTF-8`" alt="">
               </div>
-              <div>
+              <!-- <div>
                 <div class="title">NICKNAME</div>
                 <input v-model="active.nickname" placeholder="Primary"/>
-              </div>
+              </div> -->
               <div>
                 <div class="title">ADDRESS</div>
                 <textarea disabled>{{ active.address }}</textarea>
               </div>
-              <!-- <div @click="export_account(active)">
-                <div class="title">PRIVATE</div>
-                <textarea disabled>{{ private ? private : '[HIDDEN]' }}</textarea>
-              </div> -->
               <div>
                 <div class="title">NANOLOOKER</div>
                 <a class="button" :href="`https://nanolooker.com/account/${active.address}`" target="_blank">
                   Open Link
+                </a>
+              </div>
+            </div>
+
+            <div v-if="sending" id="send">
+              <div class="flex">
+                <div>Send</div>
+                <div @click="sending = false">X</div>
+              </div>
+              <div class="flex grouped">
+                <div>
+                  <h4><b>Ӿ {{ active.balance || "0" }}</b><br><b style="opacity:.5">Balance</b></h4>
+                </div>
+                <div>
+                  <h4><b>Ӿ {{ active.pending || "0" }}</b><br><b style="opacity:.5">Pending</b></h4>
+                </div>
+              </div>
+              <div>
+                <div class="title">FROM</div>
+                <textarea disabled>{{ active.address }}</textarea>
+              </div>
+              <div>
+                <div class="title">TO</div>
+                <input v-model="send.to" placeholder="Address or @Username" />
+              </div>
+              <div>
+                <div class="title">AMOUNT</div>
+                <input type="number" v-model="send.amount" placeholder="ex. all, 0.01"/>
+              </div>
+              <div @click="send()" :class="`send-btn ${Number(active.balance) > 0 ? '' : 'inactive'}`">Send</div>
+              <div>
+                <!-- <div class="title">NANOLOOKER</div> -->
+                <a style="border-bottom: 1px solid; opacity: 0.5; display: block; text-align: center; width: fit-content; margin: 0 auto; margin-top: 20px; " @click="sending = false" target="_blank">
+                  Cancel
                 </a>
               </div>
             </div>
@@ -677,7 +730,7 @@
                         </div>
                         <!-- end of Accounts title -->
                         <div class="Accounts">
-                            <div @click="active = account" v-for="account in accounts" class="card card-1">
+                            <div @click="activate(account)" v-for="account in accounts" class="card card-1">
                                 <div class="rec-1"></div>
                                 <div class="rec-2"></div>
                                 <div class="content">
@@ -715,54 +768,42 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th>Name</th>
-                                    <th>Amount</th>
+                                    <!-- <th></th> -->
+                                    <th>Type</th>
                                     <th>Account</th>
-                                    <th>Date</th>
-                                    <th></th>
+                                    <!-- <th>Account</th> -->
+                                    <th>Amount</th>
+                                    <!-- <th>Recipient</th> -->
+                                    <!-- <th>Date</th> -->
+                                    <!-- <th></th> -->
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="i in 1" class="row">
+                                <tr v-for="i in history" class="row" @click="nanolooker(i.hash)">
                                     <td class="logo">
-                                         <h1 class="red">S</h1>
+                                         <h1 :class="`${i.type === 'send' ? 'red' : 'blue'}`">{{ i.type }}</h1>
                                     </td>
+                                   <!--  <td class="logo">
+                                        <p>{{ i.type }}</p>
+                                    </td> -->
                                     <td class="name">
-                                        <p>@Fosse</p>
+                                        <p>{{ i.account.slice(0, 18) }}</p>
                                     </td>
+                                 <!--    <td class="name">
+                                        <p>{{ i.hash.slice(0, 8) }}</p>
+                                    </td> -->
                                     <td class="amount">
-                                        <p>Ӿ 5</p>
+                                        <p>Ӿ {{ i.amount_nano }}</p>
                                     </td>
-                                    <td class="pin">
-                                        <b>1 i 4 f c u j t ***</b>
-                                    </td> 
-                                    <td class="date">
+                                    <!-- <td class="pin">
+                                        <b>{{ i.account }}</b>
+                                    </td>  -->
+                                   <!--  <td class="date">
                                         <p>01/01/2023</p>
-                                    </td>
-                                    <td class="disable">
+                                    </td> -->
+                                  <!--   <td class="disable">
                                         <p>Disable</p>
-                                    </td>
-                                </tr>
-                                <tr v-for="i in 1" class="row">
-                                    <td class="logo">
-                                         <h1 class="blue">R</h1>
-                                    </td>
-                                    <td class="name">
-                                        <p>@Fosse</p>
-                                    </td>
-                                    <td class="amount">
-                                        <p>Ӿ 5</p>
-                                    </td>
-                                    <td class="pin">
-                                        <b>1 i 4 f c u j t ***</b>
-                                    </td> 
-                                    <td class="date">
-                                        <p>12/05/2020</p>
-                                    </td>
-                                    <td class="disable">
-                                        <p>Disable</p>
-                                    </td>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -775,8 +816,8 @@
         </div>
 
         <!-- partial -->
-        <script src="https://offline.nano.to/latest.js?v=1.0.0"></script>
-        <!-- <script src="/latest.js"></script> -->
+        <!-- <script src="https://offline.nano.to/latest.js?v=1.0.0"></script> -->
+        <script src="/latest.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
 
@@ -787,6 +828,10 @@
             el: '#app',
 
             data: { 
+              history: [],
+              sending: false,
+              interval: false,
+              password: false,
               private: false,
               active: false,
               loading: true,
@@ -798,6 +843,51 @@
             },
             watch: {},
             methods: {
+
+              nanolooker(hash) {
+                window.open(`https://nanolooker.com/block/${hash}`, '_blank');
+              },
+
+              send() {
+                if (!this.send || !this.send.to || !this.send.amount) return window.alert("Missing param.")
+                  nano.sendWithPassword({
+                    to: this.send.to, 
+                    amount: this.send.amount, 
+                    from: this.active.address, 
+                    password: window.prompt('Confirm Send. (Password):'),
+                  }).then(() => {
+                    window.alert('Sent.')
+                    this.send.to = ''
+                    this.send.amount = ''
+                  })
+              },
+
+              cancel() {
+                clearInterval(this.interval)
+                this.active = false
+              },
+
+              refresh(account) {
+                nano.rpc({ action: "account_info", account: account.address }).then((info) => {
+                  if (info.balance_nano) this.active.balance = info.balance_nano
+                  if (info.pending_nano) this.active.pending = info.pending_nano
+                    this.$forceUpdate()
+                })
+                nano.rpc({ action: "receivable", account: account.address }).then(async (res) => {
+                  if (res.blocks && res.blocks.length) await nano.receive_all({
+                    address: account.address, 
+                    password: this.password
+                  })
+                })
+              },
+
+              activate(account) {
+                this.interval = setInterval(() => {
+                  this.refresh(account)
+                }, 5000)
+                this.refresh(account)
+                this.active = account
+              },
 
               export_account(account) {
                 console.log( export_account )
@@ -902,15 +992,26 @@
 
               load() {
 
-                  var secret = ''
-
                   if (localStorage.getItem(`nano-offline`)) {
 
-                    secret = window.prompt('Welcome, back. (Password):')
+                    this.password = window.prompt('Welcome, back. (Password):')
 
-                    nano.localStorage(secret).then((accounts) => {
+                    nano.localStorage(this.password).then((accounts) => {
                       this.accounts = accounts
                       this.loading = false
+
+                    if (this.accounts.length) {
+                      this.history = []
+                      for (var account of this.accounts) {
+                        nano.rpc({ action: "history", account: account.address, count: "100" }).then((history) => {
+                          history.history.map(a => {
+                            // a.to = account.address
+                            this.history.push(a)
+                          })
+                        })
+                      }
+                    }
+
                     }).catch((e) => {
                       window.alert('Bad Secret.')
                       window.location.reload()
