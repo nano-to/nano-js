@@ -1,12 +1,11 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano Wallet</h1>
+<h1 align="center">Localhost Wallet</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-![line](https://github.com/fwd/nano-offline/raw/master/.github/screen.png)
-
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
+**DEMO:**
+https://offline.nano.to
 
 **LOCAL:**
 ```html
