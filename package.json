@@ -1,6 +1,6 @@
 {
   "name": "@fwd/nano-offline",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Offline Wallet for Nano currency.",
   "main": "latest.js",
   "author": "@nano2dev <esteban@nano.to>",

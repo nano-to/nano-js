@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Non-Custodial JS Wallet</h1>
+<h1 align="center">Nano Wallet</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
@@ -20,8 +20,8 @@
 
 **NPM:**
 ```js
-// npm install fwd/nano-offline
-const nano = require('@fwd/nano-offline')
+// npm install @nano/wallet
+const nano = require('@nano/wallet')
 ```
 
 **USAGE:**
@@ -29,6 +29,7 @@ const nano = require('@fwd/nano-offline')
 nano.import( nano.generate() )
 
 console.log( await nano.accounts() ) 
+
 // console.log( nano.accounts({ export: true }) ) 
 
 // console.log( "QR Code:", await nano.qrcode() )
@@ -42,7 +43,6 @@ await nano.wait({
 
 await nano.send({ 
     to: [ 
-        '@bot',
         '@fosse',
         'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
         '@keeri',
@@ -66,12 +66,10 @@ nano.destroy()
 
 ### License
 
-MIT (No Commercial Restrictions)
-
-Contact [@nano2dev](mailto:support@nano.to) for licensing questions.
+MIT
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ### Stargazers
 
-[![Stargazers over time](https://starchart.cc/fwd/nano-js.svg)](https://github.com/fwd/nano-js)
+[![Stargazers over time](https://starchart.cc/fwd/nano-offline.svg)](https://github.com/fwd/nano-offline)
