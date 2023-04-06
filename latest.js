@@ -9,17 +9,14 @@ var _NanocurrencyWeb;(()=>{var e={4431:function(e,t,r){var n;!function(i){"use s
 // https://github.com/fwd/nano-offline
 let nano = {
 
-	version: 'v0.1',
+	wallets: [],
 
 	// BYON (Bring your own Node)
 	endpoint: 'https://rpc.nano.to',
 
-	key: '', // Optional Api Key
-
-	wallets: [],
-
 	convert: _NanocurrencyWeb.tools.convert,
 
+	// needs automatic logic
 	default_rep: 'nano_1kd4h9nqaxengni43xy9775gcag8ptw8ddjifnm77qes1efuoqikoqy5sjq3',
 
 	wait_rpc: 'https://api.nano.to',
@@ -61,10 +58,6 @@ let nano = {
 		
 		return this.wallets
 
-	},
-
-	decrypt(string, secret) {
-		return CryptoJS.AES.decrypt(string, secret)
 	},
 
 	encrypt(string, secret) {
@@ -163,8 +156,6 @@ let nano = {
 		})
 	},
 
-	localstorage: this.localStorage,
-
 	sendWithPassword(config) {
 
 		return new Promise(async (resolve, reject) => {
@@ -213,7 +204,7 @@ let nano = {
 				}
 
 				for (var account of accounts) {
-					await this._send({ 
+					await this.processWithPassword({ 
 						source,
 						account, 
 						amount: config.amount, 
@@ -237,7 +228,7 @@ let nano = {
 
 	},
 
-	_send(config) {
+	processWithPassword(config) {
 
 		return new Promise(async (resolve, reject) => {
 
@@ -292,102 +283,6 @@ let nano = {
 			    })
 
 			})
-
-		})
-
-	},
-
-	receive_all(config) {
-		return new Promise((resolve, reject) => {
-
-			if (!localStorage) return console.error("Invalid Env.")
-
-			if (!localStorage.getItem(`nano-offline`)) return console.error("Wallet not setup.")
-
-			var decrypted = CryptoJS.AES.decrypt(localStorage.getItem(`nano-offline`), config.password)
-
-			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
-
-			if (!existing) return console.error("Wallet not found.")
-
-			var source = existing.accounts.find(a => a.address === config.address)
-
-			if (!source) return console.error("Account not found.")
-
-			try {
-
-				this.rpc({ 
-					action: 'receivable', 
-					account: source.address,
-					source: "true",
-				}).then(async (res) => {
-
-					if (res.error) return console.warn(res.message)
-
-					if (!res || !res.blocks) res.data = { blocks: [] }
-
-					if (res && res.blocks && res.blocks === '') return resolve()
-
-				    var blocks = []
-
-					Object.keys(res.blocks).map(hash => blocks.push({ 
-						hash, 
-						amount: res.blocks[hash].amount, 
-						source: res.blocks[hash].source
-					}))
-
-				    for (var hash of blocks) {
-
-						var account = (await this.rpc({ action: 'account_info', account: source.address, representative: "true" }))
-
-						if (!account || account.error) account = { frontier: '' }
-
-					    const data = {
-
-						    // Your current balance in RAW from account info
-						    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
-
-						    // Your address
-						    toAddress: source.address,
-
-						    // From account info
-						    representativeAddress: account.representative || this.default_rep,
-
-						    // From account info
-						    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
-						    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
-
-						    // From the pending transaction
-						    transactionHash: hash.hash,
-
-						    // From the pending transaction in RAW
-						    amountRaw: hash.amount,
-
-							work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: account.frontier, key: config.key }),
-
-						}
-
-						// return console.error(data)
-						if (!data.work) return console.error(data)
-
-						const signedBlock = _NanocurrencyWeb.block.receive(data, source.private)
-
-						await this.rpc({
-							"action": "process",
-							"json_block": "true",
-							"subtype": "receive",
-							"block": signedBlock
-						})
-
-				    }
-
-				    resolve("Done.")
-
-				})
-
-			} catch (e) {
-				console.error(e)
-			}
 
 		})
 
@@ -579,134 +474,6 @@ let nano = {
 	  })
 	},
 
-	receive(address, password) {
-		
-		// if (address && address.password) return this.receive_all(address.address, address.password)
-
-		return new Promise((resolve, reject) => {
-
-			var source = address ? this.wallets.find(a => a.accounts && a.accounts.find(b => b.address === address)) : this.wallets[0].accounts[0]
-
-			// for (var source of (address ? [this.wallets.find(a => a.address === address)] : this.wallets)) {
-
-				try {
-
-					this.rpc({ 
-				    action: 'receivable', 
-				    account: source.address,
-				    source: "true",
-				  }).then(async (res) => {
-
-						if (res.error) return console.warn(res.message)
-
-						if (!res || !res.blocks) res.data = { blocks: [] }
-
-						if (res && res.blocks && res.blocks === '') return resolve()
-
-					    var blocks = []
-
-						Object.keys(res.blocks).map(hash => blocks.push({ 
-							hash, 
-							amount: res.blocks[hash].amount, 
-							source: res.blocks[hash].source
-						}))
-
-					    for (var hash of blocks) {
-
-							var account = (await this.rpc({ action: 'account_info', account: source.address, representative: "true" }))
-
-							if (!account || account.error) account = { frontier: '' }
-
-						    const data = {
-
-							    // Your current balance in RAW from account info
-							    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
-
-							    // Your address
-							    toAddress: source.address,
-
-							    // From account info
-							    representativeAddress: account.representative || this.default_rep,
-
-							    // From account info
-							    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
-							    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
-
-							    // From the pending transaction
-							    transactionHash: hash.hash,
-
-							    // From the pending transaction in RAW
-							    amountRaw: hash.amount,
-
-								work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: _account.frontier, key: config.key }),
-							    // work: await this.pow({ account: source.address, frontier: account.frontier }),
-
-							}
-
-							if (!data.work) {
-								return console.error("PoW:", data)
-							}
-
-						const signedBlock = _NanocurrencyWeb.block.receive(data, source.private)
-
-						await this.rpc({
-						      "action": "process",
-						      "json_block": "true",
-						      "subtype": "receive",
-						      "block": signedBlock
-					    })
-
-					    }
-
-					    resolve("Done.")
-
-				})
-
-				} catch (e) {
-					console.error(e)
-				}
-
-			// }
-
-		})
-
-	},
-
-	block(config) {
-
-		return new Promise((resolve) => {
-
-			var source = config.from ? this.wallets.find(a => a.accounts && a.accounts.find(b => b.address === config.from)) : this.wallets[0].accounts[0]
-
-			this.rpc({ 
-			    action: 'account_info', 
-			    account: source.address,
-			    representative: "true"
-			  }).then(async (res) => {
-
-			    var account = res.data
-
-			    if (!account) account = { balance: 0 }
-
-			    const data = {
-				walletBalanceRaw: account.balance,
-				fromAddress: source.address,
-				toAddress: config.to,
-				representativeAddress: account.representative,
-				frontier: account.frontier,
-				amountRaw: config.amount === 'all' ? account.balance : _NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
-				work: config.work ? config.work : await this.pow({ account: source.address, frontier: account.frontier, key: config.key }),
-			    }
-
-			    // Returns a correctly formatted and signed block ready to be sent to the blockchain
-			    return _NanocurrencyWeb.block.send(data, source.private)
-
-			})
-
-		})
-
-	},
-
 	send(config) {
 
 		return new Promise(async (resolve) => {
@@ -740,13 +507,107 @@ let nano = {
 
 	},
 
-	process(config) {
+	receive(config) {
+		return new Promise((resolve, reject) => {
+
+			if (!localStorage) return console.error("Invalid Env.")
+
+			if (!localStorage.getItem(`nano-offline`)) return console.error("Wallet not setup.")
+
+			var decrypted = CryptoJS.AES.decrypt(localStorage.getItem(`nano-offline`), config.password)
+
+			var existing = JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
+
+			if (!existing) return console.error("Wallet not found.")
+
+			var source = existing.accounts.find(a => a.address === config.address)
+
+			if (!source) return console.error("Account not found.")
+
+			try {
+
+				this.rpc({ 
+					action: 'receivable', 
+					account: source.address,
+					source: "true",
+				}).then(async (res) => {
+
+					if (res.error) return console.warn(res.message)
+
+					if (!res || !res.blocks) res.data = { blocks: [] }
+
+					if (res && res.blocks && res.blocks === '') return resolve()
+
+				    var blocks = []
+
+					Object.keys(res.blocks).map(hash => blocks.push({ 
+						hash, 
+						amount: res.blocks[hash].amount, 
+						source: res.blocks[hash].source
+					}))
+
+				    for (var hash of blocks) {
+
+						var account = (await this.rpc({ action: 'account_info', account: source.address, representative: "true" }))
+
+						if (!account || account.error) account = { frontier: '' }
+
+					    const data = {
+
+						    // Your current balance in RAW from account info
+						    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
+
+						    // Your address
+						    toAddress: source.address,
+
+						    // From account info
+						    representativeAddress: account.representative || this.default_rep,
+
+						    // From account info
+						    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
+						    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
+
+						    // From the pending transaction
+						    transactionHash: hash.hash,
+
+						    // From the pending transaction in RAW
+						    amountRaw: hash.amount,
+
+							work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: account.frontier, key: config.key }),
+
+						}
+
+						// return console.error(data)
+						if (!data.work) return console.error(data)
+
+						const signedBlock = _NanocurrencyWeb.block.receive(data, source.private)
+
+						await this.rpc({
+							"action": "process",
+							"json_block": "true",
+							"subtype": "receive",
+							"block": signedBlock
+						})
+
+				    }
+
+				    resolve("Done.")
+
+				})
+
+			} catch (e) {
+				console.error(e)
+			}
+
+		})
+
+	},
+
+	sign(config) {
 
 		return new Promise(async (resolve) => {
 
-			var source = config.from ? this.wallets.find(a => a.accounts && a.accounts.find(b => b.address === config.from)) : this.wallets[0].accounts[0]
-
-			var account = config.account || config.to
+			var account = config.account || config.address || config.publicKey
 
 			if (account.includes('@')) {
 				var known = (await this.get(this.known))
@@ -756,42 +617,58 @@ let nano = {
 
 			this.rpc({ 
 			    action: 'account_info', 
-			    account: source.address,
+			    account,
 			    representative: "true",
 				endpoint: config.endpoint,
 				key: config.key,
-			  }).then(async (res) => {
+			  }).then(async (account) => {
 
-			    var _account = res
+		  		if (!account || account.error) account = { frontier: '' }
+			  	
+			  	if (config.type === "receive") {
 
-			    if (!_account.balance) return console.error('Not enough funds.')
+					const data = {
+					    // Your current balance in RAW from account info
+					    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
+					    // Your address
+					    toAddress: config.address,
+					    // From account info
+					    representativeAddress: account.representative || this.default_rep,
+					    // From account info
+					    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
+					    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
+					    // From the pending transaction
+					    transactionHash: hash.hash,
+					    // From the pending transaction in RAW
+					    amountRaw: hash.amount,
+						work: config.pow ? config.pow : await this.pow({ account: config.address, frontier: account.frontier, key: config.key }),
 
-			    const data = {
-					// Your current balance in RAW from account info
-					walletBalanceRaw: _account.balance,
-					// Your address
-					fromAddress: source.address,
-					toAddress: account,
-					// From account info
-					representativeAddress: _account.representative || this.default_rep,
-					frontier: _account.frontier,
-					amountRaw: config.amount === 'all' ? _account.balance : _NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
-					work: config.pow ? config.pow : await this.pow({ account: source.address, frontier: _account.frontier, key: config.key }),
-			    }
+					}	
 
-			    // Returns a correctly formatted and signed block ready to be sent to the blockchain
-			    const signedBlock = _NanocurrencyWeb.block.send(data, source.private)
+					const signedBlock = _NanocurrencyWeb.block.receive(data, config.privateKey)
 
-			    this.rpc({
+			  	} else {
+
+				    const data = {
+						walletBalanceRaw: account.balance,
+						fromAddress: config.address,
+						toAddress: config.to || config.account || config.address,
+						representativeAddress: account.representative || this.default_rep,
+						frontier: account.frontier,
+						amountRaw: config.amount === 'all' ? account.balance : _NanocurrencyWeb.tools.convert(config.amount, 'NANO', 'RAW'),
+						work: config.pow ? config.pow : await this.pow({ account: config.address, frontier: account.frontier, key: config.key }),
+				    }
+
+				    const signedBlock = _NanocurrencyWeb.block.send(data, config.privateKey)
+
+			  	}
+
+			    resolve( {
 					"action": "process",
 					"json_block": "true",
-					"subtype": "send",
-					"block": signedBlock,
-					endpoint: config.endpoint,
-					key: config.key,
-			    }).then((hash) => {
-			      resolve(hash.data)
-			    })
+					"subtype": config.type || "send",
+					"block": signedBlock
+			    } )
 
 			})
 
