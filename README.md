@@ -150,13 +150,13 @@ nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
 nano.convert('421700000000000000000000000000000', 'RAW', 'NANO') // 421.70
 ```
 ```js
-nano.encrypt('string', 'secret') // AES
+nano.encrypt('any_string', 'secret') // AES-256
 ```
 ```js
-nano.decrypt('string', 'secret') // AES
+nano.decrypt('any_string', 'secret') // AES-256
 ```
 
-## INTERNET REQUIRED
+## ONLINE
 
 ```js
 await nano.process(signedBlock)
