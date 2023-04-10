@@ -69,7 +69,7 @@ const block = nano.sign(send_block, privateKey)
 ```
 
 **RECEIVE:**
-```
+```js
 const receive_block = {
     // Your current balance in RAW from account info
     walletBalanceRaw: '18618869000000000000000000000000',
@@ -98,7 +98,7 @@ const received = nano.sign(receive_block, privateKey)
 ```
 
 **CHANGE REP:**
-```
+```js
 const rep_change = {
     // Your current balance, from account info
     walletBalanceRaw: '3000000000000000000000000000000',
