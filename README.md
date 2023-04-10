@@ -37,11 +37,8 @@ await nano.wait({
 })
 
 await nano.send({ 
-    to: [ 
-        'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', 
-    ], 
-    amount: nano.convert(0.0001, 'NANO', 'RAW'),
-    // key: 'POW_KEY' 
+    to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
+    amount: nano.convert(0.0001, 'NANO', 'RAW')
 })
 ```
 
