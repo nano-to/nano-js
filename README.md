@@ -124,9 +124,7 @@ var signed = nano.sign(rep_change, privateKey)
 var hash = nano.process( signed )
 ```
 
-![line](https://github.com/fwd/n2/raw/master/.github/line.png)
-
-## OFFLINE
+## NO INTERNET REQUIRED
 
 ```js
 nano.generate()
@@ -153,7 +151,7 @@ nano.encrypt('any_string', 'secret') // AES-256
 nano.decrypt('any_string', 'secret') // UTF-8
 ```
 
-## ONLINE
+## INTERNET REQUIRED
 
 ```js
 await nano.process(signedBlock)
