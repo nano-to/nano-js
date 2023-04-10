@@ -126,7 +126,6 @@ const signed_change_block = nano.sign(rep_change, privateKey)
 
 ## Utilities
 
-**CONVERT:**
 ```js
 
 nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
