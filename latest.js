@@ -176,7 +176,7 @@ let nano = {
 		return this.wallets
 	},
 
-	balance(config) {
+	balances(config) {
 		return new Promise((resolve, reject) => {
 			this.rpc({
 			  "action": "accounts_balances",
@@ -587,6 +587,9 @@ let nano = {
 	}
 
 }
+
+// For the kiddies.
+nano.balance = nano.balances
 
 // Browser
 if (typeof window !== 'undefined') window.nano = nano

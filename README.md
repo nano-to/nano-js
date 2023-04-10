@@ -132,6 +132,12 @@ nano.import('aes_encrypted_string')
 nano.send({ to: 'address_or_array_of_addresses', amount: 0.1 })
 ```
 ```js
+nano.accounts()
+```
+```js
+await nano.balances()
+```
+```js
 nano.receive()
 ```
 ```js

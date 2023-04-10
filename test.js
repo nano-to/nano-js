@@ -9,7 +9,7 @@
 
 	console.log( await nano.receive() )
 
-	console.log( await nano.balance() )
+	console.log( await nano.balances() )
 
 	// setTimeout(() => {
 		
