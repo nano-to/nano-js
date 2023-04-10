@@ -63,7 +63,9 @@ const send_block = {
     work: 'c5cf86de24b24419',
 }
 
-nano.process( nano.sign(send_block, privateKey) )
+var signed = nano.sign(send_block, privateKey)
+
+var hash = nano.process( signed )
 ```
 
 **RECEIVE:**
@@ -92,7 +94,9 @@ const receive_block = {
     work: 'c5cf86de24b24419',
 }
 
-nano.process( nano.sign(receive_block, privateKey) )
+var signed = nano.sign(receive_block, privateKey)
+
+var hash = nano.process( signed )
 ```
 
 **CHANGE REP:**
@@ -115,12 +119,14 @@ const rep_change = {
     work: '0000000000000000',
 }
 
-nano.process( nano.sign(rep_change, privateKey) )
+var signed = nano.sign(rep_change, privateKey)
+
+var hash = nano.process( signed )
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-## API
+## OFFLINE
 
 ```js
 nano.generate('secret_password')
@@ -135,12 +141,6 @@ nano.send({ to: 'address_or_array_of_addresses', amount: 0.1 })
 nano.accounts()
 ```
 ```js
-await nano.balances()
-```
-```js
-nano.receive()
-```
-```js
 nano.add_account()
 ```
 ```js
@@ -148,9 +148,6 @@ nano.process(signed_block)
 ```
 ```js
 nano.sign(block, privateKey)
-```
-```js
-await nano.rpc({ action: "block_count" })
 ```
 ```js
 nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
@@ -163,6 +160,24 @@ nano.encrypt('string', 'secret') // AES
 ```
 ```js
 nano.decrypt('string', 'secret') // AES
+```
+
+## ONLINE 
+
+```js
+await nano.balances()
+```
+
+```js
+await nano.receive()
+```
+
+```js
+await nano.send({ to: '@fosse', amount: 0.1 })
+```
+
+```js
+await nano.rpc({ action: "block_count" })
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
