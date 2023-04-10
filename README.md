@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Localhost Wallet</h1>
+<h1 align="center">Offline Wallet</h1>
 
 > In Development. Use with care.
 
