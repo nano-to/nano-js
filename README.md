@@ -22,12 +22,14 @@ const nano = require('@nano/wallet')
 
 **BASIC:**
 ```js
-nano.create({ 
-    database: 'nano.wallet', 
+nano.app({ 
+    filename: 'aes_encrypted_string.txt', 
     password: process.env.PASSWORD 
 })
 
 console.log( nano.accounts() )
+
+// nano.convert('1', 'NANO', 'RAW')
 
 await nano.receive()
 

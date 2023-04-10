@@ -72,6 +72,56 @@ let nano = {
 		return this.wallets
 	},
 
+	app(config) {
+
+		return new Promise((resolve) => {
+	
+			if (!config.password) return Error("Missing Password.")
+
+			var string;
+
+			// Browser
+			if (typeof window !== 'undefined') {
+				var string = localStorage.getItem(config.filename ?  config.filename.split('.').join('-') : `nano-offline`)
+				if (!string) {
+					var account = this.generate()
+					string = encrypt(account, config.password)
+					localStorage.setItem(config.filename ? config.filename.split('.').join('-') : `nano-offline`, string)
+					this.wallets = account.accounts.map(a => {
+						return { index: a.accountIndex, address: a.address }
+					})
+				} else {
+					this.wallets = decrypt(string, config.password).accounts.map(a => {
+						return { index: a.accountIndex, address: a.address }
+					})
+				}
+			}
+
+			// NodeJS
+			if (typeof process === 'object') {	
+				const fs = require('fs')
+				try {
+				  	string = fs.readFileSync(config.filename || `./NanoOffline.wallet`, 'utf8')
+				} catch (err) {
+					string = encrypt(this.generate(), config.password)
+					fs.writeFileSync(config.filename || `./NanoOffline.wallet`, string)
+				}
+				this.wallets = decrypt(string, config.password).accounts.map(a => {
+					return { index: a.accountIndex, address: a.address }
+				})
+			}
+			
+			this.pw_cache = config.password
+
+			this.aes256 = string
+
+			resolve(this.wallets)
+
+		})
+
+
+	},
+
 	add_account(password) {
 
 		if (!password && !this.pw_cache) return console.error("Password not provided.")
@@ -149,85 +199,6 @@ let nano = {
 			})
 		})
 	},
-
-	create(config) {
-
-		return new Promise((resolve) => {
-	
-			if (!config.password) return Error("Missing Password.")
-
-			var string;
-
-			// Browser
-			if (typeof window !== 'undefined') {
-				var string = localStorage.getItem(config.database ?  config.database.split('.').join('-') : `nano-offline`)
-				if (!string) {
-					var account = this.generate()
-					string = encrypt(account, config.password)
-					localStorage.setItem(config.database ? config.database.split('.').join('-') : `nano-offline`, string)
-					this.wallets = account.accounts.map(a => {
-						return { index: a.accountIndex, address: a.address }
-					})
-				} else {
-					this.wallets = decrypt(string, config.password).accounts.map(a => {
-						return { index: a.accountIndex, address: a.address }
-					})
-				}
-			}
-
-			// NodeJS
-			if (typeof process === 'object') {	
-				const fs = require('fs')
-				try {
-				  	string = fs.readFileSync(config.database || `./NanoOffline.wallet`, 'utf8')
-				} catch (err) {
-					string = encrypt(this.generate(), config.password)
-					fs.writeFileSync(config.database || `./NanoOffline.wallet`, string)
-				}
-				this.wallets = decrypt(string, config.password).accounts.map(a => {
-					return { index: a.accountIndex, address: a.address }
-				})
-			}
-			
-			this.pw_cache = config.password
-
-			this.aes256 = string
-
-			resolve(this.wallets)
-
-		})
-
-
-	},
-
-	download(database) {
-
-		// Browser
-		if (typeof window !== 'undefined') {
-			var existing = localStorage.getItem(`nano-offline`)
-			if (!existing) return console.error("No wallet to download.")
-			var element = document.createElement('a')
-			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent((prefix ? prefix : '') + existing))
-			element.setAttribute('download', database ? database : `NanoOffline.wallet`)
-			element.style.display = 'none'
-			document.body.appendChild(element)
-			element.click()
-			document.body.removeChild(element)
-		}
-
-		// NodeJS
-		if (typeof process === 'object') {	
-			var existing = this.aes256
-			if (!existing) return console.error("No wallet to download.")
-			const fs = require('fs')
-			fs.writeFileSync(database ? database : `./NanoOffline.wallet`, existing)
-		}
-
-	},
-
-	// export(password) {
-	// 	return decrypt(this.aes256, password)
-	// },
 
 	generate() {
 		var accounts = _NanocurrencyWeb.wallet.generate()

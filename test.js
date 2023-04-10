@@ -3,7 +3,7 @@
 	const nano = require('./latest')
 
 	nano.create({ 
-	    database: 'nano.wallet', 
+	    filename: 'wallet.export', 
 	    password: 'password'
 	})
 
