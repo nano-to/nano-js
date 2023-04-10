@@ -128,8 +128,6 @@ var hash = nano.process( signed )
 
 ## OFFLINE
 
-> Require no internet.
-
 ```js
 nano.generate()
 ```
@@ -158,9 +156,7 @@ nano.encrypt('string', 'secret') // AES
 nano.decrypt('string', 'secret') // AES
 ```
 
-## ONLINE 
-
-> Requires internet.
+## PUBLIC RPC
 
 ```js
 await nano.process(signedBlock)
