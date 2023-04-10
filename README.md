@@ -27,7 +27,7 @@ const nano = require('./latest')
 
 nano.offline({ 
     filename: 'nano.wallet', 
-    password: 'password' 
+    password: process.env.PASSWORD 
 })
 
 console.log( nano.accounts() )
