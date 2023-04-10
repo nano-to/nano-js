@@ -150,7 +150,7 @@ let nano = {
 		})
 	},
 
-	offline(config) {
+	create(config) {
 
 		return new Promise((resolve) => {
 	
@@ -160,11 +160,11 @@ let nano = {
 
 			// Browser
 			if (typeof window !== 'undefined') {
-				var string = localStorage.getItem(config.filename ?  config.filename.split('.').join('-') : `nano-offline`)
+				var string = localStorage.getItem(config.database ?  config.database.split('.').join('-') : `nano-offline`)
 				if (!string) {
 					var account = this.generate()
 					string = encrypt(account, config.password)
-					localStorage.setItem(config.filename ? config.filename.split('.').join('-') : `nano-offline`, string)
+					localStorage.setItem(config.database ? config.database.split('.').join('-') : `nano-offline`, string)
 					this.wallets = account.accounts.map(a => {
 						return { index: a.accountIndex, address: a.address }
 					})
@@ -179,10 +179,10 @@ let nano = {
 			if (typeof process === 'object') {	
 				const fs = require('fs')
 				try {
-				  	string = fs.readFileSync(config.filename || `./NanoOffline.wallet`, 'utf8')
+				  	string = fs.readFileSync(config.database || `./NanoOffline.wallet`, 'utf8')
 				} catch (err) {
 					string = encrypt(this.generate(), config.password)
-					fs.writeFileSync(config.filename || `./NanoOffline.wallet`, string)
+					fs.writeFileSync(config.database || `./NanoOffline.wallet`, string)
 				}
 				this.wallets = decrypt(string, config.password).accounts.map(a => {
 					return { index: a.accountIndex, address: a.address }
@@ -200,7 +200,7 @@ let nano = {
 
 	},
 
-	download(filename) {
+	download(database) {
 
 		// Browser
 		if (typeof window !== 'undefined') {
@@ -208,7 +208,7 @@ let nano = {
 			if (!existing) return console.error("No wallet to download.")
 			var element = document.createElement('a')
 			element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent((prefix ? prefix : '') + existing))
-			element.setAttribute('download', filename ? filename : `NanoOffline.wallet`)
+			element.setAttribute('download', database ? database : `NanoOffline.wallet`)
 			element.style.display = 'none'
 			document.body.appendChild(element)
 			element.click()
@@ -220,7 +220,7 @@ let nano = {
 			var existing = this.aes256
 			if (!existing) return console.error("No wallet to download.")
 			const fs = require('fs')
-			fs.writeFileSync(filename ? filename : `./NanoOffline.wallet`, existing)
+			fs.writeFileSync(database ? database : `./NanoOffline.wallet`, existing)
 		}
 
 	},
@@ -335,22 +335,6 @@ let nano = {
 			if (!frontier) frontier = (await this.rpc({ action: 'account_key', account: account.account } )).key
 			resolve( (await this.rpc({ action: 'work_generate', hash: frontier, key: this.key } )).work )
 		})
-	},
-
-	wait(config) {
-	  return new Promise((resolve, reject) => {
-		config.account = config.account ? config.account : this.wallets[0].accounts[0].address
-		if (!config.amount) return reject("Missing amount.")
-	    const interval = setInterval(async () => {
-			var payment = this.rpc({ endpoint: this.wait_rpc, action: 'search', account: config.account, amount: config.amount })
-			if (payment.hash) {
-				if (config.receive) await this.receive(config.account)
-				if (config.webhook) await this.rpc({ endpoint: config.webhook, payment })
-				resolve(payment)
-				clearInterval(interval)
-			};
-	    }, config.interval || 2000)
-	  })
 	},
 
 	wallet() {

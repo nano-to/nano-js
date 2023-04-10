@@ -22,19 +22,14 @@ const nano = require('@nano/wallet')
 
 **BASIC:**
 ```js
-
-nano.offline({ 
-    filename: 'nano.wallet', 
+nano.create({ 
+    database: 'nano.wallet', 
     password: process.env.PASSWORD 
 })
 
 console.log( nano.accounts() )
 
-await nano.wait({ 
-    amount: '0.001',
-    receive: true, 
-    // webhook: 'https://secret.stuff/post'
-})
+await nano.receive()
 
 await nano.send({ 
     to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
