@@ -72,7 +72,7 @@ let nano = {
 		return this.wallets
 	},
 
-	app(config) {
+	offline(config) {
 
 		return new Promise((resolve) => {
 	

@@ -2,7 +2,7 @@
 
 	const nano = require('./latest')
 
-	nano.create({ 
+	nano.offline({ 
 	    filename: 'wallet.export', 
 	    password: 'password'
 	})
