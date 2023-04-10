@@ -63,9 +63,7 @@ const send_block = {
     work: 'c5cf86de24b24419',
 }
 
-const signed_send_block = nano.sign(send_block, privateKey)
-
-// nano.process(signed_send_block)
+nano.process( nano.sign(send_block, privateKey) )
 ```
 
 **RECEIVE:**
@@ -94,9 +92,7 @@ const receive_block = {
     work: 'c5cf86de24b24419',
 }
 
-const signed_receive_block = nano.sign(receive_block, privateKey)
-
-// nano.process(signed_receive_block)
+nano.process( nano.sign(receive_block, privateKey) )
 ```
 
 **CHANGE REP:**
@@ -119,10 +115,7 @@ const rep_change = {
     work: '0000000000000000',
 }
 
-// Returns a correctly formatted and signed block ready to be sent to the blockchain
-const signed_change_block = nano.sign(rep_change, privateKey)
-
-// nano.process(signed_change_block)
+nano.process( nano.sign(rep_change, privateKey) )
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
