@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Offline Nano Wallet</h1>
+<h1 align="center">JavaScript Nano Wallet</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
@@ -38,6 +38,7 @@ await nano.send({
     amount: nano.convert(0.0001, 'NANO', 'RAW')
 })
 ```
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ## Offline Signing
 
@@ -119,6 +120,8 @@ const rep_change = {
 // Returns a correctly formatted and signed block ready to be sent to the blockchain
 const change_rep = nano.sign(rep_change, privateKey)
 ```
+
+![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
 ## Utilities
 
