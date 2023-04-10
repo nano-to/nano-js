@@ -120,8 +120,32 @@ nano.process( nano.sign(rep_change, privateKey) )
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-## Utilities
+## API
 
+```js
+nano.generate('secret_password')
+```
+```js
+nano.import('aes_encrypted_string')
+```
+```js
+nano.send({ to: 'address_or_array_of_addresses', amount: 0.1 })
+```
+```js
+nano.receive()
+```
+```js
+nano.add_account()
+```
+```js
+nano.process(signed_block)
+```
+```js
+nano.sign(block, privateKey)
+```
+```js
+await nano.rpc({ action: "block_count" })
+```
 ```js
 nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
 ```
@@ -129,7 +153,10 @@ nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
 nano.convert('421700000000000000000000000000000', 'RAW', 'NANO') // 421.70
 ```
 ```js
-nano.process(signed_block) // { hash: '53D98INVM...' }
+nano.encrypt('string', 'secret') // AES
+```
+```js
+nano.decrypt('string', 'secret') // AES
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
