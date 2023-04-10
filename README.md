@@ -38,10 +38,6 @@ await nano.send({
 ```
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-## Offline Signing
-
-**SEND:**
-
 ```js
 const privateKey = 'PRIVATE_KEY'
 
@@ -124,7 +120,7 @@ var signed = nano.sign(rep_change, privateKey)
 var hash = nano.process( signed )
 ```
 
-## OFFLINE
+## API
 
 ```js
 nano.offline({ 
