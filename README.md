@@ -2,7 +2,7 @@
 
 <h1 align="center">Offline Wallet</h1>
 
-> Code Rewrite in progress. Do not touch, just look.
+> Code Rewrite in progress. 
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
