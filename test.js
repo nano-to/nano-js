@@ -1,11 +1,12 @@
-const nano = require('./latest')
-
 ;(async () => {
 
-	await nano.import( await nano.generate() )
+const nano = require('./latest')
 
-	// console.log( await nano.accounts() )
+nano.offline({ 
+	filename: 'nano.wallet', 
+	password: 'password' 
+})
 
-	console.log( await nano.send({ to: '@faucet', amount: '0.0001' }) )
+console.log( nano.accounts() )
 
 })()
