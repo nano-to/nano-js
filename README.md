@@ -156,7 +156,7 @@ nano.encrypt('string', 'secret') // AES
 nano.decrypt('string', 'secret') // AES
 ```
 
-## PUBLIC RPC
+## INTERNET REQUIRED
 
 ```js
 await nano.process(signedBlock)
