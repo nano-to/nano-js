@@ -308,7 +308,7 @@ let nano = {
 		})
 	},
 
-	wallet() {
+	wallet(password) {
 		
 		// Browser
 		if (typeof window !== 'undefined') {
@@ -585,6 +585,10 @@ let nano = {
 	nanolooker(address) {
 		return `https://nanolooker.com/account/${address ? address : this.wallets[0].address}`
 	}
+
+	export() {
+		return this.wallet()
+	},
 
 }
 

@@ -22,7 +22,7 @@ const nano = require('@nano/wallet')
 
 **USAGE:**
 ```js
-nano.app({ 
+nano.offline({ 
     filename: 'aes_encrypted_string.txt', 
     password: process.env.PASSWORD 
 })
@@ -124,8 +124,14 @@ var signed = nano.sign(rep_change, privateKey)
 var hash = nano.process( signed )
 ```
 
-## NO INTERNET REQUIRED
+## OFFLINE
 
+```js
+nano.offline({ 
+    filename: 'aes_encrypted_string.txt', 
+    password: process.env.PASSWORD 
+})
+```
 ```js
 nano.generate()
 ```
@@ -139,19 +145,22 @@ nano.accounts()
 nano.add_account()
 ```
 ```js
-nano.sign(block, privateKey)
+nano.sign(block, process.env.privateKey)
 ```
 ```js
 nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
 ```
 ```js
-nano.encrypt('any_string', 'secret') // AES-256
+nano.encrypt('any_string', process.env.PASSWORD) // AES-256
 ```
 ```js
-nano.decrypt('any_string', 'secret') // UTF-8
+nano.decrypt('any_string', process.env.PASSWORD) // UTF-8
+```
+```js
+nano.export(process.env.PASSWORD)
 ```
 
-## INTERNET REQUIRED
+## PUBLIC RPC
 
 ```js
 await nano.process(signedBlock)
