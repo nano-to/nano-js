@@ -17,19 +17,13 @@
 ```
 
 **NPM:**
-```bash
-$ npm install @nano/wallet
-```
-
 ```js
-const nano = require('@nano/wallet')
+// npm install @nano/wallet
+const nano = require('./latest')
 ```
 
 **BASIC:**
 ```js
-// nano.import( nano.generate() )
-
-const nano = require('./latest')
 
 nano.offline({ 
     filename: 'nano.wallet', 
