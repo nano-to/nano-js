@@ -64,6 +64,7 @@ const send_block = {
 }
 
 const signed_send_block = nano.sign(send_block, privateKey)
+
 // nano.process(signed_send_block)
 ```
 
@@ -94,6 +95,7 @@ const receive_block = {
 }
 
 const signed_receive_block = nano.sign(receive_block, privateKey)
+
 // nano.process(signed_receive_block)
 ```
 
@@ -119,6 +121,7 @@ const rep_change = {
 
 // Returns a correctly formatted and signed block ready to be sent to the blockchain
 const signed_change_block = nano.sign(rep_change, privateKey)
+
 // nano.process(signed_change_block)
 ```
 
@@ -131,6 +134,9 @@ nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
 ```
 ```js
 nano.convert('421700000000000000000000000000000', 'RAW', 'NANO') // 421.70
+```
+```js
+nano.process(signed_block) // { hash: '53D98INVM...' }
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
