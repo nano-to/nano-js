@@ -450,7 +450,7 @@ let nano = {
 			var blocks = []
 
 			for (var account of accounts) {
-				var block = await this.process({ 
+				var block = await this._process({ 
 					source,
 					to: account, 
 					amount: config.amount, 
@@ -509,7 +509,18 @@ let nano = {
 
 	},
 
-	process(config) {
+	process(signedBlock) {
+		return this.rpc({
+			"action": "process",
+			"json_block": "true",
+			"subtype": "send",
+			"block": signedBlock,
+	    }).then((hash) => {
+	      resolve(hash)
+	    })
+	},
+
+	_process(config) {
 		return new Promise(async (resolve, reject) => {
 
 			var account = config.to

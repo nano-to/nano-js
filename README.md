@@ -29,13 +29,11 @@ nano.app({
 
 console.log( nano.accounts() )
 
-// nano.convert('1', 'NANO', 'RAW')
-
 await nano.receive()
 
 await nano.send({ 
     to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
-    amount: nano.convert(0.0001, 'NANO', 'RAW')
+    amount: nano.convert(0.001, 'NANO', 'RAW') // 'all'
 })
 ```
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
@@ -65,7 +63,8 @@ const send_block = {
     work: 'c5cf86de24b24419',
 }
 
-const block = nano.sign(send_block, privateKey)
+const signed_send_block = nano.sign(send_block, privateKey)
+// nano.process(signed_send_block)
 ```
 
 **RECEIVE:**
@@ -94,7 +93,8 @@ const receive_block = {
     work: 'c5cf86de24b24419',
 }
 
-const received = nano.sign(receive_block, privateKey)
+const signed_receive_block = nano.sign(receive_block, privateKey)
+// nano.process(signed_receive_block)
 ```
 
 **CHANGE REP:**
@@ -118,7 +118,8 @@ const rep_change = {
 }
 
 // Returns a correctly formatted and signed block ready to be sent to the blockchain
-const change_rep = nano.sign(rep_change, privateKey)
+const signed_change_block = nano.sign(rep_change, privateKey)
+// nano.process(signed_change_block)
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
