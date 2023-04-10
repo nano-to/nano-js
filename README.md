@@ -150,7 +150,7 @@ nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
 nano.encrypt('any_string', 'secret') // AES-256
 ```
 ```js
-nano.decrypt('any_string', 'secret') // AES-256
+nano.decrypt('any_string', 'secret') // UTF-8
 ```
 
 ## ONLINE
