@@ -39,7 +39,10 @@ await nano.send({
 })
 ```
 
-**SEND BLOCK:**
+## Offline Signing
+
+**SEND:**
+
 ```js
 const privateKey = 'PRIVATE_KEY'
 
@@ -64,7 +67,7 @@ const send_block = {
 const block = nano.sign(send_block, privateKey)
 ```
 
-**RECEIVE BLOCK:**
+**RECEIVE:**
 ```
 const receive_block = {
     // Your current balance in RAW from account info
@@ -93,7 +96,7 @@ const receive_block = {
 const received = nano.sign(receive_block, privateKey)
 ```
 
-**CHANGE REP BLOCK:**
+**CHANGE REP:**
 ```
 const rep_change = {
     // Your current balance, from account info
@@ -116,6 +119,8 @@ const rep_change = {
 // Returns a correctly formatted and signed block ready to be sent to the blockchain
 const change_rep = nano.sign(rep_change, privateKey)
 ```
+
+## Utilities
 
 **CONVERT:**
 ```js
