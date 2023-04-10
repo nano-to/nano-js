@@ -1,11 +1,24 @@
-const nano = require('./latest')
-
 ;(async () => {
 
-	await nano.import( await nano.generate() )
+	const nano = require('./latest')
 
-	// console.log( await nano.accounts() )
+	nano.offline({ 
+	    filename: 'wallet.export', 
+	    password: 'password'
+	})
 
-	console.log( await nano.send({ to: '@faucet', amount: '0.0001' }) )
+	console.log( await nano.receive() )
+
+	console.log( await nano.balances() )
+
+	// setTimeout(() => {
+		
+	// 	await nano.send({ 
+	// 	    to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
+	// 	    amount: 'all'
+	// 	})
+
+	// }, 60000)
+
 
 })()
