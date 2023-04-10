@@ -472,6 +472,43 @@ let nano = {
 
 	},
 
+	sign(block, privateKey) {
+
+		var type = ''
+
+		if (block.fromAddress) type = 'send'
+		if (block.toAddress) type = 'receive'
+		if (!block.toAddress && !block.fromAddress) type = 'representative'
+
+		const data = {
+
+		    // Your current balance in RAW from account info
+		    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
+
+		    // Your address
+		    toAddress: source.address,
+
+		    // From account info
+		    representativeAddress: account.representative || this.default_rep,
+
+		    // From account info
+		    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
+		    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
+
+		    // From the pending transaction
+		    transactionHash: hash.hash,
+
+		    // From the pending transaction in RAW
+		    amountRaw: hash.amount,
+
+			work: await this.pow({ account: source.address, frontier: account.frontier }),
+
+		}
+
+		const signedBlock = _NanocurrencyWeb.block[type](data, privateKey)
+
+	},
+
 	process(config) {
 		return new Promise(async (resolve, reject) => {
 
