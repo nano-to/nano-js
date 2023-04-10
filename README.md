@@ -128,23 +128,19 @@ var hash = nano.process( signed )
 
 ## OFFLINE
 
+> Require no internet.
+
 ```js
-nano.generate('secret_password')
+nano.generate()
 ```
 ```js
-nano.import('aes_encrypted_string')
-```
-```js
-nano.send({ to: 'address_or_array_of_addresses', amount: 0.1 })
+nano.import( nano.generate() )
 ```
 ```js
 nano.accounts()
 ```
 ```js
 nano.add_account()
-```
-```js
-nano.process(signed_block)
 ```
 ```js
 nano.sign(block, privateKey)
@@ -163,6 +159,12 @@ nano.decrypt('string', 'secret') // AES
 ```
 
 ## ONLINE 
+
+> Requires internet.
+
+```js
+await nano.process(signedBlock)
+```
 
 ```js
 await nano.balances()
