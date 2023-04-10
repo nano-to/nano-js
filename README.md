@@ -19,7 +19,7 @@
 **NPM:**
 ```js
 // npm install @nano/wallet
-const nano = require('./latest')
+const nano = require('@nano/wallet')
 ```
 
 **BASIC:**
