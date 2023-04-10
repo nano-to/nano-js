@@ -127,11 +127,10 @@ const signed_change_block = nano.sign(rep_change, privateKey)
 ## Utilities
 
 ```js
-
 nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
-
+```
+```js
 nano.convert('421700000000000000000000000000000', 'RAW', 'NANO') // 421.70
-
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
