@@ -1,6 +1,6 @@
 ;(async () => {
 
-	const nano = require('./latest')
+	const nano = require('./nano')
 
 	nano.offline({ 
 	    filename: 'wallet.export', 
