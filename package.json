@@ -2,7 +2,7 @@
   "name": "@nano/wallet",
   "version": "0.5.0",
   "description": "Javascript Nano Wallet",
-  "main": "latest.js",
+  "main": "nano.js",
   "author": "@nano2dev <hello@fwd.dev>",
   "license": "MIT",
   "homepage": "https://github.com/fwd/nano-offline",
