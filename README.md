@@ -61,7 +61,7 @@ const send_block = {
 
 var signed = nano.sign(send_block, privateKey)
 
-var hash = nano.process( signed )
+var hash = await nano.process( signed )
 ```
 
 **RECEIVE:**
@@ -92,7 +92,7 @@ const receive_block = {
 
 var signed = nano.sign(receive_block, privateKey)
 
-var hash = nano.process( signed )
+var hash = await nano.process( signed )
 ```
 
 **CHANGE REP:**
@@ -117,7 +117,7 @@ const rep_change = {
 
 var signed = nano.sign(rep_change, privateKey)
 
-var hash = nano.process( signed )
+var hash = await nano.process( signed )
 ```
 
 ## API
