@@ -130,7 +130,7 @@ await nano.rpc({ action: "block_count" })
 
 **LOCALSTORAGE:**
 
-> Build non-custodial Nano applications by persisting Wallets client-side. Using AES-256 ecryption. The longer ```process.env.PASSWORD```, the more secure. 
+> Build non-custodial Nano applications by persisting Wallets client-side. Using AES-256 encryption. The longer ```process.env.PASSWORD```, the more secure. 
 
 ```js
 nano.offline({ 
