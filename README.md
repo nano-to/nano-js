@@ -147,7 +147,8 @@ await nano.send({
 
 ## IMPORT/EXPORT
 
-> A JSON string encrypted with AES-256 with and user defined secret. Looking for a UI, try importing wallet into (Nault)[https://nault.cc]
+> A JSON string encrypted with AES-256 with and user defined secret. Looking for a UI, try importing wallet into (
+[Nault](https://nault.cc). 
 
 ```js
 
