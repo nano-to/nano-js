@@ -25,7 +25,6 @@ const nano = require('@nano/wallet')
 **OFFLINE SIGNING:**
 ```js
 var block = nano.sign({
-    type: "send",
     walletBalanceRaw: '18618869000000000000000000000000',
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
@@ -50,7 +49,6 @@ console.log( block )
 
 ```js
 var signed = nano.sign({
-    type: "receive",
     walletBalanceRaw: '18618869000000000000000000000000',
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
@@ -76,7 +74,7 @@ var signed = nano.sign({
 var hash = await nano.process( signed )
 ```
 
-## LOCAL API
+## OFFLINE API
 
 ```js
 nano.generate()
@@ -106,7 +104,7 @@ nano.decrypt('any_string', process.env.PASSWORD) // UTF-8
 nano.export(process.env.PASSWORD)
 ```
 
-## REQUIRES RPC
+## REQUIRES INTERNET
 
 ```js
 await nano.process(signedBlock)
@@ -128,7 +126,7 @@ await nano.send({ to: '@fosse', amount: 0.1 })
 await nano.rpc({ action: "block_count" })
 ```
 
-**LOCALSTORAGE:**
+## LOCALSTORAGE
 
 > Build non-custodial Nano applications by persisting Wallets client-side. Using AES-256 encryption. The longer ```process.env.PASSWORD```, the more secure. 
 
