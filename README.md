@@ -20,39 +20,17 @@
 const nano = require('@nano/wallet')
 ```
 
-**USAGE:**
-```js
-nano.offline({ 
-    filename: 'aes_encrypted_string.txt', 
-    password: process.env.PASSWORD 
-})
-
-console.log( nano.accounts() )
-
-await nano.receive()
-
-await nano.send({ 
-    to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
-    amount: nano.convert(0.001, 'NANO', 'RAW') // 'all'
-})
-```
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**SEND:**
+**OFFLINE SIGNING:**
 ```js
 var block = nano.sign({
     type: "send",
-    // Your current balance in RAW from account info
     walletBalanceRaw: '18618869000000000000000000000000',
-    // Your address
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-    // From account info
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-    // From account info
     frontier: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-    // From the pending transaction
     transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-    // From the pending transaction in RAW
     amountRaw: '7000000000000000000000000000000',
 }, process.env.PRIVATE_KEY) 
 
@@ -70,9 +48,9 @@ console.log( block )
 // }
 ```
 
-**RECEIVE:**
 ```js
 var signed = nano.sign({
+    type: "receive",
     walletBalanceRaw: '18618869000000000000000000000000',
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
@@ -148,6 +126,26 @@ await nano.send({ to: '@fosse', amount: 0.1 })
 
 ```js
 await nano.rpc({ action: "block_count" })
+```
+
+**LOCALSTORAGE:**
+
+> Build non-custodial Nano applications by storing encrypted wallet safely, and signing client-size. Secret never leaves client-side. 
+
+```js
+nano.offline({ 
+    filename: 'aes_encrypted_string.txt', 
+    password: process.env.PASSWORD 
+})
+
+console.log( nano.accounts() )
+
+await nano.receive()
+
+await nano.send({ 
+    to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
+    amount: nano.convert(0.001, 'NANO', 'RAW') // 'all'
+})
 ```
 
 ## IMPORT/EXPORT
