@@ -88,7 +88,7 @@ nano.accounts()
 nano.add_account()
 ```
 ```js
-nano.sign(block, process.env.privateKey)
+nano.sign(block)
 ```
 ```js
 nano.convert('421.70', 'NANO', 'RAW') // 421700000000000000000000000000000
@@ -100,10 +100,10 @@ nano.encrypt('any_string', process.env.PASSWORD) // AES-256
 nano.decrypt('any_string', process.env.PASSWORD) // UTF-8
 ```
 ```js
-nano.export(process.env.PASSWORD)
+nano.export()
 ```
 
-## REQUIRES INTERNET
+## REQUIRES RPC
 
 ```js
 await nano.process(signedBlock)
@@ -131,7 +131,7 @@ await nano.rpc({ action: "block_count" })
 
 ```js
 nano.offline({ 
-    filename: 'aes_encrypted_string.txt', 
+    filename: 'aes_string.txt', 
     password: process.env.PASSWORD 
 })
 
@@ -152,7 +152,7 @@ await nano.send({
 ```js
 
 nano.offline({ 
-    filename: 'aes_encrypted_string.txt', 
+    filename: 'aes_string.txt', 
     password: process.env.PASSWORD 
 })
 
