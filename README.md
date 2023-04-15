@@ -54,7 +54,7 @@ var block = nano.sign({
     transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
     // From the pending transaction in RAW
     amountRaw: '7000000000000000000000000000000',
-})
+}, process.env.PRIVATE_KEY) 
 
 console.log( block )
 
@@ -73,20 +73,12 @@ console.log( block )
 **RECEIVE:**
 ```js
 var signed = nano.sign({
-    // Your current balance in RAW from account info
     walletBalanceRaw: '18618869000000000000000000000000',
-    // Your address
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-    // From account info
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-    // From account info
     frontier: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-    // From the pending transaction
     transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-    // From the pending transaction in RAW
     amountRaw: '7000000000000000000000000000000',
-    // Generate the work server-side or with a DPOW service
-    // This is optional, you don't have to generate work before signing the transaction
     work: 'c5cf86de24b24419',
 }, process.env.PRIVATE_KEY) 
 
@@ -96,27 +88,17 @@ var hash = await nano.process( signed )
 **CHANGE REP:**
 ```js
 var signed = nano.sign({
-    // Your current balance, from account info
     walletBalanceRaw: '3000000000000000000000000000000',
-
-    // Your wallet address
     address: 'nano_3igf8hd4sjshoibbbkeitmgkp1o6ug4xads43j6e4gqkj5xk5o83j8ja9php',
-
-    // The new representative
-    representativeAddress: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs',
-
-    // Previous block, from account info
+    representativeAddress: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs', // new rep
     frontier: '128106287002E595F479ACD615C818117FCB3860EC112670557A2467386249D4',
-
-    // Generate work on the server side or with a DPOW service
-    // This is optional, you don't have to generate work before signing the transaction
     work: '0000000000000000',
 }, process.env.PRIVATE_KEY) 
 
 var hash = await nano.process( signed )
 ```
 
-## API
+## LOCAL API
 
 ```js
 nano.generate()
@@ -146,7 +128,7 @@ nano.decrypt('any_string', process.env.PASSWORD) // UTF-8
 nano.export(process.env.PASSWORD)
 ```
 
-## PUBLIC RPC
+## REQUIRES RPC
 
 ```js
 await nano.process(signedBlock)
