@@ -74,7 +74,7 @@ let nano = {
 
 	offline(config) {
 
-		return new Promise((resolve) => {
+		// return new Promise((resolve) => {
 	
 			if (!config.password) return Error("Missing Password.")
 
@@ -115,9 +115,9 @@ let nano = {
 
 			this.aes256 = string
 
-			resolve(this.wallets)
+			return this.wallets
 
-		})
+		// })
 
 
 	},
@@ -450,22 +450,29 @@ let nano = {
 			var blocks = []
 
 			for (var account of accounts) {
-				var block = await this._process({ 
-					source,
-					to: account, 
-					amount: config.amount, 
-					endpoint: config.endpoint || config.node, 
-					key: config.key,
-				})
-				blocks.push({
-					to: account,
-					from: source.address,
-					hash: block.hash,
-					amount: config.amount,
-					nanolooker: `https://nanolooker.com/block/${block.hash}`
-				})
+				try {
+					var block = await this._process({ 
+						source,
+						to: account, 
+						amount: config.amount, 
+						endpoint: config.endpoint || config.node, 
+						key: config.key,
+					})
+					if (block.error) return console.error(block)
+					if (block.hash) {
+						blocks.push({
+							to: account,
+							from: source.address,
+							hash: block.hash,
+							amount: config.amount,
+							nanolooker: `https://nanolooker.com/block/${block.hash}`
+						})
+					}
+				} catch(e) {
+					resolve(e)
+				}
 			}
-
+			
 			resolve(blocks)
 
 		})
@@ -474,36 +481,19 @@ let nano = {
 
 	sign(block, privateKey) {
 
-		var type = ''
+		if (!privateKey) {
+			var wallet = this.wallet()
+			if (!wallet) return console.error("No Wallet found.")
+			privateKey = wallet.accounts[0].private
+		}
+
+		var type
 
 		if (block.fromAddress) type = 'send'
 		if (block.toAddress) type = 'receive'
 		if (!block.toAddress && !block.fromAddress) type = 'representative'
 
-		const data = {
-
-		    // Your current balance in RAW from account info
-		    walletBalanceRaw: account.balance && Number(account.balance) ? account.balance : '0',
-
-		    // Your address
-		    toAddress: source.address,
-
-		    // From account info
-		    representativeAddress: account.representative || this.default_rep,
-
-		    // From account info
-		    frontier: account.frontier || '0000000000000000000000000000000000000000000000000000000000000000',
-		    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
-
-		    // From the pending transaction
-		    transactionHash: hash.hash,
-
-		    // From the pending transaction in RAW
-		    amountRaw: hash.amount
-
-		}
-
-		const signedBlock = _NanocurrencyWeb.block[type](data, privateKey)
+		return _NanocurrencyWeb.block[type](block, privateKey)
 
 	},
 
