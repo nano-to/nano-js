@@ -22,9 +22,9 @@ const nano = require('@nano/wallet')
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**OFFLINE SIGNING:**
+**SELF-SIGNING:**
 ```js
-var block = nano.sign({
+var send = nano.sign({
     walletBalanceRaw: '18618869000000000000000000000000',
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
@@ -33,7 +33,7 @@ var block = nano.sign({
     amountRaw: '7000000000000000000000000000000',
 }, process.env.PRIVATE_KEY) 
 
-console.log( block )
+console.log( send )
 
 // {
 //   type: 'state',
@@ -48,7 +48,7 @@ console.log( block )
 ```
 
 ```js
-var signed = nano.sign({
+var receive = nano.sign({
     walletBalanceRaw: '18618869000000000000000000000000',
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
@@ -58,12 +58,11 @@ var signed = nano.sign({
     work: 'c5cf86de24b24419',
 }, process.env.PRIVATE_KEY) 
 
-var hash = await nano.process( signed )
+var hash = await nano.process( receive )
 ```
 
-**CHANGE REP:**
 ```js
-var signed = nano.sign({
+var change_rep = nano.sign({
     walletBalanceRaw: '3000000000000000000000000000000',
     address: 'nano_3igf8hd4sjshoibbbkeitmgkp1o6ug4xads43j6e4gqkj5xk5o83j8ja9php',
     representativeAddress: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs', // new rep
@@ -71,7 +70,7 @@ var signed = nano.sign({
     work: '0000000000000000',
 }, process.env.PRIVATE_KEY) 
 
-var hash = await nano.process( signed )
+var hash = await nano.process( change_rep )
 ```
 
 ## OFFLINE API
@@ -148,7 +147,7 @@ await nano.send({
 
 ## IMPORT/EXPORT
 
-> A JSON string is encrypted with AES-256 using a user defined secret.
+> A JSON string encrypted with AES-256 with and user defined secret. Looking for a UI, try importing wallet into (Nault)[https://nault.cc]
 
 ```js
 
