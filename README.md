@@ -123,12 +123,6 @@ var hash = await nano.process( signed )
 ## API
 
 ```js
-nano.offline({ 
-    filename: 'aes_encrypted_string.txt', 
-    password: process.env.PASSWORD 
-})
-```
-```js
 nano.generate()
 ```
 ```js
@@ -176,6 +170,35 @@ await nano.send({ to: '@fosse', amount: 0.1 })
 
 ```js
 await nano.rpc({ action: "block_count" })
+```
+
+## ENCRYPTION
+
+> JSON string is encrypted with AES-256 using a user defined secret.
+
+```js
+nano.offline({ 
+    filename: 'aes_encrypted_string.txt', 
+    password: process.env.PASSWORD 
+})
+```
+
+**Encrypted:**
+```text
+AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aqEfmoR9LwoBbKKxGxrAzOwf2SvNcmvwdAsgAkmieOwVOCDbob46yMN7TZUnRDIOSNq3tEozfaf9vbH3SdRZgkCukblN5m+lA0yxKSDaPiczANZMgP6NdtjMNo2SHVVmJhWgz4i8MDCfk6ZeZChxL6UyuqR0hKyY0wEtXHndTapQuVYQ/Oyvb9ccNfqvgxirmYERiXPEFi/vndPwmS2AEGih7fWndSARkXtLgG3xTI2tWYvoMIef4ZouiFtOhfOXuiab0OteoQmlmW6C03Nb4e2SZrFyyIF9wWkXDcpHSqPBUJJzOPF/p8c8fyEbhpe/iEs6pObrLOSoh8S+t016ZF3ARntCeBtMVZCiwVS94Ru+zGcDVxJiny/oBywznxPlkCAnf4m5Tn6E9LpeLdi14feuGTCerGYW3MYM3jJbqUGRuaGw6OB1hRcKtpe3QLR/lmnw1jRkpux6K+5P2p4GsacK/l0Ul5caGnCeQWeDll3q8DIFD4Qhvp1qnawhMvpYu/RCwVTGvLFlkhYS/DruJEQuVErHK8bhfAvPZaF3Eyw5qzCoUaukcl2S1i5HzPsMgcxSfRxCmCH37bKd8YfE3wiC+7AatsN1QOvzzY=
+```
+
+**Decrypted:**
+```json
+{
+    "mnemonic": "body hire team image luxury banana panther tiny clog beauty only cover frost tea pioneer between salt magnet ugly tourist process grit unlock rice",
+    "seed": "7202a6eb69fa3a465539648c35e55ad7e295f25c9a7a340f82b3d3e338f....33a4ee0939cd44a7abb1afe83ff2170cae4",
+    "accounts": [{
+        "accountIndex": 0,
+        "private": "d7cace49b3a20f83.....58cb61b8f2ef84f3",
+        "address": "nano_1h4ymsbu....3wotjakm1copzy56bd8na"
+    }]
+}
 ```
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
