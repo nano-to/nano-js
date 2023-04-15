@@ -38,7 +38,7 @@ await nano.send({
 ```
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**SIGN:**
+**SEND:**
 ```js
 var block = nano.sign({
     type: "send",
