@@ -1,6 +1,6 @@
 {
   "name": "@nano/wallet",
-  "version": "0.6.0",
+  "version": "0.9.1",
   "description": "Offline Nano Wallet",
   "main": "nano.js",
   "author": "@nano2dev <hello@fwd.dev>",

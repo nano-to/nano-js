@@ -1,24 +1,12 @@
-;(async () => {
+const nano = require('./nano')
 
-	const nano = require('./nano')
+nano.offline({ 
+    filename: 'aes_encrypted_string.txt', 
+    password: process.env.PASSWORD
+})
 
-	nano.offline({ 
-	    filename: 'wallet.export', 
-	    password: 'password'
-	})
+console.log( nano.accounts() )
 
-	console.log( await nano.receive() )
-
-	console.log( await nano.balances() )
-
-	// setTimeout(() => {
-		
-	// 	await nano.send({ 
-	// 	    to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
-	// 	    amount: 'all'
-	// 	})
-
-	// }, 60000)
-
-
-})()
+// ;(async () => {
+// 	console.log( await nano.balance() )
+// })()
