@@ -499,9 +499,7 @@ let nano = {
 		    transactionHash: hash.hash,
 
 		    // From the pending transaction in RAW
-		    amountRaw: hash.amount,
-
-			work: await this.pow({ account: source.address, frontier: account.frontier }),
+		    amountRaw: hash.amount
 
 		}
 
@@ -584,7 +582,7 @@ let nano = {
 
 	nanolooker(address) {
 		return `https://nanolooker.com/account/${address ? address : this.wallets[0].address}`
-	}
+	},
 
 	export() {
 		return this.wallet()
