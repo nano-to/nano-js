@@ -38,10 +38,10 @@ await nano.send({
 ```
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
+**SIGN:**
 ```js
-const privateKey = 'PRIVATE_KEY'
-
-const send_block = {
+var block = nano.sign({
+    type: "send",
     // Your current balance in RAW from account info
     walletBalanceRaw: '18618869000000000000000000000000',
     // Your address
@@ -54,50 +54,48 @@ const send_block = {
     transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
     // From the pending transaction in RAW
     amountRaw: '7000000000000000000000000000000',
-    // Generate the work server-side or with a DPOW service
-    // This is optional, you don't have to generate work before signing the transaction
-    work: 'c5cf86de24b24419',
-}
+})
 
-var signed = nano.sign(send_block, privateKey)
+console.log( block )
 
-var hash = await nano.process( signed )
+// {
+//   type: 'state',
+//   account: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
+//   previous: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
+//   representative: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
+//   balance: '25618869000000000000000000000000',
+//   link: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
+//   signature: 'd5dd2a53becfc8c3fd17ddee2aba651ef6ac28571b66a4dfb2f4820c7d04d235d226d1fb176eb3958bbbfb9145663a0b4ffffd59cfc4b23af24a2af5f51e6a0e',
+//   work: ''
+// }
 ```
 
 **RECEIVE:**
 ```js
-const receive_block = {
+var signed = nano.sign({
     // Your current balance in RAW from account info
     walletBalanceRaw: '18618869000000000000000000000000',
-
     // Your address
     toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-
     // From account info
     representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-
     // From account info
     frontier: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-
     // From the pending transaction
     transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-
     // From the pending transaction in RAW
     amountRaw: '7000000000000000000000000000000',
-
     // Generate the work server-side or with a DPOW service
     // This is optional, you don't have to generate work before signing the transaction
     work: 'c5cf86de24b24419',
-}
-
-var signed = nano.sign(receive_block, privateKey)
+}, process.env.PRIVATE_KEY) 
 
 var hash = await nano.process( signed )
 ```
 
 **CHANGE REP:**
 ```js
-const rep_change = {
+var signed = nano.sign({
     // Your current balance, from account info
     walletBalanceRaw: '3000000000000000000000000000000',
 
@@ -113,9 +111,7 @@ const rep_change = {
     // Generate work on the server side or with a DPOW service
     // This is optional, you don't have to generate work before signing the transaction
     work: '0000000000000000',
-}
-
-var signed = nano.sign(rep_change, privateKey)
+}, process.env.PRIVATE_KEY) 
 
 var hash = await nano.process( signed )
 ```
@@ -172,9 +168,9 @@ await nano.send({ to: '@fosse', amount: 0.1 })
 await nano.rpc({ action: "block_count" })
 ```
 
-## ENCRYPTION
+## IMPORT/EXPORT
 
-> JSON string is encrypted with AES-256 using a user defined secret.
+> A JSON string is encrypted with AES-256 using a user defined secret.
 
 ```js
 nano.offline({ 
