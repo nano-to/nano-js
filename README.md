@@ -155,10 +155,14 @@ await nano.rpc({ action: "block_count" })
 > A JSON string is encrypted with AES-256 using a user defined secret.
 
 ```js
+
 nano.offline({ 
     filename: 'aes_encrypted_string.txt', 
     password: process.env.PASSWORD 
 })
+
+console.log( nano.export() )
+
 ```
 
 **Encrypted:**
