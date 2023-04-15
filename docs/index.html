@@ -7,686 +7,1049 @@
 |_____|        \/  \/     |______.'  
 -->
 <!DOCTYPE html>
-<html lang="en">
-    
+<html lang="en" manifest="appcache">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>NanoPay.js - Crypto Monetization Browser Library</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-        rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+        
+    <title>Nano - Offline</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=0">
+    <meta name="author" content="https://twitter.com/nano2dev"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="transparent">
+    <meta name="apple-mobile-web-app-title" content="Offline">
+    <meta property="og:title" content="NanoOffline">
+    <!-- <meta property="og:image" content="https://dist/images/cover.png"> -->
+    <!-- <meta property="twitter:image" content="dist/images/cover.png"> -->
+    <link rel="apple-touch-icon" href="https://nano.to/dist/images/new_icon.png">
+    <link rel="icon" type="image/png" href="https://nano.to/dist/favicon.png">
+
         <style>
-            :root {
-                --color-bg: #3b3a3a;
-                --color-text: #c4c5c5;
-                --color-white: #fff;
-                --color-accent: #ff8b02;
-                --article-height: 100%;
-                --article-ratio: 2;
-            }
-            
-            ::selection {
-                background: #ffffff20;
-            }
-            
+
             * {
-                padding: 0;
-                margin: 0;
                 box-sizing: border-box;
             }
             
-            html {
-                scroll-behavior: smooth;
-            }
+            @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=PT+Mono&display=swap");
+            
+            @import url("https://fonts.googleapis.com/css2?family=PT+Mono&display=swap");
+            
+            @import url("https://fonts.googleapis.com/css2?family=Inter:wght@800&display=swap");
             
             body {
-                width: 100%;
-                height: 100%;
-                background: var(--color-bg);
-                color: var(--color-text);
-                font-family: "Cormorant", serif;
-                font-size: 16px;
+              margin: 0;
+              font-family: "Nunito", sans-serif;
+              max-width: 100%;
+              -ms-overflow-style: none;
+            }
+            body::-webkit-scrollbar {
+              display: none;
             }
             
-            header {
-                width: 100%;
-                height: 100vh;
-                background: linear-gradient(
-                        180deg,
-                        rgba(59, 58, 58, 0) 0%,
-                        rgba(59, 58, 58, 0.0208296) 4.7%,
-                        rgba(59, 58, 58, 0.0439704) 8.9%,
-                        rgba(59, 58, 58, 0.0704) 12.8%,
-                        rgba(59, 58, 58, 0.101096) 16.56%,
-                        rgba(59, 58, 58, 0.137037) 20.37%,
-                        rgba(59, 58, 58, 0.1792) 24.4%,
-                        rgba(59, 58, 58, 0.228563) 28.83%,
-                        rgba(59, 58, 58, 0.286104) 33.84%,
-                        rgba(59, 58, 58, 0.3528) 39.6%,
-                        rgba(59, 58, 58, 0.42963) 46.3%,
-                        rgba(59, 58, 58, 0.51757) 54.1%,
-                        rgba(59, 58, 58, 0.6176) 63.2%,
-                        rgba(59, 58, 58, 0.730696) 73.76%,
-                        rgba(59, 58, 58, 0.857837) 85.97%,
-                        #3b3a3a 100%
-                    ),
-                    url(/img/back.gif) center
-                        center;
-                background-size: cover;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-                padding: 160px 80px 56px;
+            .main-container {
+              display: flex;
             }
-            
-            header h1 {
-                text-align: center;
-                font-size: 240px;
-                font-style: italic;
-                font-weight: 400;
-                color: var(--color-white);
-                mix-blend-mode: exclusion;
-                line-height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-direction: row;
-                flex-wrap: wrap;
+            .main-container__left {
+              padding-left: 40px;
+              width: 240px;
+              height: 100vh;
+              z-index: 1;
+              background: #fff;
+              position: fixed;
+              box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
             }
-            
-            header h1 span {
-                margin: 0 6px;
+            .main-container__left .main-title {
+              font-size: 30px;
+              margin-top: 30px;
+              margin-bottom: -15px;
             }
-            
-            nav {
-                width: 100%;
-                /*    border: 1px solid white;*/
-                z-index: 1000;
-                color: var(--color-text);
-                padding: 40px 64px 32px;
-                position: fixed;
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                background: linear-gradient(
-                    180deg,
-                    #3b3a3a 0%,
-                    #3b3a3a 0.75%,
-                    rgba(59, 58, 58, 0.99763) 2.92%,
-                    rgba(59, 58, 58, 0.992) 6.37%,
-                    rgba(59, 58, 58, 0.981037) 10.97%,
-                    rgba(59, 58, 58, 0.962963) 16.59%,
-                    rgba(59, 58, 58, 0.936) 23.1%,
-                    rgba(59, 58, 58, 0.89837) 30.37%,
-                    rgba(59, 58, 58, 0.848296) 38.27%,
-                    rgba(59, 58, 58, 0.784) 46.66%,
-                    rgba(59, 58, 58, 0.703704) 55.41%,
-                    rgba(59, 58, 58, 0.60563) 64.39%,
-                    rgba(59, 58, 58, 0.488) 73.47%,
-                    rgba(59, 58, 58, 0.349037) 82.52%,
-                    rgba(59, 58, 58, 0.186963) 91.41%,
-                    rgba(59, 58, 58, 0) 100%
-                );
+            .main-container .tabs {
+              padding-top: 60px;
             }
-            
-            nav a#home {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                font-family: "Anonymous Pro";
-                font-size: 16px;
-                font-weight: 700;
-                line-height: 24px;
-                letter-spacing: 2px;
-                text-transform: uppercase;
-                text-align: center;
-                z-index: 2;
-                color: var(--color-text);
-                text-decoration: none;
+            .main-container .tabs .tab {
+              display: flex;
+              padding: 2px 0;
+              margin-bottom: 25px;
+              position: relative;
+              cursor: pointer;
+              align-items: center;
             }
-            
-            nav #home svg {
-                width: 24px;
-                height: 24px;
-                margin-right: 16px;
-                fill: var(--color-text);
+            .main-container .tabs .tab .desc {
+              font-weight: 600;
+              font-size: 14px;
+              position: absolute;
+              left: 40px;
+/*              color: #7c7a7a;*/
             }
-            
-            #menuToggle {
-                width: 32px;
-                height: 32px;
-                z-index: 1;
-                -webkit-user-select: none;
-                user-select: none;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
+            .main-container .tabs .first {
+              border-right: 5px solid #152a46;
+              /*margin-bottom: 30px;*/
             }
-            
-            #menuToggle input {
-                display: block;
-                width: 32px;
-                height: 32px;
-                position: absolute;
-                cursor: pointer;
-                opacity: 0;
-                z-index: 2;
-                -webkit-touch-callout: none;
+            .main-container .tabs .first .desc {
+/*              color: #152a46;*/
             }
-            
-            #menuToggle span {
-                display: block;
-                width: 32px;
-                height: 2px;
-                position: relative;
-            
-                background: var(--color-text);
-                z-index: 1;
-                transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1),
-                    background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.55s ease;
+            .main-container .tools-con {
+              padding-top: 170px;
             }
-            
-            #menuToggle span:first-child {
-                transform-origin: center center;
+            .main-container .tools-con hr {
+              margin-right: 30px;
+              border: 0.2px solid #7c7a7a;
             }
-            
-            #menuToggle span:nth-last-child {
-                transform-origin: center center;
+            .main-container .tools-con .tools {
+/*              color: #7c7a7a;*/
+              padding-top: 15px;
             }
-            
-            #menuToggle input:checked ~ span {
-                opacity: 1;
-                transform: translate(0px, 0px) rotate(45deg);
+            .main-container .tools-con .tools .tool {
+              position: relative;
+              display: flex;
+              padding: 2px 0;
+              margin-bottom: 20px;
+              cursor: pointer;
             }
-            
-            #menuToggle input:checked ~ span:nth-child(2) {
-                opacity: 0;
-                transform: rotate(0deg) scale(0, 0);
+            .main-container .tools-con .tools .tool .desc {
+              position: absolute;
+              left: 40px;
+              font-weight: 600;
+              font-size: 14px;
             }
-            
-            #menuToggle input:checked ~ span:nth-last-child(2) {
-                transform: translate(0px, -10px) rotate(-45deg);
+            .main-container .tools-con .tools .tool .first-desc {
+              top: 4px;
             }
-            
-            #menu {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100vh;
-                background: #171717;
-                list-style: none;
-                counter-reset: li;
-                list-style-position: outside;
-                -webkit-font-smoothing: antialiased;
-                transform-origin: 0% 0%;
-                transform: translate(100%, 0);
-                transition: all 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                padding: 160px 80px 56px;
+            .main-container__right {
+              padding: 10px 4%;
+              margin-left: calc(160px + 8%);
+              width: calc(100vw - (160px + 4%));
             }
-            
-            #menu a li {
-                font-style: italic;
-                font-weight: 400;
-                font-size: 60px;
-                line-height: 100%;
-                color: var(--color-text);
-                margin-bottom: 24px;
-                counter-increment: li;
-                text-align: center;
-                margin-left: 24px;
+            .main-container__right nav {
+              padding: 0.5rem 0;
+              display: flex;
+              justify-content: flex-end;
             }
-            
-            #menu a {
-                text-decoration: none;
+            .main-container__right nav .icon {
+              display: flex;
+              align-items: center;
+              padding-right: 20px;
             }
-            
-            #menu a:hover li {
-                text-decoration: none;
-                color: var(--color-white);
+            .main-container__right nav .icon svg {
+              cursor: pointer;
             }
-            
-            li::before {
-                content: counter(li, decimal-leading-zero) ".";
-                color: var(--color-accent);
-                margin-left: -24px;
-                margin-right: 24px;
+            .main-container__right nav > ul > li a,
+            .main-container__right nav > ul > li .dropdown__title {
+              text-decoration: none;
+              text-align: center;
+              display: inline-block;
             }
-            
-            #menuToggle input:checked ~ ol {
-                transform: none;
+            .main-container__right ul {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+              display: grid;
             }
-            
-            article {
-                width: calc(var(--article-height) / var(--article-ratio));
-                height: 100%;
-                box-sizing: border-box;
-                margin: auto;
-                position: relative;
-                margin-bottom: 120px;
+            .main-container__right ul li {
+              padding: 0;
             }
-            
-            .hero-image {
-                max-width: 100%;
+            .main-container__right .dropdown {
+              position: relative;
             }
-            
-            img[class^="editorial-image"] {
-                width: 50%;
-                max-width: 400px;
-                margin-bottom: 32px;
-                aspect-ratio: 2 / 3;
+            .main-container__right .dropdown__menu a {
+              text-decoration: none;
+              text-align: left;
+              margin-left: 10px;
             }
-            
-            .editorial-image-left {
-                float: left;
-                margin-right: 32px;
-                margin-left: -80px;
+            .main-container__right .dropdown .dropdown__title {
+              pointer-events: none;
             }
-            
-            .editorial-image-right {
-                float: right;
-                margin-left: 32px;
-                margin-right: -80px;
+            .main-container__right .dropdown .dropdown__title .menu-con {
+              display: flex;
+              background: #e5e9ee;
+              padding: 10px 15px;
+              border-radius: 8px;
             }
-            
-            h2 {
-                font-style: italic;
-                font-weight: 400;
-                font-size: 64px;
-                line-height: 100%;
-                color: var(--color-text);
-                margin-bottom: 32px;
-                padding-top: 120px;
+            .main-container__right .dropdown .dropdown__title .profile {
+              padding-right: 15px;
             }
-            
-            h2:before {
-                position: absolute;
-                margin-left: -80px;
-                color: var(--color-accent);
+            .main-container__right .dropdown .dropdown__title .profile .image {
+              width: 32px;
+              height: 32px;
+              background: url("https://images.unsplash.com/photo-1504568758572-1c648768a420?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60") no-repeat 50% -10%;
+              background-size: cover;
+              border-radius: 50%;
             }
-            
-            h2:nth-of-type(1):before {
-                content: "01.";
+            .main-container__right .dropdown .dropdown__title .menu {
+              display: flex;
+              flex-direction: column;
+              justify-content: space-around;
+              padding: 3px 0;
             }
-            
-            h2:nth-of-type(2):before {
-                content: "02.";
+            .main-container__right .dropdown .dropdown__title .menu .dot {
+              width: 4.5px;
+              height: 4.5px;
+              background: #152a46;
+              border-radius: 50%;
             }
-            
-            h2:nth-of-type(3):before {
-                content: "03.";
+            .main-container__right .dropdown:hover .dropdown__menu, .main-container__right .dropdown:focus-within .dropdown__menu {
+              opacity: 1;
+              z-index: 10;
             }
-            
-            h2:nth-of-type(4):before {
-                content: "04.";
+            .main-container__right .dropdown .dropdown__menu {
+              background-color: #fff;
+              border-radius: 4px;
+              box-shadow: 0 0.15em 0.25em rgba(0, 0, 0, 0.25);
+              padding: 0.5em 0;
+              min-width: 15ch;
+              position: absolute;
+              top: calc(100% + 0.25rem);
+              left: 25%;
+              transform: translateX(-50%);
+              transform: rotateX(-90deg) translateX(-50%);
+              transform-origin: top center;
+              opacity: 0.3;
+              z-index: -10;
+              transition: 280ms all 120ms ease-out;
             }
-            
-            h2:nth-of-type(5):before {
-                content: "05.";
+            .main-container__right .dropdown .dropdown__menu a {
+/*              color: #444;*/
+              padding: 0.5em;
+              font-size: 14px;
+              font-weight: 600;
             }
-            
-            p {
-                font-size: 20px;
-                line-height: 32px;
-                margin-bottom: 32px;
+            .main-container__right .content .Accounts-con .title {
+              display: flex;
+              justify-content: space-between;
+              padding: 20px 0;
+              padding-top: 30px;
+              padding-bottom: 40px;
             }
-            
-            blockquote {
-                font-family: "Anonymous Pro";
-                font-size: 16px;
-                font-weight: 700;
-                line-height: 24px;
-                letter-spacing: 2px;
-                text-transform: uppercase;
-                margin: 16px 54px 48px;
-                border-left: 2px solid var(--color-accent);
-                padding: 0 32px;
-                display: inline-block;
-                padding-right: 0;
+            .main-container__right .content .Accounts-con .main {
+              font-weight: 600;
+              font-size: 18px;
             }
-            
-            blockquote span {
-                float: right;
-                margin-top: 8px;
+            .main-container__right .content .Accounts-con .sub {
+              font-size: 15px;
+              color: inherit;
+              display: flex;
+              align-items: center;
+              text-decoration: none;
+              border-bottom: 1px solid #152a46;
             }
-            
-            @media only screen and (max-width: 1200px) {
-                :root {
-                    --article-ratio: 1.5;
+            .main-container__right .content .Accounts-con .Accounts {
+              display: flex;
+/*              grid-gap: 20px;*/
+/*              grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));*/
+/*              justify-items: center;*/
+            }
+            .main-container__right .content .Accounts-con .Accounts .card {
+              overflow: hidden;
+              position: relative;
+              width: 250px;
+              height: 137px;
+              border-radius: 8px;
+              cursor: pointer;
+              color: #FFF;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card:hover {
+              zoom: 1.2;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-1 {
+              overflow: hidden;
+              position: relative;
+              width: 250px;
+              height: 137px;
+              border-radius: 8px;
+              background: #1f60b7;
+              margin-right: 40px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-1 .rec-1, .main-container__right .content .Accounts-con .Accounts .card-1 .rec-2 {
+              position: absolute;
+              width: 40px;
+              height: 108px;
+              right: 0;
+              background: #2d9cdb;
+              border-radius: 0px 8px 2px 2px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-1 .rec-2 {
+              right: 50px;
+              bottom: 0;
+              border-radius: 2px 2px 0px 0px;
+            }
+            .main-container__right .card-icon {
+              background: #ffffff;
+              position: absolute;
+              padding: 7px 7px;
+              border-radius: 50%;
+              bottom: 20px;
+              right: 25px;
+              width: 20px;
+              text-align: center;
+              height: 20px;
+              font-size: 30px;
+              line-height: 0.8;
+/*              color: #d2cdcd;*/
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-2 {
+              overflow: hidden;
+              position: relative;
+              width: 250px;
+              height: 137px;
+              border-radius: 8px;
+              background: #27ae60;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-2 .rec-1, .main-container__right .content .Accounts-con .Accounts .card-2 .rec-2 {
+              position: absolute;
+              width: 40px;
+              height: 108px;
+              right: 0;
+              background: #6fcf97;
+              border-radius: 0px 8px 2px 2px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-2 .rec-2 {
+              right: 50px;
+              bottom: 0;
+              border-radius: 2px 2px 0px 0px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-2 .card-icon {
+              background: #ffffff;
+              position: absolute;
+              padding: 7px 7px;
+              border-radius: 50%;
+              bottom: 20px;
+              right: 25px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-3 {
+              overflow: hidden;
+              position: relative;
+              width: 250px;
+              height: 137px;
+              border-radius: 8px;
+              background: #eb5757;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-3 .rec-1, .main-container__right .content .Accounts-con .Accounts .card-3 .rec-2 {
+              position: absolute;
+              width: 40px;
+              height: 108px;
+              right: 0;
+              background: #f2994a;
+              border-radius: 0px 8px 2px 2px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-3 .rec-2 {
+              right: 50px;
+              bottom: 0;
+              border-radius: 2px 2px 0px 0px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card-3 .card-icon {
+              background: #ffffff;
+              position: absolute;
+              padding: 7px 7px;
+              border-radius: 50%;
+              bottom: 20px;
+              right: 25px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card .content {
+/*              color: #ffffff;*/
+              padding: 25px 0;
+              padding-left: 20px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card .content div {
+              padding-bottom: 20px;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card .content div:last-of-type {
+              padding-bottom: 0;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card .content .amount {
+              font-size: 14px;
+              font-weight: 600;
+            }
+            .main-container__right .content .Accounts-con .Accounts .card .content .pin,
+            .main-container__right .content .Accounts-con .Accounts .card .content .expiry {
+              font-family: "PT Mono", monospace;
+              font-size: 12px;
+            }
+            .main-container__right .content .table-con {
+              overflow: scroll;
+              -ms-overflow-style: none;
+              margin-top: 10px;
+            }
+            .main-container__right .content .table-con::-webkit-scrollbar {
+              display: none;
+            }
+            .main-container__right .content .table-con .title {
+              font-weight: 600;
+              font-size: 18px;
+              padding: 30px 0;
+/*              color: #06101e;*/
+              text-align: left;
+            }
+            .main-container__right .content .table-con td {
+              white-space: nowrap;
+            }
+            .main-container__right .content .table-con table {
+              border-collapse: collapse;
+              width: 100%;
+            }
+            .main-container__right .content .table-con thead tr {
+              border-radius: 8px 8px 0px 0px;
+            }
+            .main-container__right .content .table-con th {
+              background: #e5e9ee;
+              padding: 20px 0;
+              padding-left: 40px;
+              text-align: left;
+            }
+            .main-container__right .content .table-con tbody .logo {
+              text-align: center;
+              font-weight: 800;
+              padding: 0 20px;
+              font-family: "Inter", sans-serif;
+            }
+            .main-container__right .content .table-con tbody .logo .red,
+            .main-container__right .content .table-con tbody .logo .blue,
+            .main-container__right .content .table-con tbody .logo .green {
+/*                  background: #fcc8c8;*/
+              width: fit-content;
+              margin-left: auto;
+              margin-right: auto;
+              font-size: 18px;
+              text-transform: uppercase;
+              padding: 6px 12px;
+              border-radius: 12px;
+              zoom: 0.7;
+            }
+            .main-container__right .content .table-con tbody tr:nth-child(3n), 
+            .main-container__right .content .table-con tbody tr:nth-child(3n-1), 
+            .main-container__right .content .table-con tbody tr:nth-child(3n-2) {
+              background: #fff;
+              border-bottom: 1px solid #00000024;
+              cursor: pointer;
+            }
+             tbody tr:hover {
+              opacity: 0.7;
+             }
+            .main-container__right .content .table-con tbody .logo .red {
+/*              color: #f43737;*/
+              background: #fcc8c8;
+             /* width: fit-content;
+              margin-left: auto;
+              margin-right: auto;
+              padding: 0 5px;*/
+            }
+            .main-container__right .content .table-con tbody .logo .blue {
+/*              color: #0653ba;*/
+              background: #c2dbfd;
+          /*    width: fit-content;
+              margin-left: auto;
+              margin-right: auto;
+              padding: 0 5px;*/
+            }
+            .main-container__right .content .table-con tbody .logo .green {
+/*              color: #6fcf97;*/
+              background: #e2f5ea;
+             /* width: fit-content;
+              margin-left: auto;
+              margin-right: auto;
+              padding: 0 5px;*/
+            }
+            .main-container__right .content .table-con tbody .enable,
+            .main-container__right .content .table-con tbody .disable {
+              display: none;
+            }
+            .main-container__right .content .table-con tbody td {
+              padding: 0 40px;
+              font-size: 14px;
+/*              color: #06101E;*/
+            }
+            #loader {
+    position: fixed;
+    z-index: 99;
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+            }
+            @media (max-width: 1024px) {
+                .main-container__left {
+                    display: none;
                 }
-            
-                header h1 {
-                    font-size: 220px;
-                    text-align: center;
-                    justify-content: center;
-                    align-items: center;
+                .main-container__right {
+                    width: 100%;
+                    margin-left: 0;
                 }
-            
-                #menu a li {
-                    font-size: 40px;
-                    margin-bottom: 40px !important;
+                .main-container__right .content .Accounts-con .title {
+                    padding-top: 15px;
                 }
             }
-            
-            @media only screen and (max-width: 600px) {
-                .smaller {
-                    font-size: 60px;
-                }
-                nav {
-                    padding: 32px;
-                }
-            
-                h2 {
-                    font-size: 40px;
-                }
-            
-                h2:before {
-                    margin-left: -56px;
-                }
-            
-                img {
-                    min-width: calc(100% + 112px);
-                    margin-left: -56px !important;
-                    margin-right: 0 !important;
-                    float: none !important;
-                }
-            
-                blockquote {
-                    margin: 16px 0 48px;
-                }
-            
-                header h1 {
-                    font-size: 200px;
-                }
-            
-                #menu a li {
-                    font-size: 32px;
-                }
+            .import {
+              position: absolute;
+              opacity: 0;
+              left: 0;
+              width: 100%;
+              top: 0;
+              bottom: 0;
+              height: 100%;
+              z-index: 9;
+              cursor: pointer;
             }
-            
-            @media only screen and (max-height: 680px) {
-                header h1 {
-                    font-size: 40vh;
-                }
-                #menu a li {
-                    font-size: 24px;
-                    margin-bottom: 16px !important;
-                }
+            .group {
+              display: flex;
+              font-size: 22px;
+              margin-top: 20px;
+              align-items: center;
+              justify-content: space-between;
             }
-            
-            @media only screen and (max-height: 680px) and (max-width: 1200px) {
-                header h1 {
-                    font-size: 20vh;
-                }
+            .btn {
+              position: relative;
+              border-radius: 5px;
+              border: 2px solid;
+              padding: 2px 10px;
+            }
+            .btn:hover {
+              background: #000;
+              color: #FFF;
+              cursor: pointer;
+            }
+            #send,
+            #active {
+              position: fixed;
+              background: white;
+              right: 0;
+              top: 0;
+              bottom: 0;
+              width: 290px;
+              padding: 30px;
+              z-index: 9;
+              box-shadow: 1px 5px 9px #00000030;
+              overflow-y: auto;
+            }
+            .flex {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+            }
+            .button {
+              background: #FFF;
+              padding: 10px;
+              text-align: CENTER;
+              width: 100%;
+              display: block;
+              margin: 10px 0;
+              border-radius: 4px;
+              border: 3px solid #00000021;
+              text-decoration: none;
+              color: #000;
+            }
+            .title {
+              margin: 15px 0 5px 0;
+              opacity: 0.8;
+              font-weight: bold;
+              font-size: 14px;
+              letter-spacing: 1px;
+            }
+            input, textarea {
+              width: 100%;
+              background: #FFF;
+              height: 40px;
+              appearance: none;
+              border: 3px solid #00000021;
+              padding: 10px;
+              border-radius: 4px;
+              font-size: 14px;
+            }
+            textarea {
+              height: 100px;
+            }
+            .grouped {
+              border: 3px solid #00000021;
+              padding: 0 20px;
+              margin-top: 21px;
+              border-radius: 6px;
+              margin-bottom: 9px;
+            }
+            .send-btn {
+              background: #1275f9;
+              text-align: center;
+              padding: 10px;
+              margin: 20px 0 12px 0;
+              border-radius: 18px;
+              color: #FFF;
+              font-weight: bold;
+              letter-spacing: 0.5px;
+              cursor: pointer;
+            }
+            .send-btn.inactive {
+              opacity: 0.5;
+              filter: grayscale(1);
             }
         </style>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
-        <script src="https://metrics.bar/js/script.js" id="metrics" async defer></script>
     </head>
     
     <body>
-        <p style="display: none; opacity: 0;">Non-custodial, back-end agnostic crypto monetization browser library. Easily monetize any DOM element on your website.</p>
         <!-- partial:index.partial.html -->
-        <nav>   
-            <a id="home" href="https://nano.to" target="_blank">Nano.to Presents</a>
-            <a id="home" href="https://github.com/fwd/nano-pay" target="_blank">Documentation</a>
-        </nav>
-        <header>
-                <h1 class="smaller">NanoPay.js</h1>
-        </header>
-        <article class="premium">
-            <h2 id="one">You Gotta Love Birds</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet
-                ut quam sit amet vehicula. Donec sit amet facilisis quam. Integer mollis,
-                urna accumsan tempor hendrerit, risus neque tincidunt neque, in aliquam
-                elit eros quis tortor. Sed id venenatis massa, ut malesuada sem. Nam lacinia
-                sodales tellus nec efficitur. Vestibulum fringilla nisl ac iaculis ultricies.
-                Sed commodo imperdiet metus vitae molestie. In laoreet rutrum pretium.
-                Aenean a enim ac lacus tincidunt pellentesque ac a tellus.</p>
-            <img src="https://images.unsplash.com/photo-1601168049797-351a4abb0b2f?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY1MDY1NDk3Nw&ixlib=rb-1.2.1&q=85"
-            alt="a green hummingbird flying among yellow flowers" title="Photo by Geronimo Giqueaux for Unsplash"
-            class="editorial-image-right">
-            <p class="premium">Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
-                a condimentum. Praesent tincidunt, purus ac placerat posuere, lacus risus
-                suscipit lacus, et sollicitudin turpis metus in enim. Vestibulum at imperdiet
-                magna, ac vehicula magna. Praesent placerat sapien bibendum, faucibus lectus
-                at, euismod elit. Nunc velit est, faucibus et faucibus eu, tempus non nisi.
-                Fusce hendrerit auctor lectus non auctor. Vestibulum luctus metus eget
-                sapien volutpat congue. Fusce eget augue mauris. Ut egestas mi et feugiat
-                sagittis. Cras ac convallis elit.</p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet
-                ut quam sit amet vehicula. Donec sit amet facilisis quam. Integer mollis,
-                urna accumsan tempor hendrerit, risus neque tincidunt neque, in aliquam
-                elit eros quis tortor. Sed id venenatis massa, ut malesuada sem. Nam lacinia
-                sodales tellus nec efficitur. Vestibulum fringilla nisl ac iaculis ultricies.
-                Sed commodo imperdiet metus vitae molestie. In laoreet rutrum pretium.
-                Aenean a enim ac lacus tincidunt pellentesque ac a tellus.</p>
-            <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
-                interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
-                et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
-                Donec rhoncus nec orci eget rutrum.</p>
-                <h2 id="two">Flapping Around, Flying All Over</h2>
+        <div id="app" class="main-container">
 
-            <p>Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
-                a condimentum. Praesent tincidunt, purus ac placerat posuere, lacus risus
-                suscipit lacus, et sollicitudin turpis metus in enim. Vestibulum at imperdiet
-                magna, ac vehicula magna. Praesent placerat sapien bibendum, faucibus lectus
-                at, euismod elit. Nunc velit est, faucibus et faucibus eu, tempus non nisi.
-                Fusce hendrerit auctor lectus non auctor. Vestibulum luctus metus eget
-                sapien volutpat congue. Fusce eget augue mauris. Ut egestas mi et feugiat
-                sagittis. Cras ac convallis elit.</p>
-            <img src="https://images.unsplash.com/photo-1574068468668-a05a11f871da?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY0ODkzOTc5OA&ixlib=rb-1.2.1&q=85"
-            alt="A hummingbird flying among yellow flowers. " title="Photo by Deepak Nautiyal for Unsplash"
-            class="editorial-image-left">
-            <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
-                in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
-                tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
-                vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
-                Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
-                quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
-                ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
-            <blockquote
-            class="pullquote">"Be like the bird who, pausing in her flight awhile on boughs too slight,
-                feels them give way beneath her, and yet sings, knowing she hath wings."
-                <br><span>&mdash; Victor Hugo</span>
-                </blockquote>
-                <p class="premium">Donec eu eros augue. Fusce blandit sed lacus ut pretium. Vivamus lacus
-                    ligula, fringilla sit amet nibh non, bibendum auctor nisi. In quis mollis
-                    mauris. Aliquam eget arcu ut arcu rhoncus posuere nec sit amet mauris.
-                    Integer consequat felis vitae quam ultricies, eu ultrices mi finibus. Cras
-                    eget nunc at nisl venenatis lacinia. Duis non tempus purus. Donec ut tristique
-                    turpis. Nunc non lacinia lectus, in ullamcorper erat.</p>
-                <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
-                    interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                    iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
-                    et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
-                    Donec rhoncus nec orci eget rutrum.</p>
-                <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
-                    in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
-                    tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
-                    vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
-                    Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
-                    quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
-                    ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
-                <p>Donec imperdiet efficitur risus in venenatis. Aenean ornare iaculis orci
-                    a condimentum. Praesent tincidunt, purus ac placerat posuere, lacus risus
-                    suscipit lacus, et sollicitudin turpis metus in enim. Vestibulum at imperdiet
-                    magna, ac vehicula magna. Praesent placerat sapien bibendum, faucibus lectus
-                    at, euismod elit. Nunc velit est, faucibus et faucibus eu, tempus non nisi.
-                    Fusce hendrerit auctor lectus non auctor. Vestibulum luctus metus eget
-                    sapien volutpat congue. Fusce eget augue mauris. Ut egestas mi et feugiat
-                    sagittis. Cras ac convallis elit.</p>
-                <p>Etiam ac pretium erat. Nullam mollis, enim sed pretium pellentesque, urna
-                    dolor faucibus nisi, interdum luctus neque eros blandit justo. Morbi non
-                    urna scelerisque, condimentum ex nec, bibendum sem. Pellentesque ullamcorper
-                    quis dui non condimentum. Ut aliquam neque metus, in suscipit lorem volutpat
-                    eget. Mauris ac dictum nulla, eu suscipit justo.
-                    <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
-                        in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
-                        tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
-                        vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
-                        Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
-                        quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
-                        ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
-                        <h2 id="three">Building Nests, Eating Bugs</h2>
+            <div v-if="loading" id="loader">
+              <div class="main-title">
+                <span style="zoom: 1.2"><b>Nano</b>Offline</span>
+                <div style="display: none;" :style="`${persisted ? 'display:none' : 'display:block'}`">
+                  <div class="group" style="max-width: 220px;margin: 30px auto;">
+                    <div class="btn">
+                      <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet" />
+                      Import
+                    </div>
+                    <div class="btn" @click="new_wallet()">Start New</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                    <p>Mauris eu nunc a dolor aliquam molestie vitae non turpis. Curabitur mollis
-                        vehicula euismod. Mauris eleifend, ipsum nec tempor condimentum, massa
-                        arcu lobortis erat, eget iaculis turpis turpis id nisi. Fusce iaculis velit
-                        nibh, a molestie neque placerat interdum. Phasellus eget erat placerat,
-                        viverra quam vitae, viverra ligula. Pellentesque habitant morbi tristique
-                        senectus et netus et malesuada fames ac turpis egestas. Nulla dictum, enim
-                        vitae eleifend vehicula, augue arcu dapibus metus, non accumsan nulla urna
-                        id mauris. Nunc non mi turpis. Nullam bibendum magna in metus tincidunt,
-                        vel dapibus neque placerat. Orci varius natoque penatibus et magnis dis
-                        parturient montes, nascetur ridiculus mus. Vestibulum felis libero, consequat
-                        vel congue et, ultricies ornare arcu. Mauris vitae felis vitae nulla ornare
-                        condimentum.</p>
-                    <img src="https://images.unsplash.com/photo-1602426172655-f97717c8d8e4?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY1MDY1NTQ1MA&ixlib=rb-1.2.1&q=85"
-                    alt="A robin perched on a tree branch. " title="Photo by Alfred Kenneally for Unsplash"
-                    class="editorial-image-right">
-                    <p>Nunc nisi justo, lobortis venenatis consectetur vel, porttitor in felis.
-                        Praesent tincidunt, mi non tincidunt egestas, libero risus finibus ex,
-                        volutpat facilisis nulla libero ut arcu. Proin consequat ligula non libero
-                        viverra, ut semper sem rhoncus. Morbi at viverra nisl, in convallis lorem.
-                        Proin ut dapibus ex, eu hendrerit mi. Donec tempus arcu quis purus consequat,
-                        sed congue nulla consequat. Donec tempor posuere lacus eget placerat. Maecenas
-                        euismod congue ornare. Vestibulum tincidunt eros ut faucibus blandit.</p>
-                    <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
-                        in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
-                        tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
-                        vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
-                        Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
-                        quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
-                        ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
-                    <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
-                        interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                        iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
-                        et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
-                        Donec rhoncus nec orci eget rutrum.</p>
-                        <h2 id="four">Singing Little Songs, Looking Fancy</h2>
+            <div v-if="active" id="active">
+              <div class="flex">
+                <div>Primary</div>
+                <div @click="cancel()">X</div>
+              </div>
+              <div class="flex grouped">
+                <div>
+                  <h4><b>Ӿ {{ active.balance || "0" }}</b><br><b style="opacity:.5">Balance</b></h4>
+                </div>
+                <div>
+                  <h4><b>Ӿ {{ active.pending || "0" }}</b><br><b style="opacity:.5">Pending</b></h4>
+                </div>
+              </div>
+              <div>
+                <div @click="sending = {}" :class="`send-btn ${Number(active.balance) > 0 ? '' : 'inactive'}`">Send</div>
+              </div>
+              <div>
+                <img style="width: 100%;border: 15px solid #00000042;margin: 10px 0;" :src="`https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${active.address}&choe=UTF-8`" alt="">
+              </div>
+              <!-- <div>
+                <div class="title">NICKNAME</div>
+                <input v-model="active.nickname" placeholder="Primary"/>
+              </div> -->
+              <div>
+                <div class="title">ADDRESS</div>
+                <textarea disabled>{{ active.address }}</textarea>
+              </div>
+              <div>
+                <div class="title">WALLET URI</div>
+                <a class="button" :href="`nano:${active.address}`" target="_blank">
+                  Open Wallet
+                </a>
+              </div>
+              <div>
+                <div class="title">NANOLOOKER</div>
+                <a class="button" :href="`https://nanolooker.com/account/${active.address}`" target="_blank">
+                  Open Explorer
+                </a>
+              </div>
+            </div>
 
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus imperdiet
-                        ut quam sit amet vehicula. Donec sit amet facilisis quam. Integer mollis,
-                        urna accumsan tempor hendrerit, risus neque tincidunt neque, in aliquam
-                        elit eros quis tortor. Sed id venenatis massa, ut malesuada sem. Nam lacinia
-                        sodales tellus nec efficitur. Vestibulum fringilla nisl ac iaculis ultricies.
-                        Sed commodo imperdiet metus vitae molestie. In laoreet rutrum pretium.
-                        Aenean a enim ac lacus tincidunt pellentesque ac a tellus.</p>
-                    <blockquote
-                    class="pullquote">"I'd rather learn from one bird how to sing than teach ten thousand stars
-                        how not to dance"
-                        <br> <span>&mdash; e.e. cummings</span>
-                        </blockquote>
-                        <p>In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
-                            in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
-                            tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
-                            vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
-                            Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
-                            quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
-                            ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
-                        <p>Etiam ac pretium erat. Nullam mollis, enim sed pretium pellentesque, urna
-                            dolor faucibus nisi, interdum luctus neque eros blandit justo. Morbi non
-                            urna scelerisque, condimentum ex nec, bibendum sem. Pellentesque ullamcorper
-                            quis dui non condimentum. Ut aliquam neque metus, in suscipit lorem volutpat
-                            eget. Mauris ac dictum nulla, eu suscipit justo.
-                            <p>Pellentesque suscipit metus et lorem pharetra vehicula. Maecenas luctus
-                                urna sed posuere feugiat. Proin pharetra eu nisl et vestibulum. Maecenas
-                                sollicitudin at velit non faucibus. Suspendisse faucibus at tellus rutrum
-                                tempus. Proin sollicitudin vehicula dolor sit amet efficitur. Nulla finibus
-                                massa a consectetur dapibus.</p>
-                            <img src="https://images.unsplash.com/photo-1620694563886-c3a80ec55f41?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTY1MDY1NDQ3Ng&ixlib=rb-1.2.1&q=85"
-                            alt="Yellow Warbler perched in a tree with white flowers. " title="Photo by Mark Olsen for Unsplash"
-                            class="editorial-image-left">
-                            <p>Nam tincidunt vel risus et dictum. Quisque efficitur quam vel libero pellentesque
-                                interdum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                                iaculis ligula ut aliquam aliquet. Vivamus vel elementum lectus. Interdum
-                                et malesuada fames ac ante ipsum primis in faucibus. Quisque vel erat leo.
-                                Donec rhoncus nec orci eget rutrum.</p>
-                            <p>Nunc nisi justo, lobortis venenatis consectetur vel, porttitor in felis.
-                                Praesent tincidunt, mi non tincidunt egestas, libero risus finibus ex,
-                                volutpat facilisis nulla libero ut arcu. Proin consequat ligula non libero
-                                viverra, ut semper sem rhoncus. Morbi at viverra nisl, in convallis lorem.
-                                Proin ut dapibus ex, eu hendrerit mi. Donec tempus arcu quis purus consequat,
-                                sed congue nulla consequat. Donec tempor posuere lacus eget placerat. Maecenas
-                                euismod congue ornare. Vestibulum tincidunt eros ut faucibus blandit.</p>
-                            <p>Donec vel tempor velit. Nulla facilisi. Praesent feugiat arcu risus, sollicitudin
-                                finibus purus sollicitudin et. Quisque a consequat nulla. Fusce eu sapien
-                                ac libero luctus posuere. Sed vulputate erat ante, sit amet varius lorem
-                                ultrices a. Nam id faucibus mi. Nunc pretium malesuada lorem, ut mollis
-                                elit aliquam ac. Morbi iaculis tellus ullamcorper, mollis tellus ut, egestas
-                                mi. Nunc convallis dolor eget sem egestas, et egestas est scelerisque.</p>
-                            <h2
-                            id="five">Birds: They're Great!</h2>
-                                <p>Donec vel mi a ipsum ornare venenatis. Etiam imperdiet nunc leo. Morbi
-                                    faucibus elit in orci viverra posuere. Nunc eget urna ac lectus sagittis
-                                    mollis vel auctor diam. Vivamus sodales, nulla id lacinia congue, massa
-                                    velit laoreet nunc, vitae interdum mauris leo sed quam. Integer tincidunt
-                                    quis sem non consectetur. Nam elementum nibh eu fermentum imperdiet. Nullam
-                                    nec quam at enim fringilla porta et non lectus. Aliquam tempus odio id
-                                    enim cursus bibendum. Nullam a metus augue. Cras elit leo, convallis in
-                                    commodo eget, tempus scelerisque mauris. Quisque ultricies dolor eget eleifend
-                                    consectetur. Nulla eu lorem dignissim nulla interdum consequat. Donec non
-                                    maximus tellus. Aliquam erat volutpat. Nulla porttitor odio in turpis convallis,
-                                    ac rhoncus tellus pellentesque.</p>
-                                <p class="premium">In hac habitasse platea dictumst. Aenean sit amet libero lorem. Quisque
-                                    in sagittis nisl, placerat auctor tellus. Suspendisse scelerisque eget
-                                    tortor eu porta. Nulla sollicitudin justo et ipsum placerat efficitur vel
-                                    vel dui. Vestibulum placerat lorem ac leo mollis, et finibus nisl finibus.
-                                    Pellentesque tempus ut ante non ullamcorper. Vivamus neque tellus, varius
-                                    quis mi eu, fermentum laoreet orci. Quisque nisi elit, fringilla in ligula
-                                    ut, molestie ultricies massa. Curabitur nec suscipit metus.</p>
-                                <p>Nunc nisi justo, lobortis venenatis consectetur vel, porttitor in felis.
-                                    Praesent tincidunt, mi non tincidunt egestas, libero risus finibus ex,
-                                    volutpat facilisis nulla libero ut arcu. Proin consequat ligula non libero
-                                    viverra, ut semper sem rhoncus. Morbi at viverra nisl, in convallis lorem.
-                                    Proin ut dapibus ex, eu hendrerit mi. Donec tempus arcu quis purus consequat,
-                                    sed congue nulla consequat. Donec tempor posuere lacus eget placerat. Maecenas
-                                    euismod congue ornare. Vestibulum tincidunt eros ut faucibus blandit.</p>
-                                <p>Mauris eu nunc a dolor aliquam molestie vitae non turpis. Curabitur mollis
-                                    vehicula euismod. Mauris eleifend, ipsum nec tempor condimentum, massa
-                                    arcu lobortis erat, eget iaculis turpis turpis id nisi. Fusce iaculis velit
-                                    nibh, a molestie neque placerat interdum. Phasellus eget erat placerat,
-                                    viverra quam vitae, viverra ligula. Pellentesque habitant morbi tristique
-                                    senectus et netus et malesuada fames ac turpis egestas. Nulla dictum, enim
-                                    vitae eleifend vehicula, augue arcu dapibus metus, non accumsan nulla urna
-                                    id mauris. Nunc non mi turpis. Nullam bibendum magna in metus tincidunt,
-                                    vel dapibus neque placerat. Orci varius natoque penatibus et magnis dis
-                                    parturient montes, nascetur ridiculus mus. Vestibulum felis libero, consequat
-                                    vel congue et, ultricies ornare arcu. Mauris vitae felis vitae nulla ornare
-                                    condimentum.</p>
-        </article>
-        
-        <script src="/NanoPay.js"></script>
+            <div v-if="sending" id="send">
+              <div class="flex">
+                <div>Send</div>
+                <div @click="sending = false">X</div>
+              </div>
+              <div class="flex grouped">
+                <div>
+                  <h4><b>Ӿ {{ active.balance || "0" }}</b><br><b style="opacity:.5">Balance</b></h4>
+                </div>
+                <div>
+                  <h4><b>Ӿ {{ active.pending || "0" }}</b><br><b style="opacity:.5">Pending</b></h4>
+                </div>
+              </div>
+              <div>
+                <div class="title">FROM</div>
+                <textarea disabled>{{ active.address }}</textarea>
+              </div>
+              <div>
+                <div class="title">TO</div>
+                <input v-model="send.to" placeholder="Address or @Username" />
+              </div>
+              <div>
+                <div class="title">AMOUNT</div>
+                <input type="number" v-model="send.amount" placeholder="ex. all, 0.01"/>
+              </div>
+              <div @click="send()" :class="`send-btn ${Number(active.balance) > 0 ? '' : 'inactive'}`">Send</div>
+              <div>
+                <!-- <div class="title">NANOLOOKER</div> -->
+                <a style="border-bottom: 1px solid; opacity: 0.5; display: block; text-align: center; width: fit-content; margin: 0 auto; margin-top: 20px; " @click="sending = false" target="_blank">
+                  Cancel
+                </a>
+              </div>
+            </div>
+
+            <div class="main-container__left">
+                <div class="main-title"> <b>Nano</b>Offline</div>
+                <div class="tabs">
+                    <div class="tab first">
+                        <svg width="23" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16.6882 3.4957e-05C16.4882 0.00803496 16.2952 0.044035 16.0942 0.094035L2.50022 3.40603C0.892223 3.80003 -0.113777 5.42204 0.281223 7.03103L2.18722 14.813C2.30272 15.2766 2.52761 15.7057 2.84304 16.0644C3.15848 16.4232 3.55528 16.7012 4.00022 16.875V15C4.00022 12.243 6.24322 10 9.00022 10H21.5942L19.7192 2.28103C19.5534 1.61005 19.1612 1.01678 18.6089 0.601267C18.0566 0.185749 17.3779 -0.0265974 16.6872 3.4957e-05H16.6882ZM17.9062 4.31304L18.7192 7.71903L15.3442 8.53104L14.5002 5.15603L17.9062 4.31304ZM9.00022 12C7.34422 12 6.00022 13.344 6.00022 15V23C6.00022 24.656 7.34422 26 9.00022 26H23.0002C24.6562 26 26.0002 24.656 26.0002 23V15C26.0002 13.344 24.6562 12 23.0002 12H9.00022ZM9.00022 13.594H23.0002C23.7712 13.594 24.4062 14.229 24.4062 15V16H7.59422V15C7.59422 14.229 8.22922 13.594 9.00022 13.594ZM7.59422 19H24.4062V23C24.4062 23.771 23.7712 24.406 23.0002 24.406H9.00022C8.62798 24.4039 8.27157 24.2551 8.00835 23.9919C7.74513 23.7287 7.59632 23.3723 7.59422 23V19Z"
+                            fill="#7C7A7A" />
+                        </svg>
+                        <div class="desc">Accounts</div>
+                    </div>
+                    <div class="tab" onclick="alert('Coming soon.')">
+                        <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 0L15.298 2.28C15.5015 2.34354 15.6794 2.47048 15.8057 2.64229C15.932 2.81409 16.0001 3.02177 16 3.235V5H18C18.2652 5 18.5196 5.10536 18.7071 5.29289C18.8946 5.48043 19 5.73478 19 6V14C19 14.2652 18.8946 14.5196 18.7071 14.7071C18.5196 14.8946 18.2652 15 18 15L14.78 15.001C14.393 15.511 13.923 15.961 13.38 16.331L8 20L2.62 16.332C1.81252 15.7815 1.15175 15.042 0.69514 14.1779C0.238528 13.3138 -0.000101223 12.3513 3.22098e-08 11.374V3.235C0.000120606 3.02194 0.0682866 2.81449 0.194562 2.64289C0.320838 2.47128 0.498622 2.34449 0.702 2.281L8 0ZM8 2.094L2 3.97V11.374C1.99986 11.9862 2.14025 12.5903 2.41036 13.1397C2.68048 13.6892 3.07311 14.1692 3.558 14.543L3.747 14.679L8 17.58L11.782 15H7C6.73478 15 6.48043 14.8946 6.29289 14.7071C6.10536 14.5196 6 14.2652 6 14V6C6 5.73478 6.10536 5.48043 6.29289 5.29289C6.48043 5.10536 6.73478 5 7 5H14V3.97L8 2.094ZM8 10V13H17V10H8ZM8 8H17V7H8V8Z"
+                            fill="#7C7A7A" />
+                        </svg>
+                        <div class="desc">Recurring</div>
+                    </div>
+                </div>
+                <!-- end of tabs -->
+                <div class="tools-con">
+                    <hr>
+                    <div class="tools">
+                        <div class="tool" style="position: relative;">
+                            <input @change="handleImport" type="file" class="import" ref="import" accept=".wallet" />
+                            <svg style="transform: rotate(270deg);" width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
+                                fill="#7C7A7A" />
+                            </svg>
+                            <div class="desc">Import</div>
+                        </div>
+                        <div class="tool">
+                            <svg style="transform: rotate(90deg);" width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
+                                fill="#7C7A7A" />
+                            </svg>
+                            <div class="desc" @click="export_file()">Export</div>
+                        </div>
+                        <div class="tool">
+                            <svg width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
+                                fill="#7C7A7A" />
+                            </svg>
+                            <div class="desc" style="color: #eb5757" @click="destroy()">Destroy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- right container -->
+            <div class="main-container__right">
+
+                <!-- end of navigation -->
+                <div class="content">
+                    <div v-if="true" class="Accounts-con">
+                        <div class="title">
+                            <div class="main">Accounts</div> <a @click="add_account()" href="#" class="sub">Add Account</a>
+                        </div>
+                        <!-- end of Accounts title -->
+                        <div class="Accounts">
+                            <div @click="activate(account)" v-for="account in accounts" class="card card-1">
+                                <div class="rec-1"></div>
+                                <div class="rec-2"></div>
+                                <div class="content">
+                                    <div class="amount">NANO_</div>
+                                    <div class="pin">{{ account.address.replace('nano_', '') }}</div>
+                                    <div class="expiry">{{ account.name || account.index || account.nickname || 'Primary' }}</div>
+                                </div>
+                                <div class="card-icon">Ӿ</div>
+                                <!--Icon -->
+                            </div>
+                           <!--  <div v-if="false" class="card card-2">
+                                <div class="rec-1"></div>
+                                <div class="rec-2"></div>
+                                <div class="content">
+                                    <div class="amount">NANO_</div>
+                                    <div class="pin">1234 **** **** 2345</div>
+                                    <div class="expiry">Savings</div>
+                                </div>
+                                <div class="card-icon">Ӿ</div>
+                            </div> -->
+                           <!--  <div v-if="false" class="card card-3">
+                                <div class="rec-1"></div>
+                                <div class="rec-2"></div>
+                                <div class="content">
+                                    <div class="amount">NANO_</div>
+                                    <div class="pin">1234 **** **** 2345</div>
+                                    <div class="expiry">Contest</div>
+                                </div>
+                                <div class="card-icon">Ӿ</div>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="table-con">
+                        <div class="title">History</div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <!-- <th></th> -->
+                                    <th>Type</th>
+                                    <th>Account</th>
+                                    <!-- <th>Account</th> -->
+                                    <th>Amount</th>
+                                    <!-- <th>Recipient</th> -->
+                                    <!-- <th>Date</th> -->
+                                    <!-- <th></th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="i in history" class="row" @click="nanolooker(i.hash)">
+                                    <td class="logo">
+                                         <h1 :class="`${i.type === 'send' ? 'red' : 'blue'}`">{{ i.type }}</h1>
+                                    </td>
+                                   <!--  <td class="logo">
+                                        <p>{{ i.type }}</p>
+                                    </td> -->
+                                    <td class="name">
+                                        <p>{{ i.account.slice(0, 18) }}</p>
+                                    </td>
+                                 <!--    <td class="name">
+                                        <p>{{ i.hash.slice(0, 8) }}</p>
+                                    </td> -->
+                                    <td class="amount">
+                                        <p>Ӿ {{ i.amount_nano }}</p>
+                                    </td>
+                                    <!-- <td class="pin">
+                                        <b>{{ i.account }}</b>
+                                    </td>  -->
+                                   <!--  <td class="date">
+                                        <p>01/01/2023</p>
+                                    </td> -->
+                                  <!--   <td class="disable">
+                                        <p>Disable</p>
+                                    </td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--table container -->
+                </div>
+                <!-- main content -->
+            </div>
+
+        </div>
+
+        <!-- partial -->
+        <script src="https://unpkg.com/@nano/wallet@0.0.1/latest.js"></script>
+        <!-- <script src="/latest.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
 
         <script>
-            nano.paywall({ 
-                element: '.premium', // required, all with class .premium
-                address: 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys', // required
-                amount: 0.001, // required
-                debug: false, // optional
-                free: false, // // optional, allow free access
-                background: '#000000f2', // optional css hex
-                button: 'Unlock', // optional css hex
-                text: 'Read Lorem for', // optional
-                title: '', // optional
-                color: '', // optional
-                endpoint: 'https://nanolooker.com/api/rpc', // optional
-                success: (block) => {
-                    // Element(s) are automatically shown.
-                    console.log(block)
+
+        new Vue({
+            
+            el: '#app',
+
+            data: { 
+              history: [],
+              sending: false,
+              interval: false,
+              password: false,
+              private: false,
+              active: false,
+              loading: true,
+              accounts: [],
+              persisted: typeof localStorage.getItem(`nano-offline`) === 'string'
+            },
+            mounted() {
+              this.load()
+            },
+            watch: {},
+            methods: {
+
+              nanolooker(hash) {
+                window.open(`https://nanolooker.com/block/${hash}`, '_blank');
+              },
+
+              send() {
+                if (!this.send || !this.send.to || !this.send.amount) return window.alert("Missing param.")
+                  nano.sendWithPassword({
+                    to: this.send.to, 
+                    amount: this.send.amount, 
+                    from: this.active.address, 
+                    password: window.prompt('Confirm Send. (Password):'),
+                  }).then(() => {
+                    this.refresh()
+                    window.alert('Sent.')
+                    this.sending = false
+                    this.send.to = ''
+                    this.send.amount = ''
+                  }).catch(e => {
+                    alert(e)
+                  })
+              },
+
+              cancel() {
+                clearInterval(this.interval)
+                this.active = false
+              },
+
+              refresh(account) {
+                nano.rpc({ action: "account_info", account: this.active.address }).then((info) => {
+                  if (info.balance_nano) this.active.balance = info.balance_nano
+                  if (info.pending_nano) this.active.pending = info.pending_nano
+                    this.$forceUpdate()
+                })
+                nano.rpc({ action: "receivable", account: this.active.address }).then(async (res) => {
+                  if (res.blocks && res.blocks.length) await nano.receive_all({
+                    address: this.active.address, 
+                    password: this.password
+                  })
+                })
+              },
+
+              activate(account) {
+                if (this.sending) {
+                   this.send.to = account.address
+                   this.$forceUpdate()
+                  return
                 }
-            })
+                this.active = account
+                this.interval = setInterval(() => {
+                  this.refresh()
+                }, 10000)
+                this.refresh()
+              },
+
+              export_account(account) {
+                console.log( export_account )
+              },
+
+              export_file() {
+                nano.download(this.accounts[0].address.slice(0, 14), 'AES-256::')
+              },
+
+              destroy() {
+                var sure = window.confirm('Are you sure?')
+                if (!sure) return
+                nano.logout()
+                localStorage.clear()
+                window.location.reload()
+              },
+
+              handleBlankImport() {
+
+                var self = this
+
+                const reader = new FileReader()
+                
+                reader.onload = event => {
+                  
+                  var string = event.target.result
+
+                  var check = 'AES-256::'
+
+                  if (!string.includes(check)) return alert('Wallet Not Supported.')
+
+                  self.accounts = nano.import({
+                    secret: string.replace(check, ''), 
+                    password: window.prompt('Welcome, back. (Password):'),
+                    persist: true
+                  })
+
+                  setTimeout(() => {
+                    self.loading = false
+                  }, 500)
+
+                }
+                
+                reader.onerror = error => reject(error)
+
+                reader.readAsText(this.$refs.blankImport.files[0]) 
+
+              },
+
+              handleImport() {
+
+                var self = this
+
+                const reader = new FileReader()
+                
+                reader.onload = event => {
+                  
+                  var string = event.target.result
+
+                  var check = 'AES-256::'
+
+                  if (!string.includes(check)) return alert('Wallet Not Supported.')
+
+                  self.accounts = nano.import({
+                    secret: string.replace(check, ''), 
+                    password: window.prompt('Welcome, back. (Password):'),
+                    persist: true
+                  })
+
+                  setTimeout(() => {
+                    self.loading = false
+                  }, 500)
+
+                }
+                
+                reader.onerror = error => reject(error)
+
+                reader.readAsText(this.$refs.import.files[0]) 
+
+              },
+
+              new_wallet() {
+
+                var password = window.prompt('New Wallet (Password):')
+
+                if (password.length <= 4) {
+                  window.alert('4 characters or more.')
+                  password = window.prompt('New Wallet (Password):')
+                  if (password.length < 6) return
+                }
+
+                this.accounts = nano.import({
+                  password,
+                  persist: true
+                })
+
+                setTimeout(() => {
+                  this.loading = false
+                }, 100)
+
+              },
+
+              load() {
+
+                  if (localStorage.getItem(`nano-offline`)) {
+
+                    this.password = window.prompt('Welcome, back. (Password):')
+
+                    nano.localStorage(this.password).then((accounts) => {
+                      this.accounts = accounts
+                      this.loading = false
+
+                    if (this.accounts.length) {
+                      this.history = []
+                      for (var account of this.accounts) {
+                        nano.rpc({ action: "history", account: account.address, count: "100" }).then((history) => {
+                          history.history.map(a => {
+                            // a.to = account.address
+                            this.history.push(a)
+                          })
+                        })
+                      }
+                    }
+
+                    }).catch((e) => {
+                      window.alert('Bad Secret.')
+                      window.location.reload()
+                    })
+
+                  }
+
+              },
+
+              add_account() {
+                
+                nano.add_account({ secret: window.prompt('Add Account (Password):') }).then((accounts) => {
+                    this.accounts = accounts
+                })
+
+              }
+
+            },
+          })
+
         </script>
+
     </body>
 
 </html>
