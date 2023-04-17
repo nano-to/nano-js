@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Offline Nano Wallet</h1>
+<h1 align="center">Javascript Nano Wallet</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
@@ -22,7 +22,10 @@ const nano = require('@nano/wallet')
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**SELF-SIGNING:**
+## SELF-SIGN
+
+**SEND**
+
 ```js
 var send = nano.sign({
     walletBalanceRaw: '18618869000000000000000000000000',
@@ -32,20 +35,9 @@ var send = nano.sign({
     transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
     amountRaw: '7000000000000000000000000000000',
 }, process.env.PRIVATE_KEY) 
-
-console.log( send )
-
-// {
-//   type: 'state',
-//   account: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-//   previous: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-//   representative: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-//   balance: '25618869000000000000000000000000',
-//   link: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-//   signature: 'd5dd2a53becfc8c3fd17ddee2aba651ef6ac28571b66a4dfb2f4820c7d04d235d226d1fb176eb3958bbbfb9145663a0b4ffffd59cfc4b23af24a2af5f51e6a0e',
-//   work: ''
-// }
 ```
+
+**RECEIVE**
 
 ```js
 var receive = nano.sign({
@@ -61,6 +53,8 @@ var receive = nano.sign({
 var hash = await nano.process( receive )
 ```
 
+**CHANGE_REP**
+
 ```js
 var change_rep = nano.sign({
     walletBalanceRaw: '3000000000000000000000000000000',
@@ -71,6 +65,21 @@ var change_rep = nano.sign({
 }, process.env.PRIVATE_KEY) 
 
 var hash = await nano.process( change_rep )
+```
+
+**SIGNED**
+
+```
+{
+  type: 'state',
+  account: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
+  previous: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
+  representative: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
+  balance: '25618869000000000000000000000000',
+  link: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
+  signature: 'd5dd2a53becfc8c3fd17ddee2aba651ef6ac28571b66a4dfb2f4820c7d04d235d226d1fb176eb3958bbbfb9145663a0b4ffffd59cfc4b23af24a2af5f51e6a0e',
+  work: ''
+}
 ```
 
 ## OFFLINE API
@@ -103,7 +112,7 @@ nano.decrypt('any_string', process.env.PASSWORD) // UTF-8
 nano.export()
 ```
 
-## REQUIRES RPC
+## PUBLIC RPC
 
 ```js
 await nano.process(signedBlock)
@@ -132,7 +141,7 @@ await nano.rpc({ action: "block_count" })
 ```js
 nano.offline({ 
     filename: 'aes_string.txt', 
-    password: process.env.PASSWORD 
+    password: env.PASSWORD 
 })
 
 console.log( nano.accounts() )
@@ -154,7 +163,7 @@ await nano.send({
 
 nano.offline({ 
     filename: 'aes_string.txt', 
-    password: process.env.PASSWORD 
+    password: env.PASSWORD 
 })
 
 console.log( nano.export() )
@@ -169,7 +178,7 @@ AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aq
 **Decrypted:**
 ```json
 {
-    "mnemonic": "body hire team image luxury banana panther tiny clog beauty only cover frost tea pioneer between salt magnet ugly tourist process grit unlock rice",
+    "mnemonic": "body hire team image luxury banana panther tiny clog beauty only cover frost tourist process grit unlock rice",
     "seed": "7202a6eb69fa3a465539648c35e55ad7e295f25c9a7a340f82b3d3e338f....33a4ee0939cd44a7abb1afe83ff2170cae4",
     "accounts": [{
         "accountIndex": 0,
