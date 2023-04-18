@@ -1,7 +1,7 @@
 {
   "name": "@nano/wallet",
-  "version": "0.9.2",
-  "description": "Offline Nano Wallet",
+  "version": "1.0.0",
+  "description": "JavaScript Nano Wallet",
   "main": "nano.js",
   "author": "@nano2dev <hello@fwd.dev>",
   "license": "MIT",
@@ -11,9 +11,5 @@
   },
   "dependencies": {
     "aes256": "^1.1.0"
-  },
-  "funding": {
-    "type": "individual",
-    "url": "https://nano.to/development"
   }
 }
