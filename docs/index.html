@@ -581,6 +581,40 @@
               opacity: 0.5;
               filter: grayscale(1);
             }
+            .Accounts > div {
+              margin-bottom: 20px;
+            }
+            .Accounts b {
+              margin-bottom: 4px;
+              display: block;
+              text-transform: uppercase;
+              font-size: 16px;
+              letter-spacing: 1px;
+            }
+            .group {
+              flex-wrap: wrap;
+            }
+            .group > .item {
+              margin: 30px 20px;
+              border: 1px solid;
+/*              color: #000;*/
+              padding: 20px;
+              min-width: 260px;
+              text-align: center;
+              font-size: 15px;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              border-radius: 4px;
+              min-height: 110px;
+              justify-content: center;
+              display: flex;
+              align-items: center;
+            }
+            .group > div:hover {
+              background-color: #000;
+              color: #FFF;
+              cursor: pointer;
+            }
         </style>
     </head>
     
@@ -680,7 +714,7 @@
             </div>
 
             <div class="main-container__left">
-                <div class="main-title"> <b>Nano</b>Offline</div>
+                <div class="main-title"> <b>Nano</b>Wallet</div>
                 <div class="tabs">
                     <div class="tab first">
                         <svg width="23" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -696,13 +730,13 @@
                         </svg>
                         <div class="desc">Recurring</div>
                     </div> -->
-                    <div class="tab" onclick="alert('Coming soon.')">
-                       <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" style=" max-width: 22px; opacity: 0.5; "><path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z"></path></svg>
-                        <div class="desc">Developer</div>
-                    </div>
-                    <div class="tab" onclick="alert('Coming soon.')">
+                    <div class="tab" @click="config = true, developer = false">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style=" max-width: 24px; opacity: 0.5; "><g><path d="M0 0h24v24H0z" fill="none"></path><path d="M5.334 4.545a9.99 9.99 0 0 1 3.542-2.048A3.993 3.993 0 0 0 12 3.999a3.993 3.993 0 0 0 3.124-1.502 9.99 9.99 0 0 1 3.542 2.048 3.993 3.993 0 0 0 .262 3.454 3.993 3.993 0 0 0 2.863 1.955 10.043 10.043 0 0 1 0 4.09c-1.16.178-2.23.86-2.863 1.955a3.993 3.993 0 0 0-.262 3.455 9.99 9.99 0 0 1-3.542 2.047A3.993 3.993 0 0 0 12 20a3.993 3.993 0 0 0-3.124 1.502 9.99 9.99 0 0 1-3.542-2.047 3.993 3.993 0 0 0-.262-3.455 3.993 3.993 0 0 0-2.863-1.954 10.043 10.043 0 0 1 0-4.091 3.993 3.993 0 0 0 2.863-1.955 3.993 3.993 0 0 0 .262-3.454zM13.5 14.597a3 3 0 1 0-3-5.196 3 3 0 0 0 3 5.196z"></path></g></svg>
                         <div class="desc">Configure</div>
+                    </div>
+                    <div class="tab" @click="config = false, developer = true">
+                       <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" style=" max-width: 22px; opacity: 0.5; "><path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z"></path></svg>
+                        <div class="desc">Developer</div>
                     </div>
                 </div>
                 <!-- end of tabs -->
@@ -739,7 +773,48 @@
             <div class="main-container__right">
 
                 <!-- end of navigation -->
-                <div class="content">
+                <div v-if="config" class="content">
+                  <div class="Accounts-con">
+                        <div class="title">
+                            <div class="main">Configure</div> <a @click="save_config()" href="#" class="sub">Update</a>
+                        </div>
+                  </div>
+                  <div class="Accounts">
+                    <div>
+                      <b>NODE URL</b>
+                      <div><input type="text" placeholder="https://rpc.nano.to"></div>
+                      <small>Must support <i>process</i>.</small>
+                    </div>
+                    <div>
+                      <b>POW URL</b>
+                      <div><input type="text" placeholder="https://pow.nano.to"></div>
+                      <small>Localhost GPUs work great.</small>
+                    </div>
+                    <div>
+                      <b>KNOWN</b>
+                      <div><input type="text" placeholder="https://known.nano.to"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- end of navigation -->
+                <div v-if="developer" class="content">
+                  <div class="Accounts-con">
+                        <div class="title">
+                            <div class="main">Developer</div> <a @click="save_config()" href="#" class="sub">Process</a>
+                        </div>
+                  </div>
+                  <div class="group">
+                    <div class="item">SimpleSwap</div>
+                    <div class="item">Convert Raw</div>
+                    <div class="item">Batch Sending</div>
+                    <div class="item">Export Nault File</div>
+                    <div class="item">Lease Username</div>
+                    <div class="item">Buy POW</div>
+                  </div>
+                </div>
+
+                <div v-if="!config && !developer" class="content">
                     <div v-if="true" class="Accounts-con">
                         <div class="title">
                             <div class="main">Accounts</div> <a @click="add_account()" href="#" class="sub">Add Account</a>
@@ -844,6 +919,8 @@
             el: '#app',
 
             data: { 
+              developer: false,
+              config: false,
               history: [],
               sending: false,
               interval: false,
