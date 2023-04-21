@@ -574,7 +574,7 @@ let nano = {
 nano.balance = nano.balances
 
 // woah
-nano.app = nano.offline
+nano.app = (password) => nano.offline({ password })
 
 // Browser
 if (typeof window !== 'undefined') window.nano = nano
