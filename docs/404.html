@@ -841,7 +841,7 @@
                     </div>
                     <div>
                       <b>KNOWN</b>
-                      <div><input type="text" v-model="config.known" placeholder="https://known.nano.to"></div>
+                      <div><input type="text" v-model="config.known" placeholder="https://nano.to/known.json"></div>
                     </div>
                   </div>
                 </div>
@@ -1163,7 +1163,7 @@
 
                     this.password = window.prompt('Welcome, back. (Password):')
 
-                    var accounts = nano.user(this.password)
+                    var accounts = nano.app(this.password)
 
                     this.accounts = accounts
 
@@ -1181,10 +1181,9 @@
                     }
 
                   } catch(e) {
-                    // alert()
+                    console.log(e)
                     window.alert('No Match. Try Again.')
                   }
-
 
                 }
               },
