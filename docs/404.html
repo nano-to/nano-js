@@ -57,6 +57,7 @@
               background: #fff;
               position: fixed;
               box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+              overflow: auto;
             }
             .main-container__left .main-title {
               font-size: 30px;
@@ -359,6 +360,13 @@
               font-size: 14px;
               font-weight: 600;
             }
+            .pin {
+                  font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 14px;
+    color: #f6f6f6;
+    text-shadow: 1px 1px 1px #00000057;
+            }
             .main-container__right .content .Accounts-con .Accounts .card .content .pin,
             .main-container__right .content .Accounts-con .Accounts .card .content .expiry {
               font-family: "PT Mono", monospace;
@@ -468,7 +476,7 @@
     align-items: center;
     justify-content: center;
             }
-            @media (max-width: 1024px) {
+            @media (max-width: 700px) {
                 .main-container__left {
                     display: none;
                 }
@@ -497,12 +505,13 @@
               margin-top: 20px;
               align-items: center;
               justify-content: space-between;
+              margin-bottom: 0 !important;
             }
             .btn {
               position: relative;
               border-radius: 5px;
               border: 2px solid;
-              padding: 2px 10px;
+              padding: 10px 20px;
             }
             .btn:hover {
               background: #000;
@@ -516,7 +525,7 @@
               right: 0;
               top: 0;
               bottom: 0;
-              width: 290px;
+              width: 360px;
               padding: 30px;
               z-index: 9;
               box-shadow: 1px 5px 9px #00000030;
@@ -588,7 +597,7 @@
               margin-bottom: 4px;
               display: block;
               text-transform: uppercase;
-              font-size: 16px;
+              font-size: 18px;
               letter-spacing: 1px;
             }
             .group {
@@ -615,6 +624,42 @@
               color: #FFF;
               cursor: pointer;
             }
+            .address-input {
+              font-weight: bold;
+              letter-spacing: 6px;
+              font-size: 15px;
+            }
+            small {
+              font-size: 12px;
+              margin-top: 7px;
+              display: block;
+              opacity: .8;
+              letter-spacing: 1px;
+              margin-bottom: 20px;
+            }
+            .mobile-icon {
+              position: fixed;
+              width: 20px;
+              height: 50px;
+              right: 20px;
+              top: 24px;
+              display: none;
+              z-index: 3;
+            }
+            .main-container__left.active {
+              display: block;
+            }
+            @media (max-width: 768px) {
+              .mobile-icon {
+                display: block;
+              }
+              .main-container__right .content .Accounts-con .title {
+                margin-top: 0 !important;
+              }
+              .main-container__right .content .Accounts-con .sub {
+                margin-right: 45px !important;
+              }
+            }
         </style>
     </head>
     
@@ -624,10 +669,10 @@
 
             <div v-if="loading" id="loader">
               <div class="main-title" style=" text-align: center; ">
-                <span style="zoom: 1.2"><b>Dev</b>Wallet</span>
-                <b style="display: block;background: red;color: rgb(255, 255, 255);font-size: 20px;padding: 5px 7px;text-align: center;margin: 20px;border-radius: 4px;">Warning: Professionals Only</b>
+                <span style="zoom: 1.2"><b>Nano</b>Wallet</span>
+                <b style="display: block;background: red;color: rgb(255, 255, 255);font-size: 20px;padding: 5px 7px;text-align: center;margin: 20px;border-radius: 4px;">Warning: Professional Use Only</b>
                 <div style="display: none;" :style="`${persisted ? 'display:none' : 'display:block'}`">
-                  <div class="group" style="max-width: 220px;margin: 30px auto;">
+                  <div class="group" style="max-width: 270px;margin: 30px auto;">
                     <div class="btn">
                       <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet" />
                       Import
@@ -640,7 +685,7 @@
 
             <div v-if="active" id="active">
               <div class="flex">
-                <div>Primary</div>
+                <div>{{ active.index || active.name || 'Primary' }}</div>
                 <div @click="cancel()">X</div>
               </div>
               <div class="flex grouped">
@@ -663,7 +708,7 @@
               </div> -->
               <div>
                 <div class="title">ADDRESS</div>
-                <textarea disabled>{{ active.address }}</textarea>
+                <textarea disabled class="address-input">{{ active.address }}</textarea>
               </div>
               <div>
                 <div class="title">WALLET URI</div>
@@ -694,7 +739,7 @@
               </div>
               <div>
                 <div class="title">FROM</div>
-                <textarea disabled>{{ active.address }}</textarea>
+                <textarea disabled class="address-input">{{ active.address }}</textarea>
               </div>
               <div>
                 <div class="title">TO</div>
@@ -713,10 +758,10 @@
               </div>
             </div>
 
-            <div class="main-container__left">
+            <div :class="`main-container__left ${toggleNav ? 'active' : ''}`">
                 <div class="main-title"> <b>Nano</b>Wallet</div>
                 <div class="tabs">
-                    <div class="tab first">
+                    <div class="tab first" @click="config = false, developer = false">
                         <svg width="23" height="24" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M16.6882 3.4957e-05C16.4882 0.00803496 16.2952 0.044035 16.0942 0.094035L2.50022 3.40603C0.892223 3.80003 -0.113777 5.42204 0.281223 7.03103L2.18722 14.813C2.30272 15.2766 2.52761 15.7057 2.84304 16.0644C3.15848 16.4232 3.55528 16.7012 4.00022 16.875V15C4.00022 12.243 6.24322 10 9.00022 10H21.5942L19.7192 2.28103C19.5534 1.61005 19.1612 1.01678 18.6089 0.601267C18.0566 0.185749 17.3779 -0.0265974 16.6872 3.4957e-05H16.6882ZM17.9062 4.31304L18.7192 7.71903L15.3442 8.53104L14.5002 5.15603L17.9062 4.31304ZM9.00022 12C7.34422 12 6.00022 13.344 6.00022 15V23C6.00022 24.656 7.34422 26 9.00022 26H23.0002C24.6562 26 26.0002 24.656 26.0002 23V15C26.0002 13.344 24.6562 12 23.0002 12H9.00022ZM9.00022 13.594H23.0002C23.7712 13.594 24.4062 14.229 24.4062 15V16H7.59422V15C7.59422 14.229 8.22922 13.594 9.00022 13.594ZM7.59422 19H24.4062V23C24.4062 23.771 23.7712 24.406 23.0002 24.406H9.00022C8.62798 24.4039 8.27157 24.2551 8.00835 23.9919C7.74513 23.7287 7.59632 23.3723 7.59422 23V19Z"
                             fill="#7C7A7A" />
@@ -734,10 +779,10 @@
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style=" max-width: 24px; opacity: 0.5; "><g><path d="M0 0h24v24H0z" fill="none"></path><path d="M5.334 4.545a9.99 9.99 0 0 1 3.542-2.048A3.993 3.993 0 0 0 12 3.999a3.993 3.993 0 0 0 3.124-1.502 9.99 9.99 0 0 1 3.542 2.048 3.993 3.993 0 0 0 .262 3.454 3.993 3.993 0 0 0 2.863 1.955 10.043 10.043 0 0 1 0 4.09c-1.16.178-2.23.86-2.863 1.955a3.993 3.993 0 0 0-.262 3.455 9.99 9.99 0 0 1-3.542 2.047A3.993 3.993 0 0 0 12 20a3.993 3.993 0 0 0-3.124 1.502 9.99 9.99 0 0 1-3.542-2.047 3.993 3.993 0 0 0-.262-3.455 3.993 3.993 0 0 0-2.863-1.954 10.043 10.043 0 0 1 0-4.091 3.993 3.993 0 0 0 2.863-1.955 3.993 3.993 0 0 0 .262-3.454zM13.5 14.597a3 3 0 1 0-3-5.196 3 3 0 0 0 3 5.196z"></path></g></svg>
                         <div class="desc">Configure</div>
                     </div>
-                    <div class="tab" @click="config = false, developer = true">
+             <!--        <div class="tab" @click="config = false, developer = true">
                        <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" style=" max-width: 22px; opacity: 0.5; "><path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z"></path></svg>
                         <div class="desc">Developer</div>
-                    </div>
+                    </div> -->
                 </div>
                 <!-- end of tabs -->
                 <div class="tools-con">
@@ -769,6 +814,10 @@
                 </div>
             </div>
 
+            <div class="mobile-icon" @click="toggleNav = !toggleNav">
+              <svg id="Icons" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:#232323;}</style></defs><rect class="cls-1" height="4" rx="2" width="22" x="1" y="2"/><rect class="cls-1" height="4" rx="2" width="22" x="1" y="18"/><rect class="cls-1" height="4" rx="2" width="22" x="1" y="10"/></svg>
+            </div>
+
             <!-- right container -->
             <div class="main-container__right">
 
@@ -776,23 +825,23 @@
                 <div v-if="config" class="content">
                   <div class="Accounts-con">
                         <div class="title">
-                            <div class="main">Configure</div> <a @click="save_config()" href="#" class="sub">Update</a>
+                            <div class="main">Configure</div> <a @click="save_config()" href="#" class="sub">SAVE</a>
                         </div>
                   </div>
                   <div class="Accounts">
                     <div>
                       <b>NODE URL</b>
-                      <div><input type="text" placeholder="https://rpc.nano.to"></div>
+                      <div><input type="text" v-model="config.node" placeholder="https://rpc.nano.to"></div>
                       <small>Must support <i>process</i>.</small>
                     </div>
                     <div>
                       <b>POW URL</b>
-                      <div><input type="text" placeholder="https://pow.nano.to"></div>
+                      <div><input type="text" v-model="config.pow" placeholder="https://pow.nano.to"></div>
                       <small>Localhost GPUs work great.</small>
                     </div>
                     <div>
                       <b>KNOWN</b>
-                      <div><input type="text" placeholder="https://known.nano.to"></div>
+                      <div><input type="text" v-model="config.known" placeholder="https://known.nano.to"></div>
                     </div>
                   </div>
                 </div>
@@ -830,7 +879,7 @@
                                 <div class="content">
                                     <div class="amount">NANO_</div>
                                     <div class="pin">{{ account.address.replace('nano_', '') }}</div>
-                                    <div class="expiry">{{ account.name || account.index || account.nickname || 'Primary' }}</div>
+                                    <div class="expiry">{{ account.index || account.nickname || 'Primary' }}</div>
                                 </div>
                                 <div class="card-icon">Ӿ</div>
                                 <!--Icon -->
@@ -857,7 +906,7 @@
                             </div> -->
                         </div>
                     </div>
-                    <div class="table-con">
+                    <div class="table-con" v-if="history.length">
                         <div class="title">History</div>
                         <table>
                             <thead>
@@ -909,9 +958,7 @@
 
         </div>
 
-        <!-- partial -->
-        <script src="https://unpkg.com/@nano/wallet@0.0.1/latest.js"></script>
-        <!-- <script src="/latest.js"></script> -->
+        <script src="https://unpkg.com/@nano/wallet"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
 
@@ -922,8 +969,9 @@
             el: '#app',
 
             data: { 
-              developer: false,
               config: false,
+              toggleNav: false,
+              developer: false,
               history: [],
               sending: false,
               interval: false,
@@ -937,7 +985,14 @@
             mounted() {
               this.load()
             },
-            watch: {},
+            watch: {
+              developer() {
+                this.toggleNav = false
+              },
+              config() {
+                this.toggleNav = false
+              },
+            },
             methods: {
 
               nanolooker(hash) {
@@ -1102,34 +1157,36 @@
               },
 
               load() {
+                if (localStorage.getItem(`nano-offline`)) {
 
-                  if (localStorage.getItem(`nano-offline`)) {
+                  try {
 
                     this.password = window.prompt('Welcome, back. (Password):')
 
-                    nano.localStorage(this.password).then((accounts) => {
-                      this.accounts = accounts
-                      this.loading = false
+                    var accounts = nano.user(this.password)
+
+                    this.accounts = accounts
+
+                    this.loading = false
 
                     if (this.accounts.length) {
                       this.history = []
                       for (var account of this.accounts) {
                         nano.rpc({ action: "history", account: account.address, count: "100" }).then((history) => {
                           history.history.map(a => {
-                            // a.to = account.address
                             this.history.push(a)
                           })
                         })
                       }
                     }
 
-                    }).catch((e) => {
-                      window.alert('Bad Secret.')
-                      window.location.reload()
-                    })
-
+                  } catch(e) {
+                    // alert()
+                    window.alert('No Match. Try Again.')
                   }
 
+
+                }
               },
 
               add_account() {
