@@ -566,7 +566,7 @@ let nano = {
 
 	export(password) {
 
-		if (!password) return this.aes256
+		if (!password) return 'AES-256::' + this.aes256
 		
 		// Browser
 		if (typeof window !== 'undefined') {

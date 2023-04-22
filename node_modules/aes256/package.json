@@ -1,0 +1,58 @@
+{
+  "name": "aes256",
+  "version": "1.1.0",
+  "description": "A Node.js module to simplify using the built-in \"crypto\" module for AES256 encryption with random initialization vectors",
+  "author": {
+    "name": "James M. Greene",
+    "email": "james.m.greene@gmail.com",
+    "url": "http://greene.io/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JamesMGreene/node-aes256.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JamesMGreene/node-aes256/issues"
+  },
+  "homepage": "https://github.com/JamesMGreene/node-aes256#readme",
+  "keywords": [
+    "aes",
+    "aes256",
+    "iv",
+    "initialization",
+    "vector",
+    "encryption",
+    "cryptography"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt travis --verbose"
+  },
+  "config": {
+    "blanket": {
+      "pattern": "",
+      "data-cover-never": [
+        "node_modules",
+        "test",
+        "coverage"
+      ],
+      "data-cover-reporter-options": {
+        "relativepath": true
+      }
+    },
+    "travis-cov": {
+      "threshold": 100
+    }
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "grunt": "^1.3.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-env": "^0.4.4",
+    "grunt-mocha-cov": "^0.4.0",
+    "grunt-open": "^0.2.4",
+    "mocha": "^5.2.0",
+    "travis-cov": "^0.2.5"
+  }
+}
