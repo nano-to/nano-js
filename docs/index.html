@@ -535,6 +535,7 @@ Non-custodial, Single Page Wallet
               z-index: 9;
               box-shadow: 1px 5px 9px #00000030;
               overflow-y: auto;
+              height: 100vh;
             }
             .flex {
               display: flex;
@@ -672,7 +673,23 @@ Non-custodial, Single Page Wallet
                 margin-right: 45px !important;
               }
             }
+            .dark body {
+              background: #000;
+              filter: invert(1);
+            }
+            .no-invert {
+              filter: invert(1);
+            }
         </style>
+        <script>
+          if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches || navigator.userAgent.includes('Linux')) {
+            document.documentElement.className += ' dark'
+          } else {
+            document.documentElement.className += ' light'
+          }
+          const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches || (window.navigator.standalone) || document.referrer.includes('android-app://')
+          if (isInStandaloneMode) document.documentElement.className += ' web-app'
+        </script>
     </head>
     
     <body>
@@ -712,7 +729,7 @@ Non-custodial, Single Page Wallet
                 <div @click="sending = {}" :class="`send-btn ${Number(active.balance) > 0 ? '' : 'inactive'}`">Send</div>
               </div>
               <div>
-                <img style="width: 100%;border: 15px solid #00000042;margin: 10px 0;" :src="`https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${active.address}&choe=UTF-8`" alt="">
+                <img class="no-invert" style="width: 100%;border: 15px solid #00000042;margin: 10px 0;" :src="`https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${active.address}&choe=UTF-8`" alt="">
               </div>
               <div>
                 <div class="title">ADDRESS</div>
@@ -880,7 +897,7 @@ Non-custodial, Single Page Wallet
                             <div class="main">Accounts</div> <a @click="add_account()" href="#" class="sub">Add Account</a>
                         </div>
                         <!-- end of Accounts title -->
-                        <div class="Accounts">
+                        <div class="Accounts no-invert">
                             <div @click="activate(account)" v-for="account in accounts" class="card card-1">
                                 <div class="rec-1"></div>
                                 <div class="rec-2"></div>
