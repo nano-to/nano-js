@@ -575,6 +575,10 @@
               border-radius: 6px;
               margin-bottom: 9px;
             }
+            .flex.grouped > div {
+              text-align: center;
+              justify-content: space-around;
+            }
             .send-btn {
               background: #1275f9;
               text-align: center;
@@ -674,7 +678,7 @@
                 <div style="display: none;" :style="`${persisted ? 'display:none' : 'display:block'}`">
                   <div class="group" style="max-width: 270px;margin: 30px auto;">
                     <div class="btn">
-                      <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet" />
+                      <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet,.json" />
                       Import
                     </div>
                     <div class="btn" @click="new_wallet()">Start New</div>
@@ -789,7 +793,7 @@
                     <hr>
                     <div class="tools">
                         <div class="tool" style="position: relative;">
-                            <input @change="handleImport" type="file" class="import" ref="import" accept=".wallet" />
+                            <input @change="handleImport" type="file" class="import" ref="import" accept=".wallet, .json" />
                             <svg style="transform: rotate(270deg);" width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
                                 fill="#7C7A7A" />
@@ -958,7 +962,8 @@
 
         </div>
 
-        <script src="https://offline.nano.to/nano.js"></script>
+        <script src="./nano.js"></script>
+        <!-- <script src="https://offline.nano.to/nano.js"></script> -->
         <!-- <script src="https://unpkg.com/@nano/wallet"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
@@ -987,7 +992,7 @@
             mounted() {
               this.load()
             },
-            
+
             watch: {
               developer() {
                 this.toggleNav = false
@@ -1063,8 +1068,8 @@
               },
 
               export_file() {
-                console.log( nano.export() )
-                // this.download(  )
+                // console.log(  )
+                this.download( nano.export() )
               },
 
               download(existing, filename, prefix) {
@@ -1081,7 +1086,6 @@
               destroy() {
                 var sure = window.confirm('Are you sure?')
                 if (!sure) return
-                nano.logout()
                 localStorage.clear()
                 window.location.reload()
               },
@@ -1096,15 +1100,11 @@
                   
                   var string = event.target.result
 
-                  var check = 'AES-256::'
+                  var vibe_check = 'AES-256::'
 
-                  if (!string.includes(check)) return alert('Wallet Not Supported.')
+                  if (!string.includes(vibe_check)) return alert('Wallet Not Supported.')
 
-                  self.accounts = nano.import({
-                    secret: string.replace(check, ''), 
-                    password: window.prompt('Welcome, back. (Password):'),
-                    persist: true
-                  })
+                  self.accounts = nano.import( string.replace(vibe_check, ''), window.prompt('Welcome, back. (Password):'))
 
                   setTimeout(() => {
                     self.loading = false
@@ -1128,15 +1128,14 @@
                   
                   var string = event.target.result
 
-                  var check = 'AES-256::'
+                  var vibe_check = 'AES-256::'
 
-                  if (!string.includes(check)) return alert('Wallet Not Supported.')
+                  console.log( string )
 
-                  self.accounts = nano.import({
-                    secret: string.replace(check, ''), 
-                    password: window.prompt('Welcome, back. (Password):'),
-                    persist: true
-                  })
+                  if (!string.includes(vibe_check)) return alert('Wallet Not Supported.')
+
+                  self.accounts = nano.import( string.replace(vibe_check, ''), window.prompt('Welcome, back. (Password):'))
+
 
                   setTimeout(() => {
                     self.loading = false
@@ -1160,10 +1159,7 @@
                   if (password.length < 6) return
                 }
 
-                this.accounts = nano.import({
-                  password,
-                  persist: true
-                })
+                this.accounts = nano.app(password)
 
                 setTimeout(() => {
                   this.loading = false
