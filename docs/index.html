@@ -262,6 +262,7 @@
               border-radius: 8px;
               background: #1f60b7;
               margin-right: 40px;
+/*              zoom: 0.9;*/
             }
             .main-container__right .content .Accounts-con .Accounts .card-1 .rec-1, .main-container__right .content .Accounts-con .Accounts .card-1 .rec-2 {
               position: absolute;
@@ -727,6 +728,12 @@
                 <div class="title">NANOLOOKER</div>
                 <a class="button" :href="`https://nanolooker.com/account/${active.address}`" target="_blank">
                   Open Explorer
+                </a>
+              </div>
+              <div>
+                <div class="title">CHECKOUT UI</div>
+                <a class="button" :href="`https://nano.to/${active.address}`" target="_blank">
+                  Open Checkout
                 </a>
               </div>
             </div>
@@ -1210,10 +1217,9 @@
 
               add_account() {
                 
-                nano.add_account({ secret: window.prompt('Add Account (Password):') }).then((accounts) => {
-                    this.accounts = accounts
-                    window.alert(`Don't forget to export your Wallet again. To include this new account.`)
-                })
+                this.accounts = nano.add_account(window.prompt('Add Account (Password):'))
+                
+                window.alert(`Don't forget to re-export Wallet backup.`)
 
               }
 
