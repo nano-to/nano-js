@@ -564,8 +564,24 @@ let nano = {
 		return `https://nanolooker.com/account/${address ? address : this.wallets[0].address}`
 	},
 
-	export() {
-		return this.wallet()
+	export(password) {
+
+		if (!password) return this.aes256
+		
+		// Browser
+		if (typeof window !== 'undefined') {
+			var existing = localStorage.getItem(`nano-offline`)
+		}
+
+		// NodeJS
+		if (typeof process === 'object') {
+			var existing = this.aes256
+		}
+
+		if (!existing) return new Error("Wallet Not Found.")
+
+		return decrypt(existing, password)
+
 	},
 
 }

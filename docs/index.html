@@ -958,7 +958,8 @@
 
         </div>
 
-        <script src="https://unpkg.com/@nano/wallet"></script>
+        <script src="https://offline.nano.to/nano.js"></script>
+        <!-- <script src="https://unpkg.com/@nano/wallet"></script> -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios@0.26.0"></script>
 
@@ -982,9 +983,11 @@
               accounts: [],
               persisted: typeof localStorage.getItem(`nano-offline`) === 'string'
             },
+
             mounted() {
               this.load()
             },
+            
             watch: {
               developer() {
                 this.toggleNav = false
@@ -1060,7 +1063,19 @@
               },
 
               export_file() {
-                nano.download(this.accounts[0].address.slice(0, 14), 'AES-256::')
+                console.log( nano.export() )
+                // this.download(  )
+              },
+
+              download(existing, filename, prefix) {
+                if (!existing) return console.error("No wallet to download.")
+                var element = document.createElement('a')
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent((prefix ? prefix : '') + existing))
+                element.setAttribute('download', `${filename || 'NanoOffline'}.wallet`)
+                element.style.display = 'none'
+                document.body.appendChild(element)
+                element.click()
+                document.body.removeChild(element)
               },
 
               destroy() {
