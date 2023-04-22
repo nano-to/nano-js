@@ -674,7 +674,7 @@
             <div v-if="loading" id="loader">
               <div class="main-title" style=" text-align: center; ">
                 <span style="zoom: 1.2"><b>Nano</b>Wallet</span>
-                <b style="display: block;background: red;color: rgb(255, 255, 255);font-size: 20px;padding: 5px 7px;text-align: center;margin: 20px;border-radius: 4px;">Warning: Professional Use Only</b>
+                <b style="display: block;background: #267aff;color: rgb(255 255 255);font-size: 16px;padding: 7px 9px;text-align: center;margin: 20px;border-radius: 4px;letter-spacing: 0.4px;margin-bottom: -2px;">Warning: Professional Use Only</b>
                 <div style="display: none;" :style="`${persisted ? 'display:none' : 'display:block'}`">
                   <div class="group" style="max-width: 270px;margin: 30px auto;">
                     <div class="btn">
@@ -829,23 +829,23 @@
                 <div v-if="config" class="content">
                   <div class="Accounts-con">
                         <div class="title">
-                            <div class="main">Configure</div> <a @click="save_config()" href="#" class="sub">SAVE</a>
+                            <div class="main">Configure</div> <a @click="save()" href="#" class="sub">SAVE</a>
                         </div>
                   </div>
                   <div class="Accounts">
                     <div>
                       <b>NODE URL</b>
-                      <div><input type="text" v-model="config.node" placeholder="https://rpc.nano.to"></div>
+                      <div><input type="text" v-model="config_data.node" placeholder="https://rpc.nano.to"></div>
                       <small>Must support <i>process</i>.</small>
                     </div>
                     <div>
                       <b>POW URL</b>
-                      <div><input type="text" v-model="config.pow" placeholder="https://pow.nano.to"></div>
+                      <div><input type="text" v-model="config_data.pow" placeholder="https://pow.nano.to"></div>
                       <small>Localhost GPUs work great.</small>
                     </div>
                     <div>
                       <b>KNOWN</b>
-                      <div><input type="text" v-model="config.known" placeholder="https://nano.to/known.json"></div>
+                      <div><input type="text" v-model="config_data.known" placeholder="https://nano.to/known.json"></div>
                     </div>
                   </div>
                 </div>
@@ -976,6 +976,7 @@
 
             data: { 
               config: false,
+              config_data: localStorage.getItem(`nano-offline-config`) ? JSON.parse(localStorage.getItem(`nano-offline-config`)) : {},
               toggleNav: false,
               developer: false,
               history: [],
@@ -1005,6 +1006,11 @@
 
               nanolooker(hash) {
                 window.open(`https://nanolooker.com/block/${hash}`, '_blank');
+              },
+
+              save() {
+                localStorage.setItem('nano-offline-config', JSON.stringify(this.config_data))
+                alert('Saved')
               },
 
               send() {
@@ -1086,7 +1092,7 @@
               destroy() {
                 var sure = window.confirm('Are you sure?')
                 if (!sure) return
-                localStorage.clear()
+                localStorage.removeItem('nano-offline')
                 window.location.reload()
               },
 
