@@ -45,13 +45,16 @@
             body::-webkit-scrollbar {
               display: none;
             }
-            
+            .content {
+              max-width: 1024px;
+              margin: 0 auto;
+            }
             .main-container {
               display: flex;
             }
             .main-container__left {
-              padding-left: 40px;
-              width: 240px;
+              padding-left: 25px;
+              width: 220px;
               height: 100vh;
               z-index: 1;
               background: #fff;
@@ -1199,7 +1202,7 @@
 
                   } catch(e) {
                     console.log(e)
-                    window.alert('No Match. Try Again.')
+                    window.alert('No Match. Reload. Try Again.')
                   }
 
                 }
