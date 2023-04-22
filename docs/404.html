@@ -5,6 +5,7 @@
   |  _|      \ \/  \/ /     | |  | | 
  _| |_        \  /\  /     _| |_.' / 
 |_____|        \/  \/     |______.'  
+Single Page Wallet
 -->
 <!DOCTYPE html>
 <html lang="en" manifest="appcache">
@@ -45,13 +46,16 @@
             body::-webkit-scrollbar {
               display: none;
             }
-            
+            .content {
+              max-width: 1024px;
+              margin: 0 auto;
+            }
             .main-container {
               display: flex;
             }
             .main-container__left {
-              padding-left: 40px;
-              width: 240px;
+              padding-left: 25px;
+              width: 220px;
               height: 100vh;
               z-index: 1;
               background: #fff;
@@ -259,6 +263,7 @@
               border-radius: 8px;
               background: #1f60b7;
               margin-right: 40px;
+/*              zoom: 0.9;*/
             }
             .main-container__right .content .Accounts-con .Accounts .card-1 .rec-1, .main-container__right .content .Accounts-con .Accounts .card-1 .rec-2 {
               position: absolute;
@@ -575,6 +580,10 @@
               border-radius: 6px;
               margin-bottom: 9px;
             }
+            .flex.grouped > div {
+              text-align: center;
+              justify-content: space-around;
+            }
             .send-btn {
               background: #1275f9;
               text-align: center;
@@ -625,9 +634,12 @@
               cursor: pointer;
             }
             .address-input {
+              font-family: monospace;
               font-weight: bold;
-              letter-spacing: 6px;
-              font-size: 15px;
+              letter-spacing: 5px;
+              font-size: 17px;
+              line-height: 19px;
+              overflow: hidden;
             }
             small {
               font-size: 12px;
@@ -670,11 +682,11 @@
             <div v-if="loading" id="loader">
               <div class="main-title" style=" text-align: center; ">
                 <span style="zoom: 1.2"><b>Nano</b>Wallet</span>
-                <b style="display: block;background: red;color: rgb(255, 255, 255);font-size: 20px;padding: 5px 7px;text-align: center;margin: 20px;border-radius: 4px;">Warning: Professional Use Only</b>
+                <b style="display: block;background: #267aff;color: rgb(255 255 255);font-size: 16px;padding: 7px 9px;text-align: center;margin: 20px;border-radius: 4px;letter-spacing: 0.4px;margin-bottom: -2px;">Warning: Professional Use Only</b>
                 <div style="display: none;" :style="`${persisted ? 'display:none' : 'display:block'}`">
                   <div class="group" style="max-width: 270px;margin: 30px auto;">
                     <div class="btn">
-                      <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet" />
+                      <input @change="handleBlankImport" type="file" class="import" ref="blankImport" accept=".wallet,.json" />
                       Import
                     </div>
                     <div class="btn" @click="new_wallet()">Start New</div>
@@ -702,10 +714,6 @@
               <div>
                 <img style="width: 100%;border: 15px solid #00000042;margin: 10px 0;" :src="`https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${active.address}&choe=UTF-8`" alt="">
               </div>
-              <!-- <div>
-                <div class="title">NICKNAME</div>
-                <input v-model="active.nickname" placeholder="Primary"/>
-              </div> -->
               <div>
                 <div class="title">ADDRESS</div>
                 <textarea disabled class="address-input">{{ active.address }}</textarea>
@@ -722,8 +730,13 @@
                   Open Explorer
                 </a>
               </div>
+              <div>
+                <div class="title">CHECKOUT UI</div>
+                <a class="button" :href="`https://nano.to/${active.address}`" target="_blank">
+                  Open Checkout
+                </a>
+              </div>
             </div>
-
             <div v-if="sending" id="send">
               <div class="flex">
                 <div>Send</div>
@@ -779,17 +792,12 @@
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style=" max-width: 24px; opacity: 0.5; "><g><path d="M0 0h24v24H0z" fill="none"></path><path d="M5.334 4.545a9.99 9.99 0 0 1 3.542-2.048A3.993 3.993 0 0 0 12 3.999a3.993 3.993 0 0 0 3.124-1.502 9.99 9.99 0 0 1 3.542 2.048 3.993 3.993 0 0 0 .262 3.454 3.993 3.993 0 0 0 2.863 1.955 10.043 10.043 0 0 1 0 4.09c-1.16.178-2.23.86-2.863 1.955a3.993 3.993 0 0 0-.262 3.455 9.99 9.99 0 0 1-3.542 2.047A3.993 3.993 0 0 0 12 20a3.993 3.993 0 0 0-3.124 1.502 9.99 9.99 0 0 1-3.542-2.047 3.993 3.993 0 0 0-.262-3.455 3.993 3.993 0 0 0-2.863-1.954 10.043 10.043 0 0 1 0-4.091 3.993 3.993 0 0 0 2.863-1.955 3.993 3.993 0 0 0 .262-3.454zM13.5 14.597a3 3 0 1 0-3-5.196 3 3 0 0 0 3 5.196z"></path></g></svg>
                         <div class="desc">Configure</div>
                     </div>
-             <!--        <div class="tab" @click="config = false, developer = true">
-                       <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg" style=" max-width: 22px; opacity: 0.5; "><path d="M255.03 261.65c6.25 6.25 16.38 6.25 22.63 0l11.31-11.31c6.25-6.25 6.25-16.38 0-22.63L253.25 192l35.71-35.72c6.25-6.25 6.25-16.38 0-22.63l-11.31-11.31c-6.25-6.25-16.38-6.25-22.63 0l-58.34 58.34c-6.25 6.25-6.25 16.38 0 22.63l58.35 58.34zm96.01-11.3l11.31 11.31c6.25 6.25 16.38 6.25 22.63 0l58.34-58.34c6.25-6.25 6.25-16.38 0-22.63l-58.34-58.34c-6.25-6.25-16.38-6.25-22.63 0l-11.31 11.31c-6.25 6.25-6.25 16.38 0 22.63L386.75 192l-35.71 35.72c-6.25 6.25-6.25 16.38 0 22.63zM624 416H381.54c-.74 19.81-14.71 32-32.74 32H288c-18.69 0-33.02-17.47-32.77-32H16c-8.8 0-16 7.2-16 16v16c0 35.2 28.8 64 64 64h512c35.2 0 64-28.8 64-64v-16c0-8.8-7.2-16-16-16zM576 48c0-26.4-21.6-48-48-48H112C85.6 0 64 21.6 64 48v336h512V48zm-64 272H128V64h384v256z"></path></svg>
-                        <div class="desc">Developer</div>
-                    </div> -->
                 </div>
-                <!-- end of tabs -->
                 <div class="tools-con">
                     <hr>
                     <div class="tools">
                         <div class="tool" style="position: relative;">
-                            <input @change="handleImport" type="file" class="import" ref="import" accept=".wallet" />
+                            <input @change="handleImport" type="file" class="import" ref="import" accept=".wallet, .json" />
                             <svg style="transform: rotate(270deg);" width="19" height="20" viewBox="0 0 19 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M3 16H5V18H17V2H5V4H3V1C3 0.734784 3.10536 0.48043 3.29289 0.292893C3.48043 0.105357 3.73478 0 4 0H18C18.2652 0 18.5196 0.105357 18.7071 0.292893C18.8946 0.48043 19 0.734784 19 1V19C19 19.2652 18.8946 19.5196 18.7071 19.7071C18.5196 19.8946 18.2652 20 18 20H4C3.73478 20 3.48043 19.8946 3.29289 19.7071C3.10536 19.5196 3 19.2652 3 19V16ZM5 9H12V11H5V14L0 10L5 6V9Z"
                                 fill="#7C7A7A" />
@@ -825,23 +833,23 @@
                 <div v-if="config" class="content">
                   <div class="Accounts-con">
                         <div class="title">
-                            <div class="main">Configure</div> <a @click="save_config()" href="#" class="sub">SAVE</a>
+                            <div class="main">Configure</div> <a @click="save()" href="#" class="sub">SAVE</a>
                         </div>
                   </div>
                   <div class="Accounts">
                     <div>
                       <b>NODE URL</b>
-                      <div><input type="text" v-model="config.node" placeholder="https://rpc.nano.to"></div>
+                      <div><input type="text" v-model="config_data.node" placeholder="https://rpc.nano.to"></div>
                       <small>Must support <i>process</i>.</small>
                     </div>
                     <div>
                       <b>POW URL</b>
-                      <div><input type="text" v-model="config.pow" placeholder="https://pow.nano.to"></div>
+                      <div><input type="text" v-model="config_data.pow" placeholder="https://pow.nano.to"></div>
                       <small>Localhost GPUs work great.</small>
                     </div>
                     <div>
                       <b>KNOWN</b>
-                      <div><input type="text" v-model="config.known" placeholder="https://nano.to/known.json"></div>
+                      <div><input type="text" v-model="config_data.known" placeholder="https://nano.to/known.json"></div>
                     </div>
                   </div>
                 </div>
@@ -882,28 +890,7 @@
                                     <div class="expiry">{{ account.index || account.nickname || 'Primary' }}</div>
                                 </div>
                                 <div class="card-icon">Ӿ</div>
-                                <!--Icon -->
                             </div>
-                           <!--  <div v-if="false" class="card card-2">
-                                <div class="rec-1"></div>
-                                <div class="rec-2"></div>
-                                <div class="content">
-                                    <div class="amount">NANO_</div>
-                                    <div class="pin">1234 **** **** 2345</div>
-                                    <div class="expiry">Savings</div>
-                                </div>
-                                <div class="card-icon">Ӿ</div>
-                            </div> -->
-                           <!--  <div v-if="false" class="card card-3">
-                                <div class="rec-1"></div>
-                                <div class="rec-2"></div>
-                                <div class="content">
-                                    <div class="amount">NANO_</div>
-                                    <div class="pin">1234 **** **** 2345</div>
-                                    <div class="expiry">Contest</div>
-                                </div>
-                                <div class="card-icon">Ӿ</div>
-                            </div> -->
                         </div>
                     </div>
                     <div class="table-con" v-if="history.length">
@@ -911,14 +898,9 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <!-- <th></th> -->
                                     <th>Type</th>
                                     <th>Account</th>
-                                    <!-- <th>Account</th> -->
                                     <th>Amount</th>
-                                    <!-- <th>Recipient</th> -->
-                                    <!-- <th>Date</th> -->
-                                    <!-- <th></th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -970,6 +952,7 @@
 
             data: { 
               config: false,
+              config_data: localStorage.getItem(`nano-offline-config`) ? JSON.parse(localStorage.getItem(`nano-offline-config`)) : {},
               toggleNav: false,
               developer: false,
               history: [],
@@ -982,9 +965,11 @@
               accounts: [],
               persisted: typeof localStorage.getItem(`nano-offline`) === 'string'
             },
+
             mounted() {
               this.load()
             },
+
             watch: {
               developer() {
                 this.toggleNav = false
@@ -997,6 +982,11 @@
 
               nanolooker(hash) {
                 window.open(`https://nanolooker.com/block/${hash}`, '_blank');
+              },
+
+              save() {
+                localStorage.setItem('nano-offline-config', JSON.stringify(this.config_data))
+                alert('Saved')
               },
 
               send() {
@@ -1038,137 +1028,96 @@
               },
 
               activate(account) {
-                
                 if (this.sending) {
                    this.send.to = account.address
                    this.$forceUpdate()
                   return
                 }
-
                 this.active = account
-                
                 this.interval = setInterval(() => {
                   this.refresh()
                 }, 10000)
-
                 this.refresh()
 
               },
 
-              export_account(account) {
-                console.log( export_account )
+              export_file() {
+                this.download( nano.export() )
               },
 
-              export_file() {
-                nano.download(this.accounts[0].address.slice(0, 14), 'AES-256::')
+              download(existing, filename, prefix) {
+                if (!existing) return console.error("No wallet to download.")
+                var element = document.createElement('a')
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent((prefix ? prefix : '') + existing))
+                element.setAttribute('download', `${filename || 'NanoOffline'}.wallet`)
+                element.style.display = 'none'
+                document.body.appendChild(element)
+                element.click()
+                document.body.removeChild(element)
               },
 
               destroy() {
                 var sure = window.confirm('Are you sure?')
                 if (!sure) return
-                nano.logout()
-                localStorage.clear()
+                localStorage.removeItem('nano-offline')
                 window.location.reload()
               },
 
               handleBlankImport() {
-
                 var self = this
-
                 const reader = new FileReader()
-                
                 reader.onload = event => {
-                  
                   var string = event.target.result
-
-                  var check = 'AES-256::'
-
-                  if (!string.includes(check)) return alert('Wallet Not Supported.')
-
-                  self.accounts = nano.import({
-                    secret: string.replace(check, ''), 
-                    password: window.prompt('Welcome, back. (Password):'),
-                    persist: true
-                  })
-
+                  var vibe_check = 'AES-256::'
+                  if (!string.includes(vibe_check)) return alert('Wallet Not Supported.')
+                  self.accounts = nano.import( string.replace(vibe_check, ''), window.prompt('Welcome, back. (Password):'))
                   setTimeout(() => {
                     self.loading = false
                   }, 500)
 
                 }
-                
                 reader.onerror = error => reject(error)
-
                 reader.readAsText(this.$refs.blankImport.files[0]) 
-
               },
 
               handleImport() {
-
                 var self = this
-
                 const reader = new FileReader()
-                
                 reader.onload = event => {
-                  
                   var string = event.target.result
-
-                  var check = 'AES-256::'
-
-                  if (!string.includes(check)) return alert('Wallet Not Supported.')
-
-                  self.accounts = nano.import({
-                    secret: string.replace(check, ''), 
-                    password: window.prompt('Welcome, back. (Password):'),
-                    persist: true
-                  })
-
+                  var vibe_check = 'AES-256::'
+                  console.log( string )
+                  if (!string.includes(vibe_check)) return alert('Wallet Not Supported.')
+                  self.accounts = nano.import( string.replace(vibe_check, ''), window.prompt('Welcome, back. (Password):'))
                   setTimeout(() => {
                     self.loading = false
                   }, 500)
-
                 }
-                
                 reader.onerror = error => reject(error)
-
                 reader.readAsText(this.$refs.import.files[0]) 
 
               },
 
               new_wallet() {
-
                 var password = window.prompt('New Wallet (Password):')
-
                 if (password.length <= 4) {
                   window.alert('4 characters or more.')
                   password = window.prompt('New Wallet (Password):')
                   if (password.length < 6) return
                 }
-
-                this.accounts = nano.import({
-                  password,
-                  persist: true
-                })
-
+                this.accounts = nano.app(password)
                 setTimeout(() => {
                   this.loading = false
                 }, 100)
-
               },
 
               load() {
                 if (localStorage.getItem(`nano-offline`)) {
-
                   try {
-
                     this.password = window.prompt('Welcome, back. (Password):')
-
                     var accounts = nano.app(this.password)
-
                     this.accounts = accounts
-
                     this.loading = false
-
                     if (this.accounts.length) {
                       this.history = []
                       for (var account of this.accounts) {
@@ -1179,22 +1128,16 @@
                         })
                       }
                     }
-
                   } catch(e) {
                     console.log(e)
-                    window.alert('No Match. Try Again.')
+                    window.alert('No Match. Reload. Try Again.')
                   }
-
                 }
               },
 
               add_account() {
-                
-                nano.add_account({ secret: window.prompt('Add Account (Password):') }).then((accounts) => {
-                    this.accounts = accounts
-                    window.alert(`Don't forget to export your Wallet again. To include this new account.`)
-                })
-
+                this.accounts = nano.add_account(window.prompt('Add Account (Password):'))
+                window.alert(`Don't forget to re-export Wallet backup.`)
               }
 
             },
