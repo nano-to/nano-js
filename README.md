@@ -157,7 +157,7 @@ await nano.send({
 ## IMPORT/EXPORT
 
 > JSON object, stringified and encrypted with AES-256. Looking for a UI? Try importing wallet into
-[Nault](https://nault.cc). 
+[Nault](https://nault.pro). 
 
 ```js
 
