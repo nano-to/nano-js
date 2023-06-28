@@ -61,7 +61,7 @@ var change_rep = nano.sign({
     address: 'nano_3igf8hd4sjshoibbbkeitmgkp1o6ug4xads43j6e4gqkj5xk5o83j8ja9php',
     representativeAddress: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs', // new rep
     frontier: '128106287002E595F479ACD615C818117FCB3860EC112670557A2467386249D4',
-    work: '0000000000000000',
+    work: 'c5cf86de24b24419',
 }, process.env.PRIVATE_KEY) 
 
 var hash = await nano.process( change_rep )
@@ -78,7 +78,7 @@ var hash = await nano.process( change_rep )
   balance: '25618869000000000000000000000000',
   link: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
   signature: 'd5dd2a53becfc8c3fd17ddee2aba651ef6ac28571b66a4dfb2f4820c7d04d235d226d1fb176eb3958bbbfb9145663a0b4ffffd59cfc4b23af24a2af5f51e6a0e',
-  work: ''
+  work: 'c5cf86de24b24419'
 }
 ```
 
