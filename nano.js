@@ -44,8 +44,8 @@ if (typeof process === 'object') {
 
 }
 
-// NanoOffline
-// https://github.com/fwd/nano-offline
+// @Nano/Wallet
+// https://github.com/fwd/nano-js
 let nano = {
 
 	aes256: '',
@@ -124,6 +124,7 @@ let nano = {
 
 	},
 
+	// this needs rewrite, wrongly done.
 	add_account(password) {
 
 		var existing = this.wallet()
@@ -586,7 +587,6 @@ let nano = {
 
 }
 
-// For the kiddies.
 nano.balance = nano.balances
 
 // woah
