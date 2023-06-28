@@ -141,7 +141,7 @@ await nano.rpc({ action: "block_count" })
 ```js
 nano.offline({ 
     filename: 'aes_string.txt', 
-    password: env.PASSWORD 
+    password: window.prompt('PIN: ')
 })
 
 console.log( nano.accounts() )
@@ -163,7 +163,7 @@ await nano.send({
 
 nano.offline({ 
     filename: 'aes_string.txt', 
-    password: env.PASSWORD 
+    password: window.prompt('PIN: ')
 })
 
 console.log( nano.export() )
