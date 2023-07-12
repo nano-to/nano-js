@@ -205,4 +205,4 @@ MIT
 
 ### Stargazers
 
-[![Stargazers over time](https://starchart.cc/fwd/nano-wallet.svg)](https://github.com/fwd/nano-wallet)
+[![Stargazers over time](https://starchart.cc/fwd/nano-js.svg)](https://github.com/fwd/nano-js)
