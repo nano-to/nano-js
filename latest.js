@@ -471,8 +471,7 @@ let nano = {
 							to: account,
 							from: source.address,
 							hash: block.hash,
-							amount: config.amount,
-							nanolooker: `https://nanolooker.com/block/${block.hash}`
+							amount: config.amount
 						})
 					}
 				} catch(e) {
