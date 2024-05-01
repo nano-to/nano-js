@@ -1,7 +1,7 @@
 {
   "name": "@nano/wallet",
   "version": "1.0.3",
-  "description": "JavaScript Nano Wallet",
+  "description": "Nano Javascript Wallet (NPM)",
   "main": "latest.js",
   "author": "@nano2dev <hello@fwd.dev>",
   "license": "MIT",

@@ -136,7 +136,7 @@ await nano.rpc({ action: "block_count" })
 ```js
 nano.offline({ 
     filename: 'aes_string.txt', 
-    password: window.prompt('PIN: ')
+    password: process.env.PASSWORD
 })
 
 console.log( nano.accounts() )
@@ -158,7 +158,7 @@ await nano.send({
 
 nano.offline({ 
     filename: 'aes_string.txt', 
-    password: window.prompt('PIN: ')
+    password: process.env.PASSWORD
 })
 
 console.log( nano.export() )
@@ -185,7 +185,7 @@ AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aq
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### License
+## License
 
 MIT
 
@@ -198,6 +198,6 @@ MIT
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Stargazers
+## Stargazers
 
 [![Stargazers over time](https://starchart.cc/fwd/nano-js.svg)](https://github.com/fwd/nano-js)
