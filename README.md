@@ -1,15 +1,10 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano JS Wallet</h1>
+<h1 align="center">Nano Javascript Wallet (NPM)</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**LOCAL:**
-```html
-<script src="/wallet.js"></script>
-```
-
-**CDN:**
+**BROWSER:**
 ```html
 <script src="https://unpkg.com/@nano/wallet"></script>
 ```

@@ -1,15 +1,29 @@
 {
   "name": "@nano/wallet",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "JavaScript Nano Wallet",
-  "main": "nano.js",
+  "main": "latest.js",
   "author": "@nano2dev <hello@fwd.dev>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:fwd/nano-offline.git"
+    "url": "git@github.com:fwd/nano-js.git"
   },
   "dependencies": {
     "aes256": "^1.1.0"
-  }
+  },
+  "keywords": [
+    "nano",
+    "nanocurrency",
+    "blockchain",
+    "wallet",
+    "rpc",
+    "non-custodial",
+    "xno",
+    "web3",
+    "currency",
+    "crypto",
+    "nanoto",
+    "nano2dev"
+  ]
 }
