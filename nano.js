@@ -728,6 +728,7 @@ let nano = {
 nano.balance = nano.balances
 
 nano.app = nano.offline
+nano.waitFor = nano.confirm
 
 // Browser
 if (typeof window !== 'undefined') window.nano = nano
