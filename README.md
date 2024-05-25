@@ -326,6 +326,13 @@ AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aq
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
+## GET FREE NANO
+
+- https://nanodrop.io/
+- https://freenanofaucet.com/
+- https://faucet.prussia.dev/nano
+- https://getnano.ovh/faucet
+
 ## License
 
 MIT
