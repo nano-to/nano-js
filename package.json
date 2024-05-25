@@ -1,9 +1,9 @@
 {
   "name": "@nano/wallet",
-  "version": "1.0.3",
-  "description": "Nano Javascript Wallet (NPM)",
-  "main": "latest.js",
-  "author": "@nano2dev <hello@fwd.dev>",
+  "version": "1.5.0",
+  "description": "Nano Javascript Wallet",
+  "main": "nano.js",
+  "author": "nano2dev <hello@fwd.dev>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -21,6 +21,8 @@
     "non-custodial",
     "xno",
     "web3",
+    "offline",
+    "app",
     "currency",
     "crypto",
     "nanoto",

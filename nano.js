@@ -48,6 +48,8 @@ let nano = {
 
 	wallets: [],
 
+	rpc_key: '',
+
 	endpoint: 'https://rpc.nano.to',
 
 	// Convert
@@ -87,26 +89,33 @@ let nano = {
 
 	offline(config) {
 
-		if (!config.password) {
+		var password = config.password || config.secret
+
+		if (!password) {
 			return Error( console.error("Offline:", "No password provided.") )
 		}
 
 		var string;
+		var filename = config.filename || config.filepath || config.path || config.database
 
 		// Browser
 		if (typeof window !== 'undefined') {
-			var string = localStorage.getItem(config.filename ?  config.filename.split('.').join('-') : `nano-offline`)
+			var string = localStorage.getItem(filename ?  filename.split('.').join('-') : `nano-offline`)
 			if (!string) {
 				var account = this.generate()
-				string = encrypt(account, config.password)
-				localStorage.setItem(config.filename ? config.filename.split('.').join('-') : `nano-offline`, string)
+				string = encrypt(account, password)
+				localStorage.setItem(filename ? filename.split('.').join('-') : `nano-offline`, string)
 				this.wallets = account.accounts.map(a => {
 					return { index: a.accountIndex, address: a.address, metadata: a.metadata }
 				})
 			} else {
-				this.wallets = decrypt(string, config.password).accounts.map(a => {
-					return { index: a.accountIndex, address: a.address, metadata: a.metadata || false }
-				})
+				try {
+					this.wallets = decrypt(string, password).accounts.map(a => {
+						return { index: a.accountIndex, address: a.address, metadata: a.metadata || false }
+					})
+				} catch(e) {
+					return { error: "Invalid password" }
+				}
 			}
 		}
 
@@ -114,18 +123,24 @@ let nano = {
 		if (typeof process === 'object') {	
 			const fs = require('fs')
 			try {
-			  	string = fs.readFileSync(config.filename || `./NanoOffline.wallet`, 'utf8')
+			  	string = fs.readFileSync(filename || `./NanoOffline.wallet`, 'utf8')
 			} catch (err) {
-				string = encrypt(this.generate(), config.password)
-				fs.writeFileSync(config.filename || `./NanoOffline.wallet`, string)
+				string = encrypt(this.generate(), password)
+				fs.writeFileSync(filename || `./NanoOffline.wallet`, string)
 			}
-			this.wallets = decrypt(string, config.password).accounts.map(a => {
-				return { index: a.accountIndex, address: a.address, metadata: a.metadata || false }
-			})
+			try {
+				this.wallets = decrypt(string, password).accounts.map(a => {
+					return { index: a.accountIndex, address: a.address, metadata: a.metadata || false }
+				})
+			} catch(e) {
+				return { error: "Invalid password" }
+			}
 		}
 		
-		this.filename_cache = config.filename
-		this.pw_cache = config.password
+		if (config.node || config.endpoint) this.endpoint = config.node || config.endpoint
+		if (config.rpc_key) this.rpc_key = config.rpc_key
+		this.filename_cache = filename
+		this.pw_cache = password
 
 		this.aes256 = string
 
@@ -133,16 +148,15 @@ let nano = {
 
 	},
 
-	// TODO: this needs rewrite
 	add_account(metadata) {
 
 		var existing = this.wallet()
 
 		if (!existing) return new Error("Account not found.")
-	
-		var new_wallet = this.generate(), new_wallet = new_wallet.accounts[0]
 
-		new_wallet.accountIndex = (existing.accounts.length - 1) + 1
+		var index = existing.accounts.length - 1
+	
+		var new_wallet = _NanocurrencyWeb.wallet.accounts(existing.seed, index, index + 1), new_wallet = new_wallet[1]
 
 		if (metadata) new_wallet.metadata = metadata
 
@@ -270,15 +284,29 @@ let nano = {
 				  path: '/',
 				  method: 'POST',
 				  headers: { 
-				  	'Content-Type': 'application/json', 
-				  	'Content-Length': postData.length
+				  	'content-type': 'application/json', 
+				  	'authorization': this.rpc_key,
+				  	'nano-app': `@nano/wallet-1.5.0`,
 				  }
 				};
 
 				var req = https.request(options, (res) => {
-				  res.on('data', (d) => {
-				    resolve(JSON.parse(d.toString()))
-				  });
+
+					let responseData = ''; // Initialize a variable to accumulate the data
+
+					res.on('data', (chunk) => {
+						responseData += chunk; // Accumulate data chunks
+					});
+
+					res.on('end', () => {
+						try {
+							const parsedData = JSON.parse(responseData); // Parse the complete data once received
+							resolve(parsedData);
+						} catch (error) {
+							reject(new Error('Failed to parse response JSON: ' + error.message)); // Handle JSON parse error
+						}
+					});
+
 				});
 
 				req.on('error', (e) => {
@@ -301,8 +329,55 @@ let nano = {
 
 			}
 
-
 		})
+
+	},
+
+	checkout(body) {
+		return new Promise(async (resolve) => {
+			var wallet = this.wallet()
+			body = body || { action: "checkout", address: wallet.accounts[0].address }
+			if (body === 0 || Number(body)) body = { action: "checkout", address: wallet.accounts[Number(body)].address }
+			if (body && body.address === 0 || body && Number(body.address)) body.address = wallet.accounts[Number(body.address)].address
+			if (body && body.address && !body.action) body.action = "checkout"
+			if (body.address && typeof body.address === 'object') {
+				if (body.address.id) {
+					source = wallet.accounts.find(b => b.metadata && b.metadata.id === body.address.id)
+					if (!source) return { error: `Account with metadata id ${config.id} not found` }
+					body.address = source.address
+				}
+				if (body.address.userId) {
+					source = wallet.accounts.find(b => b.metadata && b.metadata.userId === body.address.userId)
+					if (!source) return { error: `Account with metadata userId ${config.userId} not found` }
+					body.address = source.address
+				}
+			}
+			if (!body.action) return { error: "Action not provided." }
+			if (!body.address) return { error: "Address not provided." }
+			resolve( (await this.rpc(body)) )
+		})
+	},
+
+	async confirm(checkout) {
+	  if (!checkout || !checkout.check) return { error: "Invalid checkout object." }
+	  while (true) {
+	    try {
+	      const data = await this.get(checkout.check);
+	      if (data.block) {
+	      	return data
+	        break;
+	      }
+	      console.log('Payment not found. Waiting 2 seconds before rechecking.');
+	      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
+	    } catch (error) {
+	      // console.error('Error fetching data:', error);
+	      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying in case of error
+	    }
+	  }
+	},
+
+	async qrcode(body) {
+		return (await this.checkout(body)).qrcode
 	},
 
 	pow(account) {
@@ -313,7 +388,7 @@ let nano = {
 		})
 	},
 
-	wallet(password) {
+	wallet(password = this.pw_cache) {
 		
 		// Browser
 		if (typeof window !== 'undefined') {
@@ -325,9 +400,11 @@ let nano = {
 			var existing = this.aes256
 		}
 
-		if (!existing) return new Error("Wallet Not Found.")
-
-		return decrypt(existing, this.pw_cache || password)
+		try {
+			return decrypt(existing, this.pw_cache || password)
+		} catch(e) {
+			return { error: "Invalid password" }
+		}
 
 	},
 
@@ -361,10 +438,11 @@ let nano = {
 							Object.keys(res.blocks).map(hash => blocks.push({ 
 								hash, 
 								amount: res.blocks[hash].amount, 
+								amount_nano: _NanocurrencyWeb.tools.convert(res.blocks[hash].amount, 'RAW', 'NANO'),
 								source: res.blocks[hash].source
 							}))
 
-						    for (var hash of blocks) {
+						    for (var block of blocks) {
 
 								var account = (await this.rpc({ 
 									action: 'account_info', 
@@ -390,10 +468,10 @@ let nano = {
 								    // frontier: account.frontier || (await this.rpc(endpoint, { action: 'account_key', account: source.address } )).data.key,
 
 								    // From the pending transaction
-								    transactionHash: hash.hash,
+								    transactionHash: block.hash,
 
 								    // From the pending transaction in RAW
-								    amountRaw: hash.amount,
+								    amountRaw: block.amount,
 
 									work: await this.pow({ account: source.address, frontier: account.frontier }),
 
@@ -404,21 +482,24 @@ let nano = {
 
 								const signedBlock = _NanocurrencyWeb.block.receive(data, source.private)
 
-								await this.rpc({
+								block.send_hash = block.hash
+
+								block.hash = (await this.rpc({
 									"action": "process",
 									"json_block": "true",
 									"subtype": "receive",
 									"block": signedBlock
-								})
+								})).hash
 
 						    }
 
-						    resolve("Done.")
+						    resolve(blocks)
 
 						})
 
 					} catch (e) {
-						new Error(e)
+						console.log("error", error)
+						// new Error(e)
 					}
 
 				}
@@ -435,9 +516,50 @@ let nano = {
 
 			if (!wallet) return new Error("Account not found.")
 
-			var source = config.from ? wallet.find(a => a.accounts && a.accounts.find(b => b.address === config.from)) : wallet.accounts[0]
+			if (wallet.error) return resolve(wallet)
+
+			var source = ''
+
+			if (config.from && String(config.from).includes('nano_')) source = config.from
+			if (config.from && Number(config.from)) source = wallet.accounts[Number(config.from)].address
+
+			if (config.from && typeof config.from === 'object') {
+				
+				if (config.from.id) {
+					source = wallet.accounts.find(b => b.metadata && b.metadata.id === config.from.id)
+					if (!source) return { error: `Account with metadata id ${config.id} not found` }
+					// source = source.address
+				}
+
+				if (config.from.userId) {
+					source = wallet.accounts.find(b => b.metadata && b.metadata.userId === config.from.userId)
+					if (!source) return { error: `Account with metadata userId ${config.userId} not found` }
+					// source = source.address
+				}
+
+			}
+
+			if (config.to && typeof config.to === 'object') {
+
+				if (config.to.id) {
+					var dest = wallet.accounts.find(a => a.metadata && a.metadata.id === config.to.id)
+					if (!dest) return { error: `Account with metadata id ${config.from.id} not found` }
+					config.to = dest.address
+				}
+
+				if (config.to.userId) {
+					var dest = wallet.accounts.find(a => a.metadata && a.metadata.userId === config.to.userId)
+					if (!dest) return { error: `Account with metadata userId ${config.from.userId} not found` }
+					config.to = dest.address
+				}
+
+			}
+
+			if (!source) return { error: `Payment source not provided.` }
 
 			var accounts = config.accounts || config.to
+			
+			if ( accounts === 0 || Number(accounts) ) accounts = wallet.accounts[Number(accounts)] ? [wallet.accounts[Number(accounts)].address] : ''
 			
 			if ( typeof accounts === "string" ) accounts = [accounts]
 
@@ -462,20 +584,21 @@ let nano = {
 						source,
 						to: account, 
 						amount: config.amount, 
-						endpoint: config.endpoint || config.node, 
-						key: config.key,
+						// endpoint: config.endpoint || config.node, 
+						// key: config.key,
 					})
-					if (block.error) return new Error(block)
+					if (block.error) console.error(block)
 					if (block.hash) {
 						blocks.push({
 							to: account,
 							from: source.address,
 							hash: block.hash,
-							amount: config.amount
+							amount: String(config.amount),
+							browser: `https://nanobrowse.com/block/${block.hash}`
 						})
 					}
 				} catch(e) {
-					resolve(e)
+					resolve("Error:" + e)
 				}
 			}
 			
@@ -489,7 +612,7 @@ let nano = {
 
 		if (!privateKey) {
 			var wallet = this.wallet()
-			if (!wallet) return new Error("No Wallet found.")
+			if (!wallet) return { error: "No wallet found." }
 			privateKey = wallet.accounts[0].private
 		}
 
@@ -517,7 +640,7 @@ let nano = {
 
 			var account = config.to
 
-			if (!config.source) return new Error("No source address.")
+			if (!config.source) return { error: "No source address." }
 
 			if (account.includes('@')) {
 				var known = (await this.get(this.known))
@@ -530,13 +653,15 @@ let nano = {
 			    action: 'account_info', 
 			    account: config.source.address,
 			    representative: "true",
-				endpoint: config.endpoint,
-				key: config.key,
+				// endpoint: config.endpoint,
+				// key: config.key,
+				// json_block: true
 			  }).then(async (res) => {
 
 			    var _account = res
 
-			    if (!_account.balance) return new Error('Not enough funds.')
+			    if (!_account.balance) return { error: "Insufficient funds." }
+			    if (_account.error) return _account
 
 			    const data = {
 					walletBalanceRaw: _account.balance,
@@ -578,7 +703,7 @@ let nano = {
 	// 	return `https://${domain || 'nanobrowse'}.com/${type || 'account'}/${address ? address : this.wallets[0].address}`
 	// },
 
-	export(password) {
+	export(password = this.pw_cache) {
 
 		if (!password) return 'AES-256::' + this.aes256
 		
@@ -602,7 +727,7 @@ let nano = {
 
 nano.balance = nano.balances
 
-nano.app = (password) => nano.offline({ password })
+nano.app = nano.offline
 
 // Browser
 if (typeof window !== 'undefined') window.nano = nano
