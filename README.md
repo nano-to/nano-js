@@ -27,10 +27,10 @@ nano.app({
     secret: 'SUPER_SECRET_PASSWORD'
 })
 
-nano.add_account({ userId: 'JoeMama' })
+nano.add_account({ userId: 'JohnDoe' })
 
 var payment = await nano.checkout({ 
-    address: { userId: 'JoeMama' }, 
+    address: { userId: 'JohnDoe' }, 
     amount: '0.133' 
 })
 
@@ -92,7 +92,7 @@ var checkout = await nano.checkout({ address: 0, amount: '0.133' })
 ```
 
 ```js
-var payment = await nano.confirm(checkout)
+var payment = await nano.waitFor(checkout)
 ```
 
 ```js
@@ -154,14 +154,14 @@ nano.app({
     secret: 'SUPER_SECRET_PASSWORD'
 })
 
-const userId = johnDoe
+const user = { userId: 'JoeDoe' }
 
-console.log( nano.add_account({ userId }) )
+console.log( nano.add_account(user) )
 
-await nano.receive()
+await nano.receive(user)
 
 await nano.send({ 
-    to: { userId }, 
+    to: user, 
     from: 0, // your first account
     amount: '0.133'
 })

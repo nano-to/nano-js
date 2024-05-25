@@ -1,6 +1,6 @@
 {
   "name": "@nano/wallet",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Nano Javascript Wallet",
   "main": "nano.js",
   "author": "nano2dev <hello@fwd.dev>",
@@ -14,6 +14,7 @@
   },
   "keywords": [
     "nano",
+    "web-app",
     "nanocurrency",
     "blockchain",
     "wallet",

@@ -114,7 +114,10 @@ let nano = {
 						return { index: a.accountIndex, address: a.address, metadata: a.metadata || false }
 					})
 				} catch(e) {
-					return { error: "Invalid password" }
+					var error = { error: "Invalid password" }
+				    console.error(error)
+				    throw new Error(error.error)
+				    return 
 				}
 			}
 		}
@@ -133,7 +136,10 @@ let nano = {
 					return { index: a.accountIndex, address: a.address, metadata: a.metadata || false }
 				})
 			} catch(e) {
-				return { error: "Invalid password" }
+				var error = { error: "Invalid password" }
+			    console.error(error)
+			    throw new Error(error.error)
+			    return 
 			}
 		}
 		
@@ -153,6 +159,15 @@ let nano = {
 		var existing = this.wallet()
 
 		if (!existing) return new Error("Account not found.")
+
+		var accounts = existing.accounts
+
+		if (this.findAccount(existing, metadata)) {
+			var error = { error: "Account with identical metadata already exists. Try using a unique id." }
+			new Error(error)
+			console.error(error)
+			return
+		}
 
 		var index = existing.accounts.length - 1
 	
@@ -195,33 +210,95 @@ let nano = {
 		return this.wallets
 	},
 
-	balances(config) {
+	balances(account) {
 		return new Promise((resolve, reject) => {
+
+			var wallet = this.wallet()
+
+			if (!wallet || !wallet.accounts) {
+				return new Error("Account not found.")
+			}
+
+			var accounts = wallet.accounts
+
+			if (this.findAccount(wallet, account)) accounts = [this.findAccount(wallet, account)]
+
 			this.rpc({
 			  "action": "accounts_balances",
 			  "array": "true",
-			  "accounts": this.wallets.map(a => a.address)
+			  "accounts": accounts.map(a => a.address)
 			}).then(async (res) => {
+
+				if (accounts.length === 1) {
+					var account = accounts[0]
+					var balance = res.balances[account.address]
+						balance.metadata = account.metadata || false
+					return resolve(balance)
+				}
+
 				resolve(res.balances)
+
 			})
+
 		})
+
 	},
 
 	pending(config) {
 		return new Promise((resolve, reject) => {
+
+			var wallet = this.wallet()
+
+			if (!wallet || !wallet.accounts) {
+				return new Error("Account not found.")
+			}
+
+			var accounts = wallet.accounts
+
+			if (this.findAccount(wallet, account)) accounts = [this.findAccount(wallet, account)]
+
 			this.rpc({
 			  "action": "accounts_receivable",
 			  "array": "true",
-			  "accounts": this.wallets.map(a => a.address)
+			  "accounts": accounts.map(a => a.address)
 			}).then(async (res) => {
 				resolve(res)
 			})
+
 		})
 	},
 
 	generate() {
 		var accounts = _NanocurrencyWeb.wallet.generate()
 		return accounts
+	},
+
+	findAccount(wallet, criteria) {
+	    // Destructure accounts from the wallet
+	    const { accounts } = wallet;
+	    
+	    // Check if criteria is a number
+	    if (typeof criteria === 'number') {
+	        // Find account by accountIndex
+	        return accounts.find(account => account.accountIndex === criteria) || false;
+	    }
+	    
+	    // Check if criteria is an object
+	    if (typeof criteria === 'object' && criteria !== null) {
+	        return accounts.find(account => {
+	            // Check each key-value pair in criteria
+	            for (let key in criteria) {
+	                // Ensure metadata exists and matches
+	                if (account.metadata && account.metadata[key] === criteria[key]) {
+	                    return true;
+	                }
+	            }
+	            return false;
+	        }) || false;
+	    }
+	    
+	    // If criteria is neither a number nor an object
+	    return false;
 	},
 
 	get(endpoint) {
@@ -286,7 +363,7 @@ let nano = {
 				  headers: { 
 				  	'content-type': 'application/json', 
 				  	'authorization': this.rpc_key,
-				  	'nano-app': `@nano/wallet-1.5.3`,
+				  	'nano-app': `@nano/wallet-1.5.4`,
 				  }
 				};
 
@@ -336,43 +413,59 @@ let nano = {
 	checkout(body) {
 		return new Promise(async (resolve) => {
 			var wallet = this.wallet()
-			body = body || { action: "checkout", address: wallet.accounts[0].address }
-			if (body === 0 || Number(body)) body = { action: "checkout", address: wallet.accounts[Number(body)].address }
-			if (body && body.address === 0 || body && Number(body.address)) body.address = wallet.accounts[Number(body.address)].address
+			if (!body) {
+				var error = { error: "Missing checkout body.", example: { address: 0, amount: '0.005' } }
+			    console.error(error)
+			    throw new Error(error.error)
+			    return 
+			}
 			if (body && body.address && !body.action) body.action = "checkout"
 			if (body.address && typeof body.address === 'object') {
-				if (body.address.id) {
-					source = wallet.accounts.find(b => b.metadata && b.metadata.id === body.address.id)
-					if (!source) return { error: `Account with metadata id ${config.id} not found` }
-					body.address = source.address
+				source = this.findAccount(wallet, body.address)
+				if (!source) {
+					var error = { error: `Account with metadata ${JSON.stringify(body.address)} not found` }
+					console.error(error)
+					throw new Error(error.error)
+					return 
 				}
-				if (body.address.userId) {
-					source = wallet.accounts.find(b => b.metadata && b.metadata.userId === body.address.userId)
-					if (!source) return { error: `Account with metadata userId ${config.userId} not found` }
-					body.address = source.address
-				}
+				body.address = source.address
 			}
-			if (!body.action) return { error: "Action not provided." }
-			if (!body.address) return { error: "Address not provided." }
+			if (!body.action) {
+				var error = { error: "Action not provided." }
+				console.error(error)
+				throw new Error(error.error)
+				return 
+			}
+			if (!body.address) {
+				var error = { error: "Address not provided." }
+				console.error(error)
+				throw new Error(error.error)
+				return 
+			}
 			resolve( (await this.rpc(body)) )
 		})
 	},
 
-	async confirm(checkout) {
-	  if (!checkout || !checkout.check) return { error: "Invalid checkout object." }
-	  while (true) {
-	    try {
-	      const data = await this.get(checkout.check);
-	      if (data.block) {
-	      	return data
-	        break;
-	      }
-	      console.log('Payment not found. Waiting 5 seconds before rechecking.');
-	      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 2 seconds
-	    } catch (error) {
-	      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 2 seconds before retrying in case of error
-	    }
-	  }
+	async confirm(checkout, timeout) {
+		if (!checkout || !checkout.check) {
+			var error = { error: "Invalid checkout object." }
+			console.error(error)
+			throw new Error(error.error)
+			return 
+		}
+		while (true) {
+			try {
+			  const data = await this.get(checkout.check);
+			  if (data.block) {
+			  	return data
+			    break;
+			  }
+			  console.log('Payment not found. Waiting 5 seconds before rechecking.');
+			  await new Promise(resolve => setTimeout(resolve, timeout || 5000)); // Wait for 2 seconds
+			} catch (error) {
+			  await new Promise(resolve => setTimeout(resolve, timeout || 5000)); // Wait for 2 seconds before retrying in case of error
+			}
+		}
 	},
 
 	async qrcode(body) {
@@ -381,9 +474,20 @@ let nano = {
 
 	pow(account) {
 		return new Promise(async (resolve) => {
-			var frontier = account.frontier
-			if (!frontier) frontier = (await this.rpc({ action: 'account_key', account: account.account } )).key
-			resolve( (await this.rpc({ action: 'work_generate', hash: frontier, key: this.key } )).work )
+			try {
+	
+				var frontier = account.frontier
+				if (!frontier) frontier = (await this.rpc({ action: 'account_key', account: account.account } )).key
+				resolve( (await this.rpc({ action: 'work_generate', hash: frontier } )).work )
+
+			} catch(e) {
+
+				var error = { error: "Error generating PoW", context: data }
+				console.error(error)
+				throw new Error(error.error)
+				return resolve(error)
+
+			}
 		})
 	},
 
@@ -402,21 +506,31 @@ let nano = {
 		try {
 			return decrypt(existing, this.pw_cache || password)
 		} catch(e) {
-			return { error: "Invalid password" }
+			var error = { error: "Invalid password" }
+			console.error(error)
+			throw new Error(error.error)
+			return 
 		}
 
 	},
 
-	receive() {
+	receive(account) {
 		return new Promise((resolve, reject) => {
 
 			var wallet = this.wallet()
 
 			if (!wallet || !wallet.accounts) {
-				return new Error("Account not found.")
+				var error = { error: "Account not found." }
+				console.error(error)
+				throw new Error(error.error)
+				return 
 			}
 
-			for (var source of wallet.accounts) {
+			var accounts = wallet.accounts
+
+			if (this.findAccount(wallet, account)) accounts = [this.findAccount(wallet, account)]
+
+			for (var source of accounts) {
 				
 					try {
 
@@ -425,8 +539,6 @@ let nano = {
 							account: source.address,
 							source: "true",
 						}).then(async (res) => {
-
-							if (res.error) return console.warn(res.message)
 
 							if (!res || !res.blocks) res.data = { blocks: [] }
 
@@ -477,7 +589,12 @@ let nano = {
 								}
 
 								// return new Error(data)
-								if (!data.work) return new Error("No Pow", data)
+								if (!data.work) {
+									var error = { error: "Error generating PoW", context: data }
+									console.error(error)
+									throw new Error(error.error)
+									return 
+								} 
 
 								const signedBlock = _NanocurrencyWeb.block.receive(data, source.private)
 
@@ -497,8 +614,10 @@ let nano = {
 						})
 
 					} catch (e) {
-						console.log("error", error)
-						// new Error(e)
+						var error = { error: "Error generating PoW", context: e }
+						console.error(error)
+						throw new Error(error.error)
+						return 
 					}
 
 				}
@@ -513,56 +632,56 @@ let nano = {
 
 			var wallet = this.wallet()
 
-			if (!wallet) return new Error("Account not found.")
+			if (!wallet) {
+				var error = { error: "Account not found." }
+				console.error(error)
+				throw new Error(error.error)
+				return 
+			}
 
 			if (wallet.error) return resolve(wallet)
 
 			var source = ''
 
 			if (config.from && String(config.from).includes('nano_')) source = config.from
-			if (config.from && Number(config.from)) source = wallet.accounts[Number(config.from)].address
 
-			if (config.from && typeof config.from === 'object') {
-				
-				if (config.from.id) {
-					source = wallet.accounts.find(b => b.metadata && b.metadata.id === config.from.id)
-					if (!source) return { error: `Account with metadata id ${config.id} not found` }
-					// source = source.address
-				}
+			if (config.from && typeof config.from === 'object' || config.from === 0 || Number(config.from)) {
 
-				if (config.from.userId) {
-					source = wallet.accounts.find(b => b.metadata && b.metadata.userId === config.from.userId)
-					if (!source) return { error: `Account with metadata userId ${config.userId} not found` }
-					// source = source.address
+				source = this.findAccount(wallet, config.from)
+				if (!source) {
+					var error = { error: `Account with metadata ${JSON.stringify(config.from)} not found` }
+				    console.error(error)
+				    throw new Error(error.error)
+				    return 
 				}
 
 			}
 
-			if (config.to && typeof config.to === 'object') {
+			if (!Array.isArray(config.to) && config.to && typeof config.to === 'object' || config.to === 0 || Number(config.to)) {
 
-				if (config.to.id) {
-					var dest = wallet.accounts.find(a => a.metadata && a.metadata.id === config.to.id)
-					if (!dest) return { error: `Account with metadata id ${config.from.id} not found` }
-					config.to = dest.address
+				dest = this.findAccount(wallet, config.to)
+
+				if (!source) {
+					var error = { error: `Account with metadata ${JSON.stringify(config.to)} not found` }
+				    console.error(error)
+				    throw new Error(error.error)
+				    return 
 				}
 
-				if (config.to.userId) {
-					var dest = wallet.accounts.find(a => a.metadata && a.metadata.userId === config.to.userId)
-					if (!dest) return { error: `Account with metadata userId ${config.from.userId} not found` }
-					config.to = dest.address
-				}
+				config.to = dest.address
 
 			}
 
-			if (!source) return { error: `Payment source not provided.` }
+			if (!source) {
+				var error = { error: `Payment source not provided.` }
+			    console.error(error)
+			    throw new Error(error.error)
+			    return 
+			}
 
 			var accounts = config.accounts || config.to
 			
-			if ( accounts === 0 || Number(accounts) ) accounts = wallet.accounts[Number(accounts)] ? [wallet.accounts[Number(accounts)].address] : ''
-			
 			if ( typeof accounts === "string" ) accounts = [accounts]
-
-			if (!accounts || !Array.isArray(accounts)) return new Error('Invalid accounts array.', accounts)
 
 			if (accounts.find(a => a.includes('@'))) {
 					var known = (await this.get(this.known))
@@ -578,13 +697,17 @@ let nano = {
 			var blocks = []
 
 			for (var account of accounts) {
+				if (!source || !source.address) {
+					var error = { error: `Invalid source account.` }
+				    console.error(error)
+				    throw new Error(error.error)
+				    return 
+				}
 				try {
 					var block = await this.block({ 
 						source,
 						to: account, 
 						amount: config.amount, 
-						// endpoint: config.endpoint || config.node, 
-						// key: config.key,
 					})
 					if (block.error) console.error(block)
 					if (block.hash) {
@@ -592,12 +715,15 @@ let nano = {
 							to: account,
 							from: source.address,
 							hash: block.hash,
-							amount: String(config.amount),
+							amount: String(block.amount_nano),
 							browser: `https://nanobrowse.com/block/${block.hash}`
 						})
 					}
 				} catch(e) {
-					resolve("Error:" + e)
+					var error = { error: "Error", context: e }
+				    console.error(error)
+				    throw new Error(error.error)
+				    return 
 				}
 			}
 			
@@ -611,7 +737,12 @@ let nano = {
 
 		if (!privateKey) {
 			var wallet = this.wallet()
-			if (!wallet) return { error: "No wallet found." }
+			if (!wallet) {
+				var error = { error: "Account not found." }
+			    console.error(error)
+			    throw new Error(error.error)
+			    return 
+			}
 			privateKey = wallet.accounts[0].private
 		}
 
@@ -635,16 +766,26 @@ let nano = {
 	},
 
 	block(config) {
-		return new Promise(async (resolve, reject) => {
+		return new Promise(async (resolve) => {
 
 			var account = config.to
 
-			if (!config.source) return { error: "No source address." }
+			if (!config.source) {
+				var error = { error: "No source address." }
+			    console.error(error)
+			    throw new Error(error.error)
+			    return 
+			}
 
 			if (account.includes('@')) {
 				var known = (await this.get(this.known))
 				var found = known.find(b => b.name.toLowerCase() === account.toLowerCase().replace('@', ''))
-				if (!found) return reject("Username not found.")
+				if (!found) {
+					var error = { error: "Username not found." }
+				    console.error(error)
+				    throw new Error(error.error)
+				    return 
+				}
 				account = found.address
 			}
 
@@ -652,15 +793,29 @@ let nano = {
 			    action: 'account_info', 
 			    account: config.source.address,
 			    representative: "true",
-				// endpoint: config.endpoint,
-				// key: config.key,
-				// json_block: true
 			  }).then(async (res) => {
 
 			    var _account = res
 
-			    if (!_account.balance) return { error: "Insufficient funds." }
-			    if (_account.error) return _account
+			    if (!_account.balance) {
+			    	var error = { error: "Insufficient funds." }
+					console.error(error)
+					throw new Error(error.error)
+					return 
+			    }
+
+			    if (_account.error) {
+					console.error({
+						error: _account.error,
+						context: { 
+						    action: 'account_info', 
+						    account: config.source.address,
+						    representative: "true",
+						}
+					})
+					throw new Error(_account.error)
+					return
+			    }
 
 			    const data = {
 					walletBalanceRaw: _account.balance,
@@ -672,7 +827,6 @@ let nano = {
 					work: config.pow ? config.pow : await this.pow({ account: config.source.address, frontier: _account.frontier }),
 			    }
 
-			    // Returns a correctly formatted and signed block ready to be sent to the blockchain
 			    const signedBlock = _NanocurrencyWeb.block.send(data, config.source.private)
 
 			    this.rpc({
@@ -683,7 +837,8 @@ let nano = {
 					endpoint: config.endpoint,
 					key: config.key,
 			    }).then((hash) => {
-			      resolve(hash)
+					hash.amount_nano = _NanocurrencyWeb.tools.convert(data.amountRaw, 'RAW', 'NANO')
+					resolve(hash)
 			    })
 
 			})
@@ -692,12 +847,12 @@ let nano = {
 
 	},
 
-	// depreceated 
+	// depreceated in 1.5.1
 	// qrcode(address) {
 	// 	return `https://chart.apis.google.com/chart?chs=250x250&cht=qr&chl=nano:${address ? address : this.wallets[0].address}&choe=UTF-8`
 	// },
 
-	// depreceated 
+	// depreceated in 1.5.1
 	// browser(address, domain, type) {
 	// 	return `https://${domain || 'nanobrowse'}.com/${type || 'account'}/${address ? address : this.wallets[0].address}`
 	// },
@@ -716,7 +871,12 @@ let nano = {
 			var existing = this.aes256
 		}
 
-		if (!existing) return new Error("Wallet Not Found.")
+		if (!existing) {
+			var error = { error: "Wallet not found." }
+			console.error(error)
+			throw new Error(error.error)
+			return 
+		}
 
 		return decrypt(existing, password)
 
@@ -725,7 +885,6 @@ let nano = {
 }
 
 nano.balance = nano.balances
-
 nano.app = nano.offline
 nano.waitFor = nano.confirm
 
