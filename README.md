@@ -108,9 +108,12 @@ await nano.receive()
 ```
 
 ```js
+// send to globally known accounts
 await nano.send({ to: '@fosse', amount: 0.1 })
+
 // transfer between your own accounts
 await nano.send({ to: 1, from: 0, amount: 0.1 })
+
 // transfer between users
 await nano.send({ to: { userId: 'johnDoe' }, from: { userId: 'janeDoe' }, amount: 0.1 })
 ```
