@@ -1,8 +1,8 @@
-![line](https://github.com/nano-currency/node-cl/raw/main/.github/line.png)
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
 <h1 align="center">Nano JS Wallet</h1>
 
-![line](https://github.com/nano-currency/node-cl/raw/main/.github/line.png)
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
 **BROWSER:**
 ```html
@@ -15,7 +15,7 @@
 const nano = require('@nano/wallet')
 ```
 
-![line](https://github.com/nano-currency/node-cl/raw/main/.github/line.png)
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
 ## SELF-SIGN
 
@@ -234,20 +234,20 @@ AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aq
 }
 ```
 
-![line](https://github.com/nano-currency/node-cl/raw/main/.github/line.png)
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
 ## License
 
 MIT
 
-![line](https://github.com/nano-currency/node-cl/raw/main/.github/line.png)
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
 ## Sponsor (DigitalOcean)
 
 <a align="center" target="_blank" href="https://m.do.co/c/f139acf4ddcb"><img style="object-fit: contain;
     max-width: 100%;" src="https://github.com/fwd/fwd/raw/master/ads/digitalocean_new.png" width="970" /></a>
 
-![line](https://github.com/nano-currency/node-cl/raw/main/.github/line.png)
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
 ## Stargazers
 
