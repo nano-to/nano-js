@@ -21,9 +21,9 @@ const nano = require('@nano/wallet')
 
 ```js
 nano.app({ 
-    node: 'https://us-1.nano.to',
+    node: 'https://rpc.nano.to',
     rpc_key: 'YOUR_RPC_KEY',
-    database: 'localstorage.db',
+    database: 'encrypted_wallets.txt',
     secret: 'SUPER_SECRET_PASSWORD'
 })
 
