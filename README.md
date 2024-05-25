@@ -186,7 +186,7 @@ var hash = await nano.process( change_rep )
 
 ## LOCALSTORAGE
 
-> Build non-custodial Nano applications by persisting Wallets client-side. Using AES-256 encryption. The longer ```process.env.PASSWORD```, the more secure. 
+> Build non-custodial Nano applications by persisting Wallets client-side. Using AES-256 encryption. The longer ```SUPER_SECRET_PASSWORD```, the more secure. 
 
 ```js
 nano.app({ 
