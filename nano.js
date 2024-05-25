@@ -286,7 +286,7 @@ let nano = {
 				  headers: { 
 				  	'content-type': 'application/json', 
 				  	'authorization': this.rpc_key,
-				  	'nano-app': `@nano/wallet-1.5.0`,
+				  	'nano-app': `@nano/wallet-1.5.1`,
 				  }
 				};
 
@@ -367,11 +367,10 @@ let nano = {
 	      	return data
 	        break;
 	      }
-	      console.log('Payment not found. Waiting 2 seconds before rechecking.');
-	      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds
+	      console.log('Payment not found. Waiting 5 seconds before rechecking.');
+	      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 2 seconds
 	    } catch (error) {
-	      // console.error('Error fetching data:', error);
-	      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for 2 seconds before retrying in case of error
+	      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 2 seconds before retrying in case of error
 	    }
 	  }
 	},
