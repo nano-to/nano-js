@@ -114,7 +114,7 @@ await nano.send({ to: '@fosse', amount: 0.1 })
 // transfer between your own accounts
 await nano.send({ to: 1, from: 0, amount: 0.1 })
 
-// transfer between users
+// transfer between your own users
 await nano.send({ to: { userId: 'johnDoe' }, from: { userId: 'janeDoe' }, amount: 0.1 })
 ```
 
