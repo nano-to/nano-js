@@ -17,6 +17,38 @@ const nano = require('@nano/wallet')
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
+## Basic Usage
+
+```js
+nano.app({ 
+    database: 'localstorage.db',
+    secret: 'SUPER_SECRET_PASSWORD'
+})
+
+nano.add_account({ userId: 'JoeMama' })
+
+var payment = await nano.checkout({ 
+    address: { userId: 'JoeMama' }, 
+    amount: '0.133' 
+})
+
+var success = await nano.waitFor(payment)
+
+// {
+//     id: 'b06a8127',
+//     success: true,
+//     block: '3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
+//     json: 'https://api.nano.to/checkout/b06a8127',
+//     address: 'nano_37y6iq8m...xpb9jrcwhkmoxpo61f4o',
+//     browser: 'https://nanobrowse.com/block/3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
+//     amount: '0.133',
+//     amount_raw: '1330000000000000000000000'
+// }
+```
+
+
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
+
 ## SELF-SIGN
 
 **SEND**
