@@ -113,6 +113,12 @@ await nano.receive({ userId: 'johnDoe' })
 // send to globally known accounts
 await nano.send({ to: '@fosse', amount: 0.1 })
 
+// send to multiple accounts
+await nano.send({ to: [ '@fosse', '@bank' ], amount: 0.1 })
+
+// send all funds on address
+await nano.send({ to: '@fosse', amount: 'all' })
+
 // transfer between your own accounts
 await nano.send({ to: 1, from: 0, amount: 0.1 })
 
@@ -200,10 +206,7 @@ console.log( nano.accounts() )
 
 await nano.receive()
 
-await nano.send({ 
-    to: [ 'nano_1faucet7b6xjyha7m13objpn5ubkquzd6ska8kwopzf1ecbfmn35d1zey3ys' ], 
-    amount: nano.convert(0.001, 'NANO', 'RAW') // 'all'
-})
+await nano.send({ to: '@faucet', amount: 0.001 })
 ```
 
 ## METADATA
