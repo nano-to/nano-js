@@ -51,66 +51,6 @@ var success = await nano.waitFor(payment)
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
-## SELF-SIGN
-
-**SEND**
-
-```js
-var send = nano.sign({
-    walletBalanceRaw: '18618869000000000000000000000000',
-    toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-    representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-    frontier: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-    transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-    amountRaw: '7000000000000000000000000000000',
-}, process.env.PRIVATE_KEY) 
-```
-
-**RECEIVE**
-
-```js
-var receive = nano.sign({
-    walletBalanceRaw: '18618869000000000000000000000000',
-    toAddress: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-    representativeAddress: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-    frontier: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-    transactionHash: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-    amountRaw: '7000000000000000000000000000000',
-    work: 'c5cf86de24b24419',
-}, process.env.PRIVATE_KEY) 
-
-var hash = await nano.process( receive )
-```
-
-**CHANGE_REP**
-
-```js
-var change_rep = nano.sign({
-    walletBalanceRaw: '3000000000000000000000000000000',
-    address: 'nano_3igf8hd4sjshoibbbkeitmgkp1o6ug4xads43j6e4gqkj5xk5o83j8ja9php',
-    representativeAddress: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs', // new rep
-    frontier: '128106287002E595F479ACD615C818117FCB3860EC112670557A2467386249D4',
-    work: 'c5cf86de24b24419',
-}, process.env.PRIVATE_KEY) 
-
-var hash = await nano.process( change_rep )
-```
-
-**SIGNED**
-
-```
-{
-  type: 'state',
-  account: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-  previous: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-  representative: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-  balance: '25618869000000000000000000000000',
-  link: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-  signature: 'd5dd2a53becfc8c3fd17ddee2aba651ef6ac28571b66a4dfb2f4820c7d04d235d226d1fb176eb3958bbbfb9145663a0b4ffffd59cfc4b23af24a2af5f51e6a0e',
-  work: 'c5cf86de24b24419'
-}
-```
-
 ## OFFLINE API
 
 ```js
@@ -155,20 +95,6 @@ var checkout = await nano.checkout({ address: 0, amount: '0.133' })
 var payment = await nano.confirm(checkout)
 ```
 
-**Response:**
-```
-{
-  id: 'b06a8127',
-  success: true,
-  block: '3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
-  json: 'https://api.nano.to/checkout/b06a8127',
-  address: 'nano_37y6iq8m...xpb9jrcwhkmoxpo61f4o',
-  browser: 'https://nanobrowse.com/block/3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
-  amount: '0.133',
-  amount_raw: '1330000000000000000000000'
-}
-```
-
 ```js
 await nano.process(signedBlock)
 ```
@@ -183,6 +109,10 @@ await nano.receive()
 
 ```js
 await nano.send({ to: '@fosse', amount: 0.1 })
+// transfer between your own accounts
+await nano.send({ to: 1, from: 0, amount: 0.1 })
+// transfer between users
+await nano.send({ to: { userId: 'johnDoe' }, from: { userId: 'janeDoe' }, amount: 0.1 })
 ```
 
 ```js
@@ -236,8 +166,7 @@ await nano.send({
 
 ## IMPORT/EXPORT
 
-> JSON object, stringified and encrypted with AES-256. Looking for a UI? Try importing wallet into
-[Nault](https://nault.pro). 
+> JSON object, stringified and encrypted with AES-256
 
 ```js
 
