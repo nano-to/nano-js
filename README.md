@@ -84,15 +84,36 @@ nano.export()
 ## PUBLIC RPC
 
 ```js
-await nano.qrcode()
+var qrcode = await nano.qrcode()
+console.log( qrcode ) // base64:png..
 ```
 
 ```js
 var checkout = await nano.checkout({ address: 0, amount: '0.133' })
+console.log( checkout )
+// {
+//     "id": "CHECKOUT_ID",
+//     "browser": "https://nano.to/id_CHECKOUT_ID",
+//     "json": "https://api.nano.to/checkout/CHECKOUT_ID",
+//     "check": "https://api.nano.to/check/CHECKOUT_ID",
+//     "address": "YOUR_ADDRESS",
+//     "qrcode": "data:image/png;base64"
+// }
 ```
 
 ```js
 var payment = await nano.waitFor(checkout)
+console.log( Ppyment )
+// {
+//     id: 'b06a8127',
+//     success: true,
+//     block: '3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
+//     json: 'https://api.nano.to/checkout/b06a8127',
+//     address: 'nano_37y6iq8m...xpb9jrcwhkmoxpo61f4o',
+//     browser: 'https://nanobrowse.com/block/3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
+//     amount: '0.133',
+//     amount_raw: '1330000000000000000000000'
+// }
 ```
 
 ```js
@@ -100,6 +121,14 @@ var payment = await nano.waitFor(checkout)
 await nano.balances()
 // get balance of specific address
 await nano.balance({ userId: 'johnDoe' })
+// {
+//     "balance": "325586539664609129644855132177",
+//     "pending": "2309372510769300000000000000000000",
+//     "receivable": "2309372510769300000000000000000000",
+//     "balance_nano": "0.32558653966460912964",
+//     "pending_nano": "2309.3725107693",
+//     "receivable_nano": "2309.3725107693"
+// }
 ```
 
 ```js
@@ -107,6 +136,15 @@ await nano.balance({ userId: 'johnDoe' })
 await nano.receive()
 // receive all for specific address
 await nano.receive({ userId: 'johnDoe' })
+// [
+//   {
+//     hash: '6147D4B0632E522E91D8DB48E0ACA0D96A19A7149E69EDEB24FE92C039EB5C8C',
+//     amount: '1000000000000000000000000',
+//     amount_nano: '0.000001000000000000000000000000',
+//     source: 'nano_37y6iq8m1zx9inwkkcgqh34kqsihzpjfwgp9jir8xpb9jrcwhkmoxpo61f4o',
+//     send_hash: 'A32EEDA7589290B49A2D724BB1F0ADB7A631C626447D8A29998858CA272714B4'
+//   }
+// ]
 ```
 
 ```js
@@ -124,10 +162,27 @@ await nano.send({ to: 1, from: 0, amount: 0.1 })
 
 // transfer between your own users
 await nano.send({ to: { userId: 'johnDoe' }, from: { userId: 'janeDoe' }, amount: 0.1 })
+
+// [
+//   {
+//     to: 'nano_1bank1q3q7x8rimo3hf6qu6ezq3fmtximyt8kggtfaosg8kyr51qsdkm8g45',
+//     from: 'nano_1komhob8amguaora5zkt4u3ybiz35he1g7puuxfqe5ywjc1tkf6pm1nqprp3',
+//     hash: 'BCF9F79EEE7A26010465DB587206AB57735079DDE2242DFC6B9300EE0D27955C',
+//     amount: '1000000000000000000000000',
+//     browser: 'https://nanobrowse.com/block/BCF9F79EEE7A26010465DB587206AB57735079DDE2242DFC6B9300EE0D27955C'
+//   }
+// ]
 ```
 
 ```js
 await nano.rpc({ action: "block_count" })
+
+// {
+//     "count": "199484966",
+//     "unchecked": "8",
+//     "cemented": "199484966",
+//     "node": "@humblenano-1"
+// }
 ```
 
 ## MANUAL SIGNING
