@@ -1,6 +1,6 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano Javascript Wallet (NPM)</h1>
+<h1 align="center">Nano JS Wallet</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
