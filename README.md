@@ -1,15 +1,10 @@
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-<h1 align="center">Nano JS Wallet</h1>
+<h1 align="center">Nano Javascript Wallet (NPM)</h1>
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-**LOCAL:**
-```html
-<script src="/wallet.js"></script>
-```
-
-**CDN:**
+**BROWSER:**
 ```html
 <script src="https://unpkg.com/@nano/wallet"></script>
 ```
@@ -115,6 +110,32 @@ nano.export()
 ## PUBLIC RPC
 
 ```js
+await nano.qrcode()
+```
+
+```js
+var checkout = await nano.checkout({ address: 0, amount: '0.133' })
+```
+
+```js
+var payment = await nano.confirm(checkout)
+```
+
+**Response:**
+```
+{
+  id: 'b06a8127',
+  success: true,
+  block: '3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
+  json: 'https://api.nano.to/checkout/b06a8127',
+  address: 'nano_37y6iq8m...xpb9jrcwhkmoxpo61f4o',
+  browser: 'https://nanobrowse.com/block/3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
+  amount: '0.133',
+  amount_raw: '1330000000000000000000000'
+}
+```
+
+```js
 await nano.process(signedBlock)
 ```
 
@@ -139,9 +160,11 @@ await nano.rpc({ action: "block_count" })
 > Build non-custodial Nano applications by persisting Wallets client-side. Using AES-256 encryption. The longer ```process.env.PASSWORD```, the more secure. 
 
 ```js
-nano.offline({ 
-    filename: 'aes_string.txt', 
-    password: window.prompt('PIN: ')
+nano.app({ 
+    node: 'https://rpc.nano.to',
+    rpc_key: 'RPC_API_KEY', // get free key @ rpc.nano.to
+    database: 'aes_string.txt', 
+    secret: 'SUPER_SECRET_PASSWORD'
 })
 
 console.log( nano.accounts() )
@@ -154,6 +177,29 @@ await nano.send({
 })
 ```
 
+## METADATA
+
+```js
+nano.app({ 
+    node: 'https://rpc.nano.to',
+    rpc_key: 'RPC_API_KEY', // get free key @ rpc.nano.to
+    database: 'aes_string.txt', 
+    secret: 'SUPER_SECRET_PASSWORD'
+})
+
+const userId = johnDoe
+
+console.log( nano.add_account({ userId }) )
+
+await nano.receive()
+
+await nano.send({ 
+    to: { userId }, 
+    from: 0, // your first account
+    amount: '0.133'
+})
+```
+
 ## IMPORT/EXPORT
 
 > JSON object, stringified and encrypted with AES-256. Looking for a UI? Try importing wallet into
@@ -163,7 +209,7 @@ await nano.send({
 
 nano.offline({ 
     filename: 'aes_string.txt', 
-    password: window.prompt('PIN: ')
+    password: process.env.PASSWORD
 })
 
 console.log( nano.export() )
@@ -190,7 +236,7 @@ AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aq
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### License
+## License
 
 MIT
 
@@ -203,6 +249,6 @@ MIT
 
 ![line](https://github.com/fwd/n2/raw/master/.github/line.png)
 
-### Stargazers
+## Stargazers
 
 [![Stargazers over time](https://starchart.cc/fwd/nano-js.svg)](https://github.com/fwd/nano-js)
