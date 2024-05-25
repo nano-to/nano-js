@@ -103,7 +103,7 @@ console.log( checkout )
 
 ```js
 var payment = await nano.waitFor(checkout)
-console.log( Ppyment )
+console.log( payment )
 // {
 //     id: 'b06a8127',
 //     success: true,
