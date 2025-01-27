@@ -1,9 +1,9 @@
 {
   "name": "@nano/wallet",
-  "version": "1.5.5",
+  "version": "1.5.6",
   "description": "Nano Javascript Wallet",
   "main": "nano.js",
-  "author": "nano2dev <hello@fwd.dev>",
+  "author": "nano2dev <support@nano.to>",
   "license": "MIT",
   "repository": {
     "type": "git",
