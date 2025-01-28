@@ -32,7 +32,7 @@ nano.app({
 ;(async () => {
 
 var payment = await nano.checkout({
-   amount: '0.00133'
+    amount: '0.00133'
 })
 
 console.log( payment.browser )
@@ -42,8 +42,8 @@ var success = await nano.waitFor(payment)
 var receive = await nano.receive()
 
 var send = await nano.send({
-to: 'YOUR_FRIENDS_ADDRESS',
-amount: '0.00133'
+    to: 'YOUR_FRIENDS_ADDRESS',
+    amount: '0.00133'
 })
 
 console.log( send )
