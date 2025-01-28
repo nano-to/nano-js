@@ -373,7 +373,7 @@ let nano = {
 				  headers: { 
 				  	'content-type': 'application/json', 
 				  	'authorization': this.rpc_key,
-				  	'nano-app': `@nano/wallet-1.5.5`,
+				  	'nano-app': `@nano/wallet-1.5.6`,
 				  }
 				};
 
