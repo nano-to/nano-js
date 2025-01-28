@@ -20,32 +20,35 @@ const nano = require('@nano/wallet')
 ## Basic Usage
 
 ```js
-nano.app({ 
+// npm install @nano/wallet
+const nano = require('@nano/wallet')
+
+nano.app({
     node: 'https://rpc.nano.to',
-    rpc_key: 'YOUR_RPC_KEY',
-    database: 'encrypted_wallets.txt',
+    database: 'encrypted_wallet.txt',
     secret: 'SUPER_SECRET_PASSWORD'
 })
 
-nano.add_account({ userId: 'JohnDoe' })
+;(async () => {
 
-var payment = await nano.checkout({ 
-    address: { userId: 'JohnDoe' }, 
-    amount: '0.133' 
+var payment = await nano.checkout({
+   amount: '0.00133'
 })
+
+console.log( payment.browser )
 
 var success = await nano.waitFor(payment)
 
-// {
-//     id: 'b06a8127',
-//     success: true,
-//     block: '3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
-//     json: 'https://api.nano.to/checkout/b06a8127',
-//     address: 'nano_37y6iq8m...xpb9jrcwhkmoxpo61f4o',
-//     browser: 'https://nanobrowse.com/block/3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
-//     amount: '0.133',
-//     amount_raw: '1330000000000000000000000'
-// }
+var receive = await nano.receive()
+
+var send = await nano.send({
+to: 'YOUR_FRIENDS_ADDRESS',
+amount: '0.00133'
+})
+
+console.log( send )
+
+})()
 ```
 
 
