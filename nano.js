@@ -1,4 +1,4 @@
-// NanoPay 1.5.6
+// NanoPay 1.5.7
 // January 27, 2025
 // https://github.com/fwd/nano-js
 // (c) @nano2dev <support@nano.to>
@@ -56,7 +56,7 @@ let nano = {
 
 	endpoint: 'https://rpc.nano.to',
 
-	tools: _NanocurrencyWeb.tools,
+	tools: _NanocurrencyWeb,
 
 	convert: _NanocurrencyWeb.tools.convert,
 
@@ -373,7 +373,7 @@ let nano = {
 				  headers: { 
 				  	'content-type': 'application/json', 
 				  	'authorization': this.rpc_key,
-				  	'nano-app': `@nano/wallet-1.5.6`,
+				  	'nano-app': `@nano/wallet-1.5.7`,
 				  }
 				};
 
