@@ -118,29 +118,86 @@ await nano.rpc({ action: "process", json_block: "true", subtype: "send", block: 
 ## CLI
 
 ```bash
-# Generate a new wallet
+npm install -g @nano/wallet
+```
+
+**Quick Start — 5 commands to send your first Nano:**
+
+```bash
+# 1. Create a wallet (encrypted locally)
+nano-wallet generate --secret mypassword
+# Wallet saved to ./nano-wallet.dat
+# Address: nano_3abc...
+# Mnemonic: word1 word2 word3 ...
+
+# 2. Get free Nano from a faucet
+#    Visit https://nanodrop.io and paste your address
+
+# 3. Receive the pending Nano
+nano-wallet receive --secret mypassword
+# Received 1 block(s):
+#   0.0001 NANO — hash: ABC123...
+
+# 4. Check your balance
+nano-wallet balance --secret mypassword
+
+# 5. Send Nano to anyone
+nano-wallet send nano_1to... 0.00005 --secret mypassword
+# Sent 0.00005 NANO
+#   to:   nano_1to...
+#   hash: DEF456...
+#   view: https://nanobrowse.com/block/DEF456...
+```
+
+**With environment variables (even cleaner):**
+
+```bash
+export NANO_SECRET=mypassword
+
 nano-wallet generate
+nano-wallet receive
+nano-wallet send nano_1to... 0.001
+nano-wallet balance
+```
 
-# Check balance
-nano-wallet balance nano_1abc...
+**Utility commands (no wallet needed):**
 
-# Get account info
-nano-wallet account_info nano_1abc...
+```bash
+# Convert units
+nano-wallet convert 1.5 NANO RAW
+nano-wallet convert 1000000000000000000000000000000 RAW NANO
 
-# Raw RPC call
+# Raw RPC calls
 nano-wallet rpc block_count
 nano-wallet rpc account_info account=nano_1abc...
 
-# Convert units
-nano-wallet convert 1.5 NANO RAW
+# Check any address (no wallet required)
+nano-wallet balance nano_1abc...
+nano-wallet account_info nano_1abc...
 
-# With custom RPC endpoint or API key
-nano-wallet rpc block_count --node https://rpc.nano.to --key YOUR_API_KEY
+# Encrypt / decrypt files
+nano-wallet encrypt myfile.json mypassword
+nano-wallet decrypt encrypted.txt mypassword
 
-# Environment variables
-export NANO_RPC=https://rpc.nano.to
-export NANO_RPC_KEY=YOUR_API_KEY
-nano-wallet rpc block_count
+# Sign a block manually
+nano-wallet sign '{"walletBalanceRaw":"1000...","toAddress":"nano_1..."}' PRIVATE_KEY
+```
+
+**All options:**
+
+```
+Options:
+  --secret <password>     Wallet password (encrypts/decrypts wallet file)
+  --wallet <file>         Wallet file path (default: ./nano-wallet.dat)
+  --node <url>            RPC endpoint (default: https://rpc.nano.to)
+  --key <api_key>         RPC API key for rpc.nano.to
+  --json                  Output raw JSON
+
+Environment Variables:
+  NANO_SECRET             Wallet password
+  NANO_WALLET             Wallet file path
+  NANO_RPC                RPC endpoint
+  NANO_RPC_KEY            API key for rpc.nano.to
 ```
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
