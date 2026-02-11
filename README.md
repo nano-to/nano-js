@@ -4,6 +4,16 @@
 
 <p align="center">Zero dependency Nano currency wallet for Browser, Node.js & CLI</p>
 
+<p align="center">
+  <a href="https://github.com/fwd/nano-js/actions/workflows/test.yml"><img src="https://github.com/fwd/nano-js/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+  <a href="https://www.npmjs.com/package/@nano/wallet"><img src="https://img.shields.io/npm/v/@nano/wallet.svg?color=blue" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@nano/wallet"><img src="https://img.shields.io/npm/dm/@nano/wallet.svg?color=blue" alt="npm downloads"></a>
+  <a href="https://github.com/fwd/nano-js"><img src="https://img.shields.io/badge/dependencies-0-brightgreen" alt="Zero Dependencies"></a>
+  <a href="https://github.com/fwd/nano-js/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/@nano/wallet.svg?color=blue" alt="License"></a>
+  <a href="https://github.com/fwd/nano-js"><img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen" alt="Node.js"></a>
+  <a href="https://github.com/fwd/nano-js"><img src="https://img.shields.io/badge/ESM%20%7C%20CJS%20%7C%20Browser-universal-blue" alt="Universal"></a>
+</p>
+
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
 ## Install
