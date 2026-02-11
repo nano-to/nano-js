@@ -88,7 +88,7 @@ describe('Module Loading', () => {
 
 		it('should have correct version', () => {
 			const pkg = require('../package.json');
-			assert.equal(pkg.version, '2.0.0');
+			assert.equal(pkg.version, '3.0.0');
 		});
 
 		it('should have zero dependencies', () => {
