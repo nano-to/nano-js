@@ -1,20 +1,45 @@
 {
   "name": "@nano/wallet",
-  "version": "1.5.7",
-  "description": "Nano Javascript Wallet",
+  "version": "2.0.0",
+  "description": "Enterprise Nano Wallet — Browser, Node.js & CLI. Zero external dependencies.",
   "main": "nano.js",
+  "module": "nano.mjs",
+  "exports": {
+    ".": {
+      "import": "./nano.mjs",
+      "require": "./nano.js",
+      "default": "./nano.js"
+    }
+  },
+  "bin": {
+    "nano-wallet": "./bin/nano-wallet.js"
+  },
+  "files": [
+    "nano.js",
+    "nano.mjs",
+    "bin/"
+  ],
   "author": "nano2dev <support@nano.to>",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git@github.com:fwd/nano-js.git"
   },
-  "dependencies": {
-    "aes256": "^1.1.0"
+  "homepage": "https://github.com/fwd/nano-js",
+  "bugs": {
+    "url": "https://github.com/fwd/nano-js/issues"
+  },
+  "scripts": {
+    "test": "node --test test/test-*.js test/test-esm.mjs",
+    "test:cjs": "node --test test/test-*.js",
+    "test:esm": "node --test test/test-esm.mjs",
+    "test:coverage": "node --test --experimental-test-coverage test/test-*.js test/test-esm.mjs"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "keywords": [
     "nano",
-    "web-app",
     "nanocurrency",
     "blockchain",
     "wallet",
@@ -23,10 +48,13 @@
     "xno",
     "web3",
     "offline",
-    "app",
+    "enterprise",
     "currency",
     "crypto",
     "nanoto",
-    "nano2dev"
+    "nano2dev",
+    "cli",
+    "browser",
+    "zero-dependency"
   ]
 }
