@@ -26,11 +26,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Run CJS tests
-        run: node --test test/test-generate.js test/test-encrypt.js test/test-convert.js test/test-sign.js test/test-module.js test/test-wallet.js test/test-rpc.js test/test-send.js test/test-cli.js test/test-cli-offline.js
+        run: node --test test/test-generate.js test/test-encrypt.js test/test-convert.js test/test-sign.js test/test-module.js test/test-wallet.js test/test-rpc.js test/test-send.js test/test-cli.js test/test-cli-offline.js test/test-legacy.js
 
       - name: Run ESM tests
         run: node --test test/test-esm.mjs
 
       - name: Run tests with coverage
         if: matrix.node-version == 22 && matrix.os == 'ubuntu-latest'
-        run: node --test --experimental-test-coverage test/test-generate.js test/test-encrypt.js test/test-convert.js test/test-sign.js test/test-module.js test/test-wallet.js test/test-rpc.js test/test-send.js test/test-cli.js test/test-cli-offline.js test/test-esm.mjs
+        run: node --test --experimental-test-coverage test/test-generate.js test/test-encrypt.js test/test-convert.js test/test-sign.js test/test-module.js test/test-wallet.js test/test-rpc.js test/test-send.js test/test-cli.js test/test-cli-offline.js test/test-legacy.js test/test-esm.mjs

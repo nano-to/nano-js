@@ -23,7 +23,28 @@ function encrypt(string, password) {
 	return 'AES-256::' + CryptoJS.AES.encrypt((typeof string === 'string' ? string : JSON.stringify(string)), password)
 }
 
+// Detect and decrypt legacy aes256 npm format (AES-256-CTR, hex_iv:hex_ciphertext)
+function isLegacyFormat(string) {
+	if (!string || typeof string !== 'string') return false
+	if (string.startsWith('AES-256::')) return false
+	return /^[0-9a-f]{32}:[0-9a-f]+$/i.test(string.trim())
+}
+
+function legacyDecrypt(string, password) {
+	if (typeof process !== 'object') throw new Error('Legacy wallet decryption requires Node.js')
+	var crypto = require('crypto')
+	var sha256 = crypto.createHash('sha256')
+	sha256.update(password)
+	var parts = string.trim().split(':')
+	var iv = Buffer.from(parts[0], 'hex')
+	var ciphertext = parts.slice(1).join(':')
+	var decipher = crypto.createDecipheriv('aes-256-ctr', sha256.digest(), iv)
+	var decrypted = decipher.update(ciphertext, 'hex', 'utf8') + decipher.final('utf8')
+	return JSON.parse(decrypted)
+}
+
 function decrypt(string, password) {
+	if (isLegacyFormat(string)) return legacyDecrypt(string, password)
 	var decrypted = CryptoJS.AES.decrypt(string.replace('AES-256::', ''), password)
 	return JSON.parse( decrypted.toString(CryptoJS.enc.Utf8) )
 }
@@ -106,6 +127,8 @@ let nano = {
 			}
 		}
 
+		// Browser: legacy format not used (browser always used CryptoJS)
+
 		// NodeJS
 		if (typeof process === 'object') {	
 			const fs = require('fs')
@@ -116,6 +139,13 @@ let nano = {
 				fs.writeFileSync(filename || `./NanoOffline.wallet`, string)
 			}
 			try {
+				// Auto-migrate legacy aes256 format to CryptoJS format
+				if (isLegacyFormat(string)) {
+					var wallet_data = legacyDecrypt(string, password)
+					string = encrypt(wallet_data, password)
+					fs.writeFileSync(filename || `./NanoOffline.wallet`, string)
+					console.log('@nano/wallet: Migrated wallet from legacy format to AES-256-CBC.')
+				}
 				this.wallets = decrypt(string, password).accounts.map(a => {
 					return { index: a.accountIndex, address: a.address, metadata: a.metadata || false }
 				})
@@ -181,8 +211,14 @@ let nano = {
 		} else {
 			if (typeof string !== 'string') return Error("Bad AES encrypted string.")
 			if (!password) return Error("Missing passphrase.")
-			this.aes256 = string
-			var wallets = this.decrypt(string, password)
+			// Auto-migrate legacy format
+			if (isLegacyFormat(string)) {
+				var wallets = legacyDecrypt(string, password)
+				this.aes256 = encrypt(wallets, password)
+			} else {
+				this.aes256 = string
+				var wallets = this.decrypt(string, password)
+			}
 		}
 		this.wallets = wallets.accounts.map(a => {
 			return { 
@@ -192,6 +228,33 @@ let nano = {
 			}
 		})
 		return this.wallets
+	},
+
+	migrate(config) {
+		if (!config) return Error("No config provided.")
+		var password = config.password || config.secret
+		var filename = config.filename || config.filepath || config.path || config.database
+		if (!password) return Error("No password provided.")
+		if (!filename && typeof process !== 'object') return Error("No filename provided.")
+		if (typeof process === 'object') {
+			var fs = require('fs')
+			try {
+				var string = fs.readFileSync(filename || './NanoOffline.wallet', 'utf8')
+			} catch(e) {
+				return Error("Wallet file not found: " + (filename || './NanoOffline.wallet'))
+			}
+			if (isLegacyFormat(string)) {
+				var data = legacyDecrypt(string, password)
+				var newString = encrypt(data, password)
+				fs.writeFileSync(filename || './NanoOffline.wallet', newString)
+				return { migrated: true, accounts: data.accounts.length, file: filename }
+			}
+			if (string.startsWith('AES-256::')) {
+				return { migrated: false, message: 'Wallet already uses new format.' }
+			}
+			return Error("Unknown wallet format.")
+		}
+		return Error("Migration is only needed for Node.js wallets from v1.x")
 	},
 
 	balances(account) {

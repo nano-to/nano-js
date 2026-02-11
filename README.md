@@ -364,6 +364,45 @@ This eliminates supply chain attack vectors while keeping the package fully self
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
+## Upgrading from v1.x
+
+v3 replaced the `aes256` npm dependency with the vendored CryptoJS library for encryption. **Existing v1.x wallets are automatically migrated** when loaded — no action is required in most cases.
+
+### Automatic Migration
+
+When `nano.offline()` or `nano.import()` detects a legacy wallet, it:
+1. Decrypts with the old format (AES-256-CTR)
+2. Re-encrypts with the new format (AES-256-CBC)
+3. Saves the updated file
+
+```js
+// Just load your wallet as usual — migration happens automatically
+nano.offline({ database: 'my_old_wallet.txt', secret: 'my_password' })
+// Console: @nano/wallet: Migrated wallet from legacy format to AES-256-CBC.
+```
+
+### Manual Migration
+
+```js
+// Migrate a wallet file without loading it
+nano.migrate({ database: 'my_old_wallet.txt', secret: 'my_password' })
+// { migrated: true, accounts: 1, file: 'my_old_wallet.txt' }
+```
+
+### CLI Migration
+
+```bash
+# Decrypt legacy wallet and inspect
+nano-wallet decrypt my_old_wallet.txt my_password
+
+# Re-encrypt in new format
+nano-wallet encrypt decrypted_output.json my_password > my_new_wallet.txt
+```
+
+> **Note:** Browser wallets are unaffected — they always used CryptoJS.
+
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
+
 ## GET FREE NANO
 
 - https://nanodrop.io/

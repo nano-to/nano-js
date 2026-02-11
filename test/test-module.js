@@ -17,7 +17,7 @@ describe('Module Loading', () => {
 				'aes256', 'wallets', 'rpc_key', 'endpoint', 'tools',
 				'convert', 'block', 'default_rep', 'known', 'encrypt',
 				'decrypt', 'accounts', 'save', 'offline', 'add_account',
-				'import', 'balances', 'pending', 'generate', 'findAccount',
+				'import', 'migrate', 'balances', 'pending', 'generate', 'findAccount',
 				'get', 'rpc', 'checkout', 'confirm', 'qrcode', 'pow',
 				'wallet', 'receive', 'send', 'sign', 'process', 'export',
 				'balance', 'app', 'waitFor'
