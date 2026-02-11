@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const path = require('path');
 const fs = require('fs');
 
+const LIVE = !process.env.CI;
+
 function freshNano() {
 	delete require.cache[require.resolve('../nano.js')];
 	return require('../nano.js');
@@ -37,7 +39,7 @@ describe('RPC & Network', () => {
 		});
 	});
 
-	describe('nano.rpc() - live (rpc.nano.to)', () => {
+	describe('nano.rpc() - live (rpc.nano.to)', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
 
 		it('should fetch block_count from rpc.nano.to', async () => {
 			const nano = freshNano();
@@ -64,7 +66,7 @@ describe('RPC & Network', () => {
 		});
 	});
 
-	describe('nano.get() - live', () => {
+	describe('nano.get() - live', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
 
 		it('should fetch known.json', async () => {
 			const nano = freshNano();

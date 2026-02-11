@@ -3,6 +3,8 @@ const assert = require('node:assert/strict');
 const { execSync } = require('child_process');
 const path = require('path');
 
+const LIVE = !process.env.CI;
+
 const CLI = path.join(__dirname, '..', 'bin', 'nano-wallet.js');
 
 function run(args, opts = {}) {
@@ -95,14 +97,14 @@ describe('CLI: nano-wallet', () => {
 
 	describe('rpc', () => {
 
-		it('should call block_count on rpc.nano.to', () => {
+		it('should call block_count on rpc.nano.to', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
 			const { stdout } = run('rpc block_count');
 			const result = JSON.parse(stdout);
 			assert.ok(result.count, 'should have count');
 			assert.ok(parseInt(result.count) > 100000000);
 		});
 
-		it('should pass key=value params', () => {
+		it('should pass key=value params', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
 			const { stdout } = run('rpc account_info account=nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd');
 			const result = JSON.parse(stdout);
 			// Should either have balance or error (account might not exist)
@@ -124,7 +126,7 @@ describe('CLI: nano-wallet', () => {
 			assert.ok(output.includes('address required'));
 		});
 
-		it('should get balance for a known address', () => {
+		it('should get balance for a known address', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
 			const { stdout } = run('balance nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd');
 			const result = JSON.parse(stdout);
 			assert.ok(result.balance !== undefined || result.error, 'should have balance or error');
