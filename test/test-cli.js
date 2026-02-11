@@ -2,10 +2,12 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const { execSync } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 const LIVE = !process.env.CI;
 
 const CLI = path.join(__dirname, '..', 'bin', 'nano-wallet.js');
+const TEST_DIR = path.join(__dirname, '.tmp-cli');
 
 function run(args, opts = {}) {
 	try {
@@ -32,6 +34,8 @@ describe('CLI: nano-wallet', () => {
 			assert.ok(stdout.includes('balance'), 'should mention balance');
 			assert.ok(stdout.includes('rpc'), 'should mention rpc');
 			assert.ok(stdout.includes('convert'), 'should mention convert');
+			assert.ok(stdout.includes('--secret'), 'should mention --secret option');
+			assert.ok(stdout.includes('NANO_SECRET'), 'should mention NANO_SECRET env var');
 		});
 
 		it('should show help with -h flag', () => {
@@ -52,22 +56,31 @@ describe('CLI: nano-wallet', () => {
 
 	describe('generate', () => {
 
-		it('should generate a wallet', () => {
-			const { stdout } = run('generate');
-			const wallet = JSON.parse(stdout);
-			assert.ok(wallet.mnemonic, 'should have mnemonic');
-			assert.ok(wallet.seed, 'should have seed');
-			assert.ok(wallet.accounts, 'should have accounts');
-			assert.ok(wallet.accounts[0].address.startsWith('nano_'), 'should have valid address');
-			assert.ok(wallet.accounts[0].private, 'should have private key');
+		it('should generate and save a wallet', () => {
+			fs.mkdirSync(TEST_DIR, { recursive: true });
+			const walletPath = path.join(TEST_DIR, 'gen-test.dat');
+			try { fs.unlinkSync(walletPath); } catch (e) {}
+			const { stdout } = run(`generate --secret testpw --wallet "${walletPath}"`);
+			assert.ok(stdout.includes('Wallet saved'), 'should confirm save');
+			assert.ok(stdout.includes('Address:'), 'should show address');
+			assert.ok(stdout.includes('Mnemonic:'), 'should show mnemonic');
+			assert.ok(fs.existsSync(walletPath), 'file should exist');
+			try { fs.unlinkSync(walletPath); } catch (e) {}
 		});
 
 		it('should generate unique wallets', () => {
-			const { stdout: s1 } = run('generate');
-			const { stdout: s2 } = run('generate');
-			const w1 = JSON.parse(s1);
-			const w2 = JSON.parse(s2);
-			assert.notEqual(w1.seed, w2.seed);
+			fs.mkdirSync(TEST_DIR, { recursive: true });
+			const p1 = path.join(TEST_DIR, 'unique1.dat');
+			const p2 = path.join(TEST_DIR, 'unique2.dat');
+			try { fs.unlinkSync(p1); } catch (e) {}
+			try { fs.unlinkSync(p2); } catch (e) {}
+			const { stdout: s1 } = run(`generate --secret pw --wallet "${p1}" --json`);
+			const { stdout: s2 } = run(`generate --secret pw --wallet "${p2}" --json`);
+			const j1 = JSON.parse(s1.slice(s1.indexOf('{')));
+			const j2 = JSON.parse(s2.slice(s2.indexOf('{')));
+			assert.notEqual(j1.seed, j2.seed);
+			try { fs.unlinkSync(p1); } catch (e) {}
+			try { fs.unlinkSync(p2); } catch (e) {}
 		});
 	});
 
@@ -107,7 +120,6 @@ describe('CLI: nano-wallet', () => {
 		it('should pass key=value params', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
 			const { stdout } = run('rpc account_info account=nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd');
 			const result = JSON.parse(stdout);
-			// Should either have balance or error (account might not exist)
 			assert.ok(result);
 		});
 
@@ -120,16 +132,15 @@ describe('CLI: nano-wallet', () => {
 
 	describe('balance', () => {
 
-		it('should show error on missing address', () => {
-			const { stdout, stderr } = run('balance');
-			const output = stderr || stdout;
-			assert.ok(output.includes('address required'));
-		});
-
-		it('should get balance for a known address', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
+		it('should get balance for an explicit address', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
 			const { stdout } = run('balance nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd');
 			const result = JSON.parse(stdout);
 			assert.ok(result.balance !== undefined || result.error, 'should have balance or error');
+		});
+
+		it('should require --secret when no address given', () => {
+			const { stdout } = run('balance');
+			assert.ok(stdout.includes('wallet password required') || stdout.includes('NANO_SECRET'));
 		});
 	});
 

@@ -4,16 +4,15 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-const LIVE = !process.env.CI;
-
 const CLI = path.join(__dirname, '..', 'bin', 'nano-wallet.js');
 const TEST_DIR = path.join(__dirname, '.tmp-cli');
 
-function run(args) {
+function run(args, opts = {}) {
 	try {
 		const result = execSync(`node "${CLI}" ${args} 2>&1`, {
 			encoding: 'utf8',
-			timeout: 15000
+			timeout: 15000,
+			...opts
 		});
 		return { stdout: result, exitCode: 0 };
 	} catch (e) {
@@ -70,19 +69,38 @@ describe('CLI: offline commands', () => {
 		});
 	});
 
-	describe('account_info', () => {
+	describe('generate', () => {
 
-		it('should show error on missing address', () => {
-			const { stdout } = run('account_info');
-			assert.ok(stdout.includes('address required'));
+		it('should require --secret', () => {
+			const { stdout } = run('generate');
+			assert.ok(stdout.includes('password required'));
 		});
-	});
 
-	describe('receive', () => {
+		it('should generate and save wallet file', () => {
+			const walletPath = path.join(TEST_DIR, 'test-wallet.dat');
+			const { stdout } = run(`generate --secret testpw --wallet "${walletPath}"`);
+			assert.ok(stdout.includes('Wallet saved'), 'should confirm save');
+			assert.ok(stdout.includes('Address:'), 'should show address');
+			assert.ok(stdout.includes('Mnemonic:'), 'should show mnemonic');
+			assert.ok(fs.existsSync(walletPath), 'wallet file should exist');
+		});
 
-		it('should show error on missing address', () => {
-			const { stdout } = run('receive');
-			assert.ok(stdout.includes('address required') || stdout.includes('Usage'));
+		it('should refuse to overwrite existing wallet', () => {
+			const walletPath = path.join(TEST_DIR, 'existing-wallet.dat');
+			run(`generate --secret testpw --wallet "${walletPath}"`);
+			const { stdout } = run(`generate --secret testpw --wallet "${walletPath}"`);
+			assert.ok(stdout.includes('already exists'));
+		});
+
+		it('should output JSON with --json flag', () => {
+			const walletPath = path.join(TEST_DIR, 'json-wallet.dat');
+			const { stdout } = run(`generate --secret testpw --wallet "${walletPath}" --json`);
+			assert.ok(stdout.includes('Wallet saved'));
+			// JSON output comes after the human-readable lines
+			const jsonStart = stdout.indexOf('{');
+			const json = JSON.parse(stdout.slice(jsonStart));
+			assert.ok(json.mnemonic, 'should have mnemonic');
+			assert.ok(json.accounts[0].address.startsWith('nano_'), 'should have address');
 		});
 	});
 
@@ -98,22 +116,45 @@ describe('CLI: offline commands', () => {
 			assert.ok(stdout.includes('Usage'));
 		});
 
-		it('should show error when private key missing', () => {
+		it('should show error when wallet password missing', () => {
 			const { stdout } = run('send nano_1abc 0.001');
-			assert.ok(stdout.includes('private key required'));
+			assert.ok(stdout.includes('wallet password required'));
 		});
 
-		it('should show error when --from missing', () => {
-			const { stdout } = run('send nano_1abc 0.001 --pk deadbeef');
-			assert.ok(stdout.includes('source address required'));
+		it('should show error when wallet file not found', () => {
+			const { stdout } = run('send nano_1abc 0.001 --secret testpw --wallet /tmp/nonexistent.dat');
+			assert.ok(stdout.includes('wallet file not found'));
 		});
 	});
 
-	describe('receive with --pk', () => {
+	describe('receive', () => {
 
-		it('should show pending blocks without --pk', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
-			const { stdout } = run('receive nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd');
-			// Without --pk, it should either show receivable blocks or an empty result
+		it('should show error when wallet password missing', () => {
+			const { stdout } = run('receive');
+			assert.ok(stdout.includes('wallet password required'));
+		});
+
+		it('should show error when wallet file not found', () => {
+			const { stdout } = run('receive --secret testpw --wallet /tmp/nonexistent.dat');
+			assert.ok(stdout.includes('wallet file not found'));
+		});
+	});
+
+	describe('balance / account_info with wallet', () => {
+
+		it('should load address from wallet for balance', () => {
+			const walletPath = path.join(TEST_DIR, 'balance-wallet.dat');
+			run(`generate --secret testpw --wallet "${walletPath}"`);
+			// balance without explicit address should load from wallet
+			// It will error on RPC (no network in test), but should not error on "missing address"
+			const { stdout } = run(`balance --secret testpw --wallet "${walletPath}"`);
+			// Should attempt an RPC call (may fail), but should NOT show "address required"
+			assert.ok(!stdout.includes('address required'), 'should not require address when wallet loaded');
+		});
+
+		it('should still accept explicit address for balance', () => {
+			const { stdout } = run('balance nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd');
+			// May succeed or fail depending on network, but should not ask for wallet
 			assert.ok(stdout, 'should produce output');
 		});
 	});
