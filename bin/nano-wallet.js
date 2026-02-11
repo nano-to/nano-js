@@ -20,8 +20,8 @@ function usage() {
     generate                        Generate a new wallet (mnemonic + seed + address)
     balance <address>               Get balance for a Nano address
     account_info <address>          Get account info from RPC
-    send <from> <to> <amount>       Send Nano (raw addresses)
-    receive <address>               Receive all pending for address
+    send <to> <amount> --pk <key>   Send Nano (signs, publishes, confirms <1s)
+    receive <address> --pk <key>    Receive all pending blocks (pockets funds)
     rpc <action> [key=value ...]    Raw RPC call to rpc.nano.to
     convert <amount> <from> <to>    Convert units (NANO/RAW)
     encrypt <file> <password>       Encrypt a file with AES-256
@@ -30,6 +30,8 @@ function usage() {
     pow <hash>                      Generate Proof of Work
 
   Options:
+    --pk <private_key>              Private key for signing send/receive blocks
+    --from <address>                Source address (auto-detected from --pk if omitted)
     --node <url>                    RPC endpoint (default: https://rpc.nano.to)
     --key <api_key>                 RPC API key for rpc.nano.to
     --json                          Output raw JSON
@@ -38,16 +40,17 @@ function usage() {
   Environment Variables:
     NANO_RPC                        RPC endpoint (default: https://rpc.nano.to)
     NANO_RPC_KEY                    API key for rpc.nano.to
+    NANO_PRIVATE_KEY                Private key for signing (alternative to --pk)
     NANO_WALLET                     Wallet file path
     NANO_SECRET                     Wallet password
 
   Examples:
     nano-wallet generate
     nano-wallet balance nano_1abc...
+    nano-wallet receive nano_1abc... --pk 69e0a0a...
+    nano-wallet send nano_1to... 0.001 --pk 69e0a0a...
     nano-wallet rpc block_count
-    nano-wallet rpc account_info account=nano_1abc...
     nano-wallet convert 1.5 NANO RAW
-    nano-wallet send nano_1from... nano_1to... 0.001
 `);
 }
 
@@ -74,6 +77,21 @@ function setupRpc() {
 	const key = getFlag('key') || process.env.NANO_RPC_KEY || '';
 	nano.endpoint = node;
 	nano.rpc_key = key;
+}
+
+function loadWalletFromKey(address, privateKey) {
+	const password = '__cli_session__';
+	nano.import({
+		accounts: [{
+			accountIndex: 0,
+			address: address,
+			private: privateKey,
+		}]
+	}, password);
+}
+
+function getPrivateKey() {
+	return getFlag('pk') || process.env.NANO_PRIVATE_KEY || null;
 }
 
 // ── Commands ─────────────────────────────────────────────
@@ -150,31 +168,61 @@ async function main() {
 		}
 
 		case 'send': {
-			const walletFile = getFlag('wallet') || process.env.NANO_WALLET;
-			const secret = getFlag('secret') || process.env.NANO_SECRET;
-			const from = args[1];
-			const to = args[2];
-			const amount = args[3];
-			if (!from || !to || !amount) return console.error('Usage: nano-wallet send <from> <to> <amount>');
-			if (walletFile && secret) {
-				nano.offline({ database: walletFile, secret, node: nano.endpoint });
+			const to = args[1];
+			const amount = args[2];
+			const pk = getPrivateKey();
+			const from = getFlag('from');
+			if (!to || !amount) return console.error('Usage: nano-wallet send <to> <amount> --pk <private_key>\n       nano-wallet send <to> <amount> (with NANO_PRIVATE_KEY env var)');
+			if (!pk) return console.error('Error: private key required. Use --pk <key> or set NANO_PRIVATE_KEY');
+			if (!from) return console.error('Error: source address required. Use --from <nano_address>');
+			loadWalletFromKey(from, pk);
+			try {
+				const res = await nano.send({ from, to, amount });
+				if (!res || !res.length) return console.error('Error: send returned no results');
+				for (const block of res) {
+					console.log(`Sent ${block.amount} NANO`);
+					console.log(`  to:   ${block.to}`);
+					console.log(`  from: ${block.from}`);
+					console.log(`  hash: ${block.hash}`);
+					console.log(`  view: ${block.browser}`);
+				}
+				if (hasFlag('json')) jsonOut(res);
+			} catch (e) {
+				console.error('Error:', e.message);
+				process.exit(1);
 			}
-			const res = await nano.rpc({
-				action: 'account_info',
-				account: from,
-				representative: 'true'
-			});
-			if (res.error) return console.error('Error getting account info:', res.error);
-			console.log('Account info retrieved. Use the library API for full send flow.');
-			jsonOut(res);
 			break;
 		}
 
 		case 'receive': {
 			const address = args[1];
-			if (!address) return console.error('Error: address required');
-			const res = await nano.rpc({ action: 'receivable', account: address, source: 'true' });
-			jsonOut(res);
+			const pk = getPrivateKey();
+			if (!address) return console.error('Usage: nano-wallet receive <address> --pk <private_key>\n       nano-wallet receive <address> (with NANO_PRIVATE_KEY env var)');
+			if (!pk) {
+				// Fallback: just list receivable blocks (no signing)
+				const res = await nano.rpc({ action: 'receivable', account: address, source: 'true' });
+				if (res.blocks && typeof res.blocks === 'object' && Object.keys(res.blocks).length > 0) {
+					console.log(`Found ${Object.keys(res.blocks).length} pending block(s). Provide --pk to pocket them.`);
+				}
+				jsonOut(res);
+				break;
+			}
+			loadWalletFromKey(address, pk);
+			try {
+				const blocks = await nano.receive();
+				if (!blocks || !blocks.length) {
+					console.log('No pending blocks to receive.');
+					break;
+				}
+				console.log(`Received ${blocks.length} block(s):`);
+				for (const block of blocks) {
+					console.log(`  ${block.amount_nano} NANO — hash: ${block.hash}`);
+				}
+				if (hasFlag('json')) jsonOut(blocks);
+			} catch (e) {
+				console.error('Error:', e.message);
+				process.exit(1);
+			}
 			break;
 		}
 

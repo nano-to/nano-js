@@ -4,6 +4,8 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
+const LIVE = !process.env.CI;
+
 const CLI = path.join(__dirname, '..', 'bin', 'nano-wallet.js');
 const TEST_DIR = path.join(__dirname, '.tmp-cli');
 
@@ -80,7 +82,7 @@ describe('CLI: offline commands', () => {
 
 		it('should show error on missing address', () => {
 			const { stdout } = run('receive');
-			assert.ok(stdout.includes('address required'));
+			assert.ok(stdout.includes('address required') || stdout.includes('Usage'));
 		});
 	});
 
@@ -91,9 +93,28 @@ describe('CLI: offline commands', () => {
 			assert.ok(stdout.includes('Usage'));
 		});
 
-		it('should show error with partial args', () => {
+		it('should show error when only to address provided', () => {
 			const { stdout } = run('send nano_1abc');
 			assert.ok(stdout.includes('Usage'));
+		});
+
+		it('should show error when private key missing', () => {
+			const { stdout } = run('send nano_1abc 0.001');
+			assert.ok(stdout.includes('private key required'));
+		});
+
+		it('should show error when --from missing', () => {
+			const { stdout } = run('send nano_1abc 0.001 --pk deadbeef');
+			assert.ok(stdout.includes('source address required'));
+		});
+	});
+
+	describe('receive with --pk', () => {
+
+		it('should show pending blocks without --pk', { skip: !LIVE && 'Skipped in CI (rate limits)' }, () => {
+			const { stdout } = run('receive nano_1natrium1o3z5519ifou7xii8crpxpk8y65qmkih8e8bpsjri651oza8imdd');
+			// Without --pk, it should either show receivable blocks or an empty result
+			assert.ok(stdout, 'should produce output');
 		});
 	});
 });
