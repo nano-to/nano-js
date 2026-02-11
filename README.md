@@ -1,60 +1,151 @@
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
-<h1 align="center">Nano JS Wallet</h1>
+<h1 align="center">Enterprise Nano Wallet</h1>
+
+<p align="center">Zero dependency Nano currency wallet for Browser, Node.js & CLI</p>
+
+<p align="center">
+  <a href="https://github.com/fwd/nano-js/actions/workflows/test.yml"><img src="https://github.com/fwd/nano-js/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
+  <a href="https://www.npmjs.com/package/@nano/wallet"><img src="https://img.shields.io/npm/v/@nano/wallet.svg?color=blue" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@nano/wallet"><img src="https://img.shields.io/npm/dm/@nano/wallet.svg?color=blue" alt="npm downloads"></a>
+  <a href="https://github.com/fwd/nano-js"><img src="https://img.shields.io/badge/dependencies-0-brightgreen" alt="Zero Dependencies"></a>
+  <a href="https://github.com/fwd/nano-js/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/@nano/wallet.svg?color=blue" alt="License"></a>
+  <a href="https://github.com/fwd/nano-js"><img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen" alt="Node.js"></a>
+  <a href="https://github.com/fwd/nano-js"><img src="https://img.shields.io/badge/ESM%20%7C%20CJS%20%7C%20Browser-universal-blue" alt="Universal"></a>
+</p>
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
-**BROWSER:**
+## Install
+
+**NPM:**
+```bash
+npm install @nano/wallet
+```
+
+**Browser (CDN):**
 ```html
 <script src="https://unpkg.com/@nano/wallet"></script>
 ```
 
-**NPM:**
+**CLI (global):**
+```bash
+npm install -g @nano/wallet
+```
+
+## Import
+
 ```js
-// npm install @nano/wallet
+// CommonJS (require)
 const nano = require('@nano/wallet')
+
+// ESM (import)
+import nano from '@nano/wallet'
+
+// ESM named imports
+import { generate, convert, send, receive } from '@nano/wallet'
+
+// Browser (global)
+// <script src="https://unpkg.com/@nano/wallet"></script>
+// Available as window.nano
 ```
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
-## Basic Usage
+## Quick Start
 
 ```js
-// npm install @nano/wallet
 const nano = require('@nano/wallet')
 
 nano.app({
     node: 'https://rpc.nano.to',
+    rpc_key: 'YOUR_API_KEY', // free key @ rpc.nano.to
     database: 'encrypted_wallet.txt',
     secret: 'SUPER_SECRET_PASSWORD'
 })
 
 ;(async () => {
 
-var payment = await nano.checkout({
-    amount: '0.00133'
-})
+    // Create checkout
+    var payment = await nano.checkout({ amount: '0.00133' })
 
-console.log( payment.browser )
+    console.log(payment.browser)
 
-var success = await nano.waitFor(payment)
+    // Wait for payment
+    var success = await nano.waitFor(payment)
 
-var receive = await nano.receive()
+    // Receive pending
+    var receive = await nano.receive()
 
-var send = await nano.send({
-    to: 'YOUR_FRIENDS_ADDRESS',
-    amount: '0.00133'
-})
+    // Send payment
+    var send = await nano.send({
+        to: 'YOUR_FRIENDS_ADDRESS',
+        amount: '0.00133'
+    })
 
-console.log( send )
+    console.log(send)
 
 })()
 ```
 
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
+
+## RPC (rpc.nano.to)
+
+This wallet works seamlessly with [rpc.nano.to](https://rpc.nano.to), a free and paid RPC-as-a-Service for the Nano network.
+
+```js
+// Free RPC
+nano.app({ node: 'https://rpc.nano.to' })
+
+// With API key (higher limits)
+nano.app({
+    node: 'https://rpc.nano.to',
+    rpc_key: 'YOUR_API_KEY'
+})
+
+// Raw RPC calls
+await nano.rpc({ action: "block_count" })
+// { "count": "215474654", "unchecked": "4", "cemented": "215474654" }
+
+await nano.rpc({ action: "account_info", account: "nano_1abc..." })
+
+await nano.rpc({ action: "process", json_block: "true", subtype: "send", block: signedBlock })
+```
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
-## OFFLINE API
+## CLI
+
+```bash
+# Generate a new wallet
+nano-wallet generate
+
+# Check balance
+nano-wallet balance nano_1abc...
+
+# Get account info
+nano-wallet account_info nano_1abc...
+
+# Raw RPC call
+nano-wallet rpc block_count
+nano-wallet rpc account_info account=nano_1abc...
+
+# Convert units
+nano-wallet convert 1.5 NANO RAW
+
+# With custom RPC endpoint or API key
+nano-wallet rpc block_count --node https://rpc.nano.to --key YOUR_API_KEY
+
+# Environment variables
+export NANO_RPC=https://rpc.nano.to
+export NANO_RPC_KEY=YOUR_API_KEY
+nano-wallet rpc block_count
+```
+
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
+
+## Offline API
 
 ```js
 nano.generate()
@@ -84,44 +175,58 @@ nano.decrypt('any_string', process.env.PASSWORD) // UTF-8
 nano.export()
 ```
 
-## PUBLIC RPC
+## Wallet Management
+
+> Build non-custodial Nano applications with AES-256 encrypted wallet persistence.
 
 ```js
-var qrcode = await nano.qrcode()
-console.log( qrcode ) // base64:png..
+nano.app({ 
+    node: 'https://rpc.nano.to',
+    rpc_key: 'RPC_API_KEY', // get free key @ rpc.nano.to
+    database: 'aes_string.txt', 
+    secret: 'SUPER_SECRET_PASSWORD'
+})
+
+console.log( nano.accounts() )
+
+await nano.receive()
+
+await nano.send({ to: '@faucet', amount: 0.001 })
 ```
 
-```js
-var checkout = await nano.checkout({ address: 0, amount: '0.133' })
-console.log( checkout )
-// {
-//     "id": "CHECKOUT_ID",
-//     "browser": "https://nano.to/id_CHECKOUT_ID",
-//     "json": "https://api.nano.to/checkout/CHECKOUT_ID",
-//     "check": "https://api.nano.to/check/CHECKOUT_ID",
-//     "address": "YOUR_ADDRESS",
-//     "qrcode": "data:image/png;base64"
-// }
-```
+## Multi-Account (Metadata)
 
 ```js
-var payment = await nano.waitFor(checkout)
-console.log( payment )
-// {
-//     id: 'b06a8127',
-//     success: true,
-//     block: '3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
-//     json: 'https://api.nano.to/checkout/b06a8127',
-//     address: 'nano_37y6iq8m...xpb9jrcwhkmoxpo61f4o',
-//     browser: 'https://nanobrowse.com/block/3C0D9A50649C6BE04263...A773C321EDD2603EFEB',
-//     amount: '0.133',
-//     amount_raw: '1330000000000000000000000'
-// }
+nano.app({ 
+    node: 'https://rpc.nano.to',
+    rpc_key: 'RPC_API_KEY',
+    database: 'aes_string.txt', 
+    secret: 'SUPER_SECRET_PASSWORD'
+})
+
+const user = { userId: 'JoeDoe' }
+
+console.log( nano.add_account(user) )
+
+await nano.receive(user)
+
+var balance = await nano.balance(user)
+
+console.log( balance )
+
+await nano.send({ 
+    to: user, 
+    from: 0,
+    amount: '0.0000133'
+})
 ```
+
+## Balances
 
 ```js
 // get all balances
 await nano.balances()
+
 // get balance of specific address
 await nano.balance({ userId: 'johnDoe' })
 // {
@@ -134,21 +239,7 @@ await nano.balance({ userId: 'johnDoe' })
 // }
 ```
 
-```js
-// receive all
-await nano.receive()
-// receive all for specific address
-await nano.receive({ userId: 'johnDoe' })
-// [
-//   {
-//     hash: '6147D4B0632E522E91D8DB48E0ACA0D96A19A7149E69EDEB24FE92C039EB5C8C',
-//     amount: '1000000000000000000000000',
-//     amount_nano: '0.000001000000000000000000000000',
-//     source: 'nano_37y6iq8m1zx9inwkkcgqh34kqsihzpjfwgp9jir8xpb9jrcwhkmoxpo61f4o',
-//     send_hash: 'A32EEDA7589290B49A2D724BB1F0ADB7A631C626447D8A29998858CA272714B4'
-//   }
-// ]
-```
+## Send
 
 ```js
 // send to globally known accounts
@@ -165,30 +256,44 @@ await nano.send({ to: 1, from: 0, amount: 0.1 })
 
 // transfer between your own users
 await nano.send({ to: { userId: 'johnDoe' }, from: { userId: 'janeDoe' }, amount: 0.1 })
-
-// [
-//   {
-//     to: 'nano_1bank1q3q7x8rimo3hf6qu6ezq3fmtximyt8kggtfaosg8kyr51qsdkm8g45',
-//     from: 'nano_1komhob8amguaora5zkt4u3ybiz35he1g7puuxfqe5ywjc1tkf6pm1nqprp3',
-//     hash: 'BCF9F79EEE7A26010465DB587206AB57735079DDE2242DFC6B9300EE0D27955C',
-//     amount: '1000000000000000000000000',
-//     browser: 'https://nanobrowse.com/block/BCF9F79EEE7A26010465DB587206AB57735079DDE2242DFC6B9300EE0D27955C'
-//   }
-// ]
 ```
 
-```js
-await nano.rpc({ action: "block_count" })
+## Receive
 
+```js
+// receive all
+await nano.receive()
+
+// receive all for specific address
+await nano.receive({ userId: 'johnDoe' })
+```
+
+## Checkout
+
+```js
+var checkout = await nano.checkout({ address: 0, amount: '0.133' })
+console.log( checkout )
 // {
-//     "count": "199484966",
-//     "unchecked": "8",
-//     "cemented": "199484966",
-//     "node": "@humblenano-1"
+//     "id": "CHECKOUT_ID",
+//     "browser": "https://nano.to/id_CHECKOUT_ID",
+//     "json": "https://api.nano.to/checkout/CHECKOUT_ID",
+//     "check": "https://api.nano.to/check/CHECKOUT_ID",
+//     "address": "YOUR_ADDRESS",
+//     "qrcode": "data:image/png;base64"
+// }
+
+var payment = await nano.waitFor(checkout)
+console.log( payment )
+// {
+//     id: 'b06a8127',
+//     success: true,
+//     block: '3C0D9A50649C6BE...',
+//     amount: '0.133',
+//     amount_raw: '1330000000000000000000000'
 // }
 ```
 
-## MANUAL SIGNING
+## Manual Signing
 
 **SEND**
 
@@ -225,7 +330,7 @@ var hash = await nano.process( receive )
 var change_rep = nano.sign({
     walletBalanceRaw: '3000000000000000000000000000000',
     address: 'nano_3igf8hd4sjshoibbbkeitmgkp1o6ug4xads43j6e4gqkj5xk5o83j8ja9php',
-    representativeAddress: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs', // new rep
+    representativeAddress: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs',
     frontier: '128106287002E595F479ACD615C818117FCB3860EC112670557A2467386249D4',
     work: '0000000000000000',
 }, process.env.PRIVATE_KEY) 
@@ -233,99 +338,68 @@ var change_rep = nano.sign({
 var hash = await nano.process( change_rep )
 ```
 
-**SIGNED**
-
-```
-{
-  type: 'state',
-  account: 'nano_3kyb49tqpt39ekc49kbej51ecsjqnimnzw1swxz4boix4ctm93w517umuiw8',
-  previous: '92BA74A7D6DC7557F3EDA95ADC6341D51AC777A0A6FF0688A5C492AB2B2CB40D',
-  representative: 'nano_1stofnrxuz3cai7ze75o174bpm7scwj9jn3nxsn8ntzg784jf1gzn1jjdkou',
-  balance: '25618869000000000000000000000000',
-  link: 'CBC911F57B6827649423C92C88C0C56637A4274FF019E77E24D61D12B5338783',
-  signature: 'd5dd2a53becfc8c3fd17ddee2aba651ef6ac28571b66a4dfb2f4820c7d04d235d226d1fb176eb3958bbbfb9145663a0b4ffffd59cfc4b23af24a2af5f51e6a0e',
-  work: ''
-}
-```
-
-## LOCALSTORAGE
-
-> Build non-custodial Nano applications by persisting Wallets client-side. Using AES-256 encryption. The longer ```SUPER_SECRET_PASSWORD```, the more secure. 
-
-```js
-nano.app({ 
-    node: 'https://rpc.nano.to',
-    rpc_key: 'RPC_API_KEY', // get free key @ rpc.nano.to
-    database: 'aes_string.txt', 
-    secret: 'SUPER_SECRET_PASSWORD'
-})
-
-console.log( nano.accounts() )
-
-await nano.receive()
-
-await nano.send({ to: '@faucet', amount: 0.001 })
-```
-
-## METADATA
-
-```js
-nano.app({ 
-    node: 'https://rpc.nano.to',
-    rpc_key: 'RPC_API_KEY', // get free key @ rpc.nano.to
-    database: 'aes_string.txt', 
-    secret: 'SUPER_SECRET_PASSWORD'
-})
-
-const user = { userId: 'JoeDoe' }
-
-console.log( nano.add_account(user) )
-
-await nano.receive(user)
-
-var balance = await nano.balance(user)
-
-console.log( balance )
-
-await nano.send({ 
-    to: user, 
-    from: 0, // wallet with index of 0
-    amount: '0.0000133'
-})
-```
-
-## EXPORT WALLET
+## Export Wallet
 
 > JSON object, stringified and encrypted with AES-256
 
 ```js
-
 nano.offline({ 
     filename: 'aes_string.txt', 
     password: process.env.PASSWORD
 })
 
 console.log( nano.export() )
-
 ```
 
-**Encrypted:**
-```text
-AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aqEfmoR9LwoBbKKxGxrAzOwf2SvNcmvwdAsgAkmieOwVOCDbob46yMN7TZUnRDIOSNq3tEozfaf9vbH3SdRZgkCukblN5m+lA0yxKSDaPiczANZMgP6NdtjMNo2SHVVmJhWgz4i8MDCfk6ZeZChxL6UyuqR0hKyY0wEtXHndTapQuVYQ/Oyvb9ccNfqvgxirmYERiXPEFi/vndPwmS2AEGih7fWndSARkXtLgG3xTI2tWYvoMIef4ZouiFtOhfOXuiab0OteoQmlmW6C03Nb4e2SZrFyyIF9wWkXDcpHSqPBUJJzOPF/p8c8fyEbhpe/iEs6pObrLOSoh8S+t016ZF3ARntCeBtMVZCiwVS94Ru+zGcDVxJiny/oBywznxPlkCAnf4m5Tn6E9LpeLdi14feuGTCerGYW3MYM3jJbqUGRuaGw6OB1hRcKtpe3QLR/lmnw1jRkpux6K+5P2p4GsacK/l0Ul5caGnCeQWeDll3q8DIFD4Qhvp1qnawhMvpYu/RCwVTGvLFlkhYS/DruJEQuVErHK8bhfAvPZaF3Eyw5qzCoUaukcl2S1i5HzPsMgcxSfRxCmCH37bKd8YfE3wiC+7AatsN1QOvzzY=
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
+
+## Zero Dependencies
+
+This package has **zero external npm dependencies**. All cryptographic libraries are vendored and sandboxed directly in the source:
+
+- [nanocurrency-web-js](https://github.com/numsu/nanocurrency-web-js) — Wallet generation, block signing, Ed25519, Blake2b
+- [crypto-js](https://github.com/brix/crypto-js) — AES-256 encryption (unified across Browser & Node.js)
+
+This eliminates supply chain attack vectors while keeping the package fully self-contained.
+
+![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
+
+## Upgrading from v1.x
+
+v3 replaced the `aes256` npm dependency with the vendored CryptoJS library for encryption. **Existing v1.x wallets are automatically migrated** when loaded — no action is required in most cases.
+
+### Automatic Migration
+
+When `nano.offline()` or `nano.import()` detects a legacy wallet, it:
+1. Decrypts with the old format (AES-256-CTR)
+2. Re-encrypts with the new format (AES-256-CBC)
+3. Saves the updated file
+
+```js
+// Just load your wallet as usual — migration happens automatically
+nano.offline({ database: 'my_old_wallet.txt', secret: 'my_password' })
+// Console: @nano/wallet: Migrated wallet from legacy format to AES-256-CBC.
 ```
 
-**Decrypted:**
-```json
-{
-    "mnemonic": "body hire team image luxury banana panther tiny clog beauty only cover frost tourist process grit unlock rice",
-    "seed": "7202a6eb69fa3a465539648c35e55ad7e295f25c9a7a340f82b3d3e338f....33a4ee0939cd44a7abb1afe83ff2170cae4",
-    "accounts": [{
-        "accountIndex": 0,
-        "private": "d7cace49b3a20f83.....58cb61b8f2ef84f3",
-        "address": "nano_1h4ymsbu....3wotjakm1copzy56bd8na"
-    }]
-}
+### Manual Migration
+
+```js
+// Migrate a wallet file without loading it
+nano.migrate({ database: 'my_old_wallet.txt', secret: 'my_password' })
+// { migrated: true, accounts: 1, file: 'my_old_wallet.txt' }
 ```
+
+### CLI Migration
+
+```bash
+# Decrypt legacy wallet and inspect
+nano-wallet decrypt my_old_wallet.txt my_password
+
+# Re-encrypt in new format
+nano-wallet encrypt decrypted_output.json my_password > my_new_wallet.txt
+```
+
+> **Note:** Browser wallets are unaffected — they always used CryptoJS.
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
@@ -333,7 +407,6 @@ AES-256::U2FsdGVkX1+jBdpxz6hMNOqWmidZQPqHjOHq7sGi94U0dMuPZsDfPRGVVDVQH5ZfvXku6aq
 
 - https://nanodrop.io/
 - https://freenanofaucet.com/
-- https://faucet.prussia.dev/nano
 - https://getnano.ovh/faucet
 
 ## License
