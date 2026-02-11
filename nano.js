@@ -1,4 +1,4 @@
-// @nano/wallet 3.0.0
+// @nano/wallet 3.1.0
 // https://github.com/fwd/nano-js
 // (c) @nano2dev <support@nano.to>
 // Released under MIT License
@@ -418,7 +418,7 @@ let nano = {
 				  headers: { 
 				  	'content-type': 'application/json', 
 				  	'authorization': this.rpc_key,
-				  	'nano-app': `@nano/wallet-3.0.0`,
+				  	'nano-app': `@nano/wallet-3.1.0`,
 				  }
 				};
 

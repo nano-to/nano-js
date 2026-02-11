@@ -1,6 +1,6 @@
 {
   "name": "@nano/wallet",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Enterprise Nano Wallet — Browser, Node.js & CLI. Zero external dependencies.",
   "main": "nano.js",
   "module": "nano.mjs",
