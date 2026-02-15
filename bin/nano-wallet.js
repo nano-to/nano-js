@@ -25,6 +25,7 @@ function usage() {
     receive                         Receive all pending blocks (pockets funds)
     send <to> <amount>              Send Nano (signs, publishes, confirms <1s)
     balance                         Get balance for wallet address
+    export [format]                 Export wallet (seed, mnemonic, nault)
     account_info                    Get account info from RPC
     rpc <action> [key=value ...]    Raw RPC call to rpc.nano.to
     convert <amount> <from> <to>    Convert units (NANO/RAW)
@@ -32,6 +33,11 @@ function usage() {
     decrypt <file> <password>       Decrypt an AES-256 encrypted file
     sign <block_json> <private_key> Sign a block
     pow <hash>                      Generate Proof of Work
+
+  Export Formats:
+    export seed                     Export wallet seed (default)
+    export mnemonic                 Export mnemonic recovery phrase
+    export nault <password>         Export as Nault.cc import URL
 
   Options:
     --secret <password>             Wallet password (encrypts/decrypts wallet file)
@@ -259,6 +265,57 @@ async function main() {
 				if (hasFlag('json')) jsonOut(blocks);
 			} catch (e) {
 				console.error('Error:', e.message);
+				process.exit(1);
+			}
+			break;
+		}
+
+		case 'export': {
+			const wallets = loadWallet();
+			const pos = getPositional();
+			const format = (pos[0] || 'seed').toLowerCase();
+			const walletData = nano.wallet();
+
+			if (format === 'seed') {
+				if (!walletData.seed) {
+					console.error('Error: no seed found in wallet (wallet may have been imported without a seed).');
+					process.exit(1);
+				}
+				if (hasFlag('json')) {
+					jsonOut({ seed: walletData.seed });
+				} else {
+					console.log(walletData.seed);
+				}
+			} else if (format === 'mnemonic' || format === 'nemonic') {
+				if (!walletData.mnemonic) {
+					console.error('Error: no mnemonic found in wallet (wallet may have been imported from a seed).');
+					process.exit(1);
+				}
+				if (hasFlag('json')) {
+					jsonOut({ mnemonic: walletData.mnemonic });
+				} else {
+					console.log(walletData.mnemonic);
+				}
+			} else if (format === 'nault') {
+				const naultPassword = pos[1] || getFlag('password');
+				if (!naultPassword) {
+					console.error('Usage: nano-wallet export nault <password>');
+					console.error('A password is required to encrypt the wallet for Nault.');
+					process.exit(1);
+				}
+				const url = nano.nault(naultPassword);
+				if (url instanceof Error) {
+					console.error('Error:', url.message);
+					process.exit(1);
+				}
+				if (hasFlag('json')) {
+					jsonOut({ url, format: 'nault' });
+				} else {
+					console.log(url);
+				}
+			} else {
+				console.error(`Unknown export format: ${format}`);
+				console.error('Available formats: seed, mnemonic, nault');
 				process.exit(1);
 			}
 			break;
