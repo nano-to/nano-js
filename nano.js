@@ -230,6 +230,43 @@ let nano = {
 		return this.wallets
 	},
 
+	import_seed(seeds, password) {
+		if (!seeds) return Error("No seed data provided.")
+		if (!password && !this.pw_cache) return Error("No password provided.")
+		password = password || this.pw_cache
+
+		// Accept single seed or array
+		if (!Array.isArray(seeds)) seeds = [seeds]
+
+		var accounts = seeds.map((seed, index) => {
+			var account = {
+				accountIndex: seed.index !== undefined ? seed.index : index,
+				private: seed.privateKey || seed.private,
+				address: seed.publicKey || seed.address,
+			}
+			if (seed.id) account.metadata = { id: seed.id }
+			else if (seed.metadata) account.metadata = seed.metadata
+			return account
+		})
+
+		var wallet = { accounts: accounts }
+
+		// Preserve seed/mnemonic if provided
+		if (seeds[0] && seeds[0].seed) wallet.seed = seeds[0].seed
+		if (seeds[0] && seeds[0].mnemonic) wallet.mnemonic = seeds[0].mnemonic
+
+		this.pw_cache = password
+		this.aes256 = encrypt(JSON.stringify(wallet), password)
+
+		this.wallets = accounts.map(a => ({
+			index: a.accountIndex,
+			address: a.address,
+			metadata: a.metadata || false
+		}))
+
+		return this.wallets
+	},
+
 	migrate(config) {
 		if (!config) return Error("No config provided.")
 		var password = config.password || config.secret
@@ -936,6 +973,43 @@ let nano = {
 
 		return decrypt(existing, password)
 
+	},
+
+	nault(password, account) {
+		if (!password) return Error("Nault export requires a password to encrypt the wallet.")
+
+		var wallet = this.wallet()
+
+		if (!wallet || !wallet.accounts || !wallet.accounts.length) return Error("No wallet found.")
+
+		// Determine what to export
+		var target = account ? this.findAccount(wallet, account) : null
+		var payload = {}
+
+		// If wallet has a legacy-compatible seed (64 chars) and no specific account requested
+		if (!target && wallet.seed && wallet.seed.length === 64) {
+			var encrypted_seed = encrypt(wallet.seed, password).replace('AES-256::', '')
+			payload.indexes = wallet.accounts.map(function(a, i) { return a.accountIndex !== undefined ? a.accountIndex : i })
+			payload.seed = encrypted_seed
+		} else {
+			// Use privateKey format for individual account
+			if (!target) target = wallet.accounts[0]
+			if (!target) return Error("Account not found.")
+
+			var privateKey = target.private || target.privateKey
+			if (!privateKey) return Error("No private key found for account.")
+
+			var encrypted_key = encrypt(privateKey, password).replace('AES-256::', '')
+			payload.indexes = [target.accountIndex !== undefined ? target.accountIndex : 0]
+			payload.privateKey = encrypted_key
+		}
+
+		var json = JSON.stringify(payload)
+
+		// Base64 encode (works in both Browser and NodeJS 16+)
+		var base64 = typeof Buffer !== 'undefined' ? Buffer.from(json).toString('base64') : btoa(json)
+
+		return 'https://nault.cc/import-wallet#' + base64
 	},
 
 }
