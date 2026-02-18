@@ -713,6 +713,35 @@ let nano = {
 
 	},
 
+	faucet(address) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				if (!address) {
+					if (this.wallets && this.wallets.length) {
+						address = this.wallets[0].address
+					} else {
+						throw new Error('No wallet loaded. Generate or import a wallet first, or pass a nano address.')
+					}
+				}
+
+				const res = await this.rpc({
+					action: 'faucet_claim',
+					nano_address: address
+				})
+
+				if (res.error) {
+					console.error('[faucet]', res.error)
+					return resolve(res)
+				}
+
+				resolve(res)
+			} catch (e) {
+				console.error('[faucet]', e.message)
+				reject(e)
+			}
+		})
+	},
+
 	send(config) {
 
 		return new Promise(async (resolve) => {

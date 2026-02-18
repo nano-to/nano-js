@@ -130,18 +130,26 @@ nano-wallet generate --secret mypassword
 # Address: nano_3abc...
 # Mnemonic: word1 word2 word3 ...
 
-# 2. Get free Nano from a faucet
-#    Visit https://nanodrop.io and paste your address
+# 2. Print your address (easy copy/paste + browser receive link)
+nano-wallet address --secret mypassword
+# Address: nano_3abc...
+# Receive: https://nano.to/nano_3abc...
 
-# 3. Receive the pending Nano
+# 3. Claim free Nano from the built-in faucet
+nano-wallet faucet --secret mypassword
+# Faucet claimed! 0.001 NANO is on the way.
+#   hash: ABC123...
+#   to:   nano_3abc...
+
+# 4. Receive the pending Nano
 nano-wallet receive --secret mypassword
 # Received 1 block(s):
-#   0.0001 NANO — hash: ABC123...
+#   0.001 NANO — hash: ABC123...
 
-# 4. Check your balance
+# 5. Check your balance
 nano-wallet balance --secret mypassword
 
-# 5. Send Nano to anyone
+# 6. Send Nano to anyone
 nano-wallet send nano_1to... 0.00005 --secret mypassword
 # Sent 0.00005 NANO
 #   to:   nano_1to...
@@ -174,6 +182,13 @@ nano-wallet rpc account_info account=nano_1abc...
 # Check any address (no wallet required)
 nano-wallet balance nano_1abc...
 nano-wallet account_info nano_1abc...
+
+# Print your address and nano.to receive link
+nano-wallet address --secret mypassword
+
+# Claim free test Nano (requires NANO_RPC_KEY)
+nano-wallet faucet --secret mypassword
+nano-wallet faucet nano_3abc... --secret mypassword   # or pass address directly
 
 # Encrypt / decrypt files
 nano-wallet encrypt myfile.json mypassword
@@ -460,8 +475,42 @@ nano-wallet encrypt decrypted_output.json my_password > my_new_wallet.txt
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
+## Faucet
+
+Claim 0.001 free test NANO in one step. Requires an RPC key from [rpc.nano.to](https://rpc.nano.to).
+
+```js
+nano.app({
+    node: 'https://rpc.nano.to',
+    rpc_key: 'YOUR_RPC_KEY',
+    database: 'nano-wallet.dat',
+    secret: 'mypassword'
+})
+
+// Auto-detect address from loaded wallet
+var result = await nano.faucet()
+
+// Or pass an address explicitly
+var result = await nano.faucet('nano_3abc...')
+
+console.log(result)
+// {
+//   success: true,
+//   message: '0.001 NANO sent to nano_3abc...',
+//   claim: {
+//     id: 42,
+//     nano_address: 'nano_3abc...',
+//     amount: '0.001',
+//     status: 'sent',
+//     tx_hash: 'ABC123...',
+//     created_at: '2026-02-18T12:00:00.000Z'
+//   }
+// }
+```
+
 ## GET FREE NANO
 
+- Built-in faucet: `nano-wallet faucet --secret mypassword` (requires RPC key)
 - https://nanodrop.io/
 - https://freenanofaucet.com/
 - https://getnano.ovh/faucet

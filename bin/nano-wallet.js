@@ -22,9 +22,11 @@ function usage() {
 
   Commands:
     generate                        Generate new wallet and save locally
+    address                         Print wallet address and nano.to receive link
     receive                         Receive all pending blocks (pockets funds)
     send <to> <amount>              Send Nano (signs, publishes, confirms <1s)
     balance                         Get balance for wallet address
+    faucet [address]                Claim 0.001 free test NANO from the faucet
     export [format]                 Export wallet (seed, mnemonic, nault)
     account_info                    Get account info from RPC
     rpc <action> [key=value ...]    Raw RPC call to rpc.nano.to
@@ -55,6 +57,7 @@ function usage() {
 
   Quick Start:
     nano-wallet generate --secret mypassword
+    nano-wallet faucet --secret mypassword
     nano-wallet receive --secret mypassword
     nano-wallet send nano_1to... 0.001 --secret mypassword
 
@@ -263,6 +266,40 @@ async function main() {
 					console.log(`  ${block.amount_nano} NANO — hash: ${block.hash}`);
 				}
 				if (hasFlag('json')) jsonOut(blocks);
+			} catch (e) {
+				console.error('Error:', e.message);
+				process.exit(1);
+			}
+			break;
+		}
+
+		case 'address': {
+			const wallets = loadWallet();
+			const address = wallets[0].address;
+			console.log(`Address: ${address}`);
+			console.log(`Receive: https://nano.to/${address}`);
+			if (hasFlag('json')) jsonOut({ address, receive_url: `https://nano.to/${address}` });
+			break;
+		}
+
+		case 'faucet': {
+			const pos = getPositional();
+			let address = pos[0];
+
+			if (!address) {
+				const wallets = loadWallet();
+				address = wallets[0].address;
+			}
+
+			if (!address) return console.error('Error: No address. Provide one or generate a wallet first.');
+
+			try {
+				const res = await nano.faucet(address);
+				if (res.error) return console.error('Error:', res.error);
+				console.log(`Faucet claimed! ${res.claim?.amount || '0.001'} NANO is on the way.`);
+				if (res.claim?.tx_hash) console.log(`  hash: ${res.claim.tx_hash}`);
+				if (res.claim?.nano_address) console.log(`  to:   ${res.claim.nano_address}`);
+				if (hasFlag('json')) jsonOut(res);
 			} catch (e) {
 				console.error('Error:', e.message);
 				process.exit(1);
