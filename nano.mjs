@@ -32,5 +32,6 @@ export const sign = nano.sign.bind(nano);
 export const tools = nano.tools;
 export const encrypt = nano.encrypt;
 export const decrypt = nano.decrypt;
+export const change_rep = nano.change_rep.bind(nano);
 export const migrate = nano.migrate.bind(nano);
 export const findAccount = nano.findAccount.bind(nano);

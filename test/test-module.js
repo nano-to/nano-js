@@ -19,7 +19,7 @@ describe('Module Loading', () => {
 				'decrypt', 'accounts', 'save', 'offline', 'add_account',
 				'import', 'migrate', 'balances', 'pending', 'generate', 'findAccount',
 				'get', 'rpc', 'checkout', 'confirm', 'qrcode', 'pow',
-				'wallet', 'receive', 'send', 'sign', 'process', 'export',
+				'wallet', 'receive', 'send', 'change_rep', 'sign', 'process', 'export',
 				'balance', 'app', 'waitFor'
 			];
 			for (const prop of expected) {
@@ -88,7 +88,7 @@ describe('Module Loading', () => {
 
 		it('should have correct version', () => {
 			const pkg = require('../package.json');
-			assert.equal(pkg.version, '3.3.0');
+			assert.equal(pkg.version, '3.4.0');
 		});
 
 		it('should have zero dependencies', () => {
