@@ -43,7 +43,7 @@ const nano = require('@nano/wallet')
 import nano from '@nano/wallet'
 
 // ESM named imports
-import { generate, convert, send, receive } from '@nano/wallet'
+import { generate, convert, send, receive, change_rep } from '@nano/wallet'
 
 // Browser (global)
 // <script src="https://unpkg.com/@nano/wallet"></script>
@@ -149,7 +149,12 @@ nano-wallet receive --secret mypassword
 # 5. Check your balance
 nano-wallet balance --secret mypassword
 
-# 6. Send Nano to anyone
+# 6. Change representative (auto-picks a good one)
+nano-wallet change_rep --secret mypassword
+# or specify one:
+# nano-wallet change_rep nano_1anr... --secret mypassword
+
+# 7. Send Nano to anyone
 nano-wallet send nano_1to... 0.00005 --secret mypassword
 # Sent 0.00005 NANO
 #   to:   nano_1to...
@@ -339,6 +344,27 @@ await nano.receive()
 // receive all for specific address
 await nano.receive({ userId: 'johnDoe' })
 ```
+
+## Change Representative
+
+```js
+// auto-pick a good rep from rpc.nano.to
+await nano.change_rep()
+
+// specify a rep address
+await nano.change_rep('nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs')
+
+// with config object
+await nano.change_rep({ rep: 'nano_1anrzcuwe64rwxzcco8dkhpyxpi8kd7zsjc1oeimpc3ppca4mrjtwnqposrs' })
+// {
+//     "hash": "BLOCK_HASH",
+//     "representative": "nano_1anr...",
+//     "account": "nano_3abc...",
+//     "browser": "https://nanobrowse.com/block/BLOCK_HASH"
+// }
+```
+
+When no representative address is provided, the wallet fetches a list of available representatives from `rpc.nano.to` (via the `reps` RPC action) and automatically picks one at random.
 
 ## Checkout
 

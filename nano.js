@@ -455,7 +455,7 @@ let nano = {
 				  headers: { 
 				  	'content-type': 'application/json', 
 				  	'authorization': this.rpc_key,
-				  	'nano-app': `@nano/wallet-3.1.0`,
+				  	'nano-app': `@nano/wallet-3.4.0`,
 				  }
 				};
 
@@ -737,6 +737,84 @@ let nano = {
 				resolve(res)
 			} catch (e) {
 				console.error('[faucet]', e.message)
+				reject(e)
+			}
+		})
+	},
+
+	change_rep(config) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				if (!config) config = {}
+				if (typeof config === 'string') config = { rep: config }
+
+				var wallet = this.wallet()
+
+				if (!wallet || !wallet.accounts) {
+					throw new Error('Account not found. Generate or import a wallet first.')
+				}
+
+				var source = wallet.accounts[0]
+
+				if (config.from) {
+					var found = this.findAccount(wallet, config.from)
+					if (found) source = found
+				}
+
+				var rep = config.rep || config.representative
+
+				if (!rep) {
+					var reps = await this.rpc({ action: 'reps' })
+					if (reps && Array.isArray(reps) && reps.length) {
+						var pick = reps[Math.floor(Math.random() * reps.length)]
+						rep = pick.account || pick.address || pick
+					} else {
+						rep = this.default_rep
+					}
+				}
+
+				var account = await this.rpc({
+					action: 'account_info',
+					account: source.address,
+					representative: 'true'
+				})
+
+				if (!account || account.error) {
+					throw new Error(account && account.error ? account.error : 'Could not fetch account info.')
+				}
+
+				var work = await this.pow({ account: source.address, frontier: account.frontier })
+
+				if (!work) {
+					throw new Error('Error generating PoW')
+				}
+
+				var data = {
+					walletBalanceRaw: account.balance,
+					address: source.address,
+					representativeAddress: rep,
+					frontier: account.frontier,
+					work: work,
+				}
+
+				var signedBlock = _NanocurrencyWeb.block.representative(data, source.private)
+
+				var result = await this.rpc({
+					action: 'process',
+					json_block: 'true',
+					subtype: 'change',
+					block: signedBlock,
+				})
+
+				resolve({
+					hash: result.hash,
+					representative: rep,
+					account: source.address,
+					browser: result.hash ? 'https://nanobrowse.com/block/' + result.hash : undefined,
+				})
+
+			} catch (e) {
+				console.error('[change_rep]', e.message)
 				reject(e)
 			}
 		})

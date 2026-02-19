@@ -25,6 +25,7 @@ function usage() {
     address                         Print wallet address and nano.to receive link
     receive                         Receive all pending blocks (pockets funds)
     send <to> <amount>              Send Nano (signs, publishes, confirms <1s)
+    change_rep [rep_address]        Change representative (auto-picks if omitted)
     balance                         Get balance for wallet address
     faucet [address]                Claim 0.001 free test NANO from the faucet
     export [format]                 Export wallet (seed, mnemonic, nault)
@@ -266,6 +267,25 @@ async function main() {
 					console.log(`  ${block.amount_nano} NANO — hash: ${block.hash}`);
 				}
 				if (hasFlag('json')) jsonOut(blocks);
+			} catch (e) {
+				console.error('Error:', e.message);
+				process.exit(1);
+			}
+			break;
+		}
+
+		case 'change_rep': {
+			const wallets = loadWallet();
+			const pos = getPositional();
+			const rep = pos[0] || undefined;
+			try {
+				const res = await nano.change_rep({ rep });
+				console.log(`Representative changed!`);
+				console.log(`  rep:     ${res.representative}`);
+				console.log(`  account: ${res.account}`);
+				if (res.hash) console.log(`  hash:    ${res.hash}`);
+				if (res.browser) console.log(`  view:    ${res.browser}`);
+				if (hasFlag('json')) jsonOut(res);
 			} catch (e) {
 				console.error('Error:', e.message);
 				process.exit(1);
