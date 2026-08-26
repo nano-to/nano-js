@@ -5,6 +5,7 @@ import {
 	generate, convert, encrypt, decrypt, sign, tools,
 	accounts, offline, app, rpc, get, send, receive,
 	balances, balance, pending, checkout, confirm, waitFor,
+	paymentRequest, getPaymentStatus, monitorPayment,
 	qrcode, pow, block, findAccount, save, wallet, add_account
 } from '../nano.mjs';
 
@@ -20,6 +21,7 @@ describe('ESM Import - default', () => {
 			'generate', 'convert', 'encrypt', 'decrypt', 'sign',
 			'accounts', 'offline', 'app', 'rpc', 'get', 'send',
 			'receive', 'balances', 'balance', 'pending', 'checkout',
+			'paymentRequest', 'getPaymentStatus', 'monitorPayment',
 			'confirm', 'waitFor', 'qrcode', 'pow', 'block',
 			'findAccount', 'save', 'wallet', 'add_account', 'export',
 			'import', 'process', 'tools'
@@ -83,6 +85,9 @@ describe('ESM Import - named exports', () => {
 		assert.equal(typeof checkout, 'function');
 		assert.equal(typeof confirm, 'function');
 		assert.equal(typeof waitFor, 'function');
+		assert.equal(typeof paymentRequest, 'function');
+		assert.equal(typeof getPaymentStatus, 'function');
+		assert.equal(typeof monitorPayment, 'function');
 		assert.equal(typeof qrcode, 'function');
 	});
 

@@ -66,13 +66,17 @@ nano.app({
 
 ;(async () => {
 
-    // Create checkout
-    var payment = await nano.checkout({ amount: '0.00133' })
+    // Create a payment request
+    var payment = await nano.paymentRequest({ amount: '0.00133' })
 
     console.log(payment.browser)
 
-    // Wait for payment
-    var success = await nano.waitFor(payment)
+    // Monitor payment with timeout and status callbacks
+    var success = await nano.monitorPayment(payment, {
+        interval: 5000,
+        timeout: 10 * 60 * 1000,
+        onStatus: status => console.log('Payment:', status.state)
+    })
 
     // Receive pending
     var receive = await nano.receive()
@@ -87,6 +91,14 @@ nano.app({
 
 })()
 ```
+
+`paymentRequest()` creates a new opt-in payment-monitor checkout without
+changing the legacy `checkout()` flow. `monitorPayment()` polls the checkout
+status endpoint and returns when
+the payment is `confirmed` or `expired`. It supports `interval`, `timeout`,
+`AbortSignal`, and an `onStatus` callback. For production merchant systems,
+prefer the signed backend webhook delivered by rpc.nano.to and use the client
+monitor as a user-facing fallback.
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 
@@ -390,6 +402,33 @@ console.log( payment )
 //     amount_raw: '1330000000000000000000000'
 // }
 ```
+
+### Payment Monitoring
+
+Use `paymentRequest()` when your application needs durable payment monitoring.
+It opts into the payment-monitor lifecycle while leaving the legacy `checkout()`
+method unchanged.
+
+```js
+var payment = await nano.paymentRequest({
+    address: 0,
+    amount: '0.00133',
+    metadata: { orderId: 'order_123' }
+})
+
+var result = await nano.monitorPayment(payment, {
+    interval: 5000,
+    timeout: 10 * 60 * 1000,
+    onStatus: status => console.log(status.state)
+})
+
+// result.state is "confirmed" or "expired"
+// result.block is available after confirmation
+```
+
+`monitorPayment()` supports `interval`, `timeout`, `AbortSignal`, and
+`onStatus`. For production fulfillment, use the signed backend webhook from
+`rpc.nano.to`; the client monitor is useful for updating the customer-facing UI.
 
 ## Manual Signing
 

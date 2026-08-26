@@ -532,6 +532,85 @@ let nano = {
 		})
 	},
 
+	// Payment-request alias for applications that do not need wallet checkout wording.
+	paymentRequest(body) {
+		if (!body || typeof body !== 'object') {
+			return Promise.reject(new Error('Payment request options are required.'))
+		}
+		return this.checkout(Object.assign({}, body, { payment_monitor: true }))
+	},
+
+	async getPaymentStatus(payment) {
+		if (!payment || !payment.check) {
+			throw new Error('Invalid payment request object.')
+		}
+
+		const data = await this.get(payment.check)
+		let state = 'pending'
+		if (data && data.block) state = data.status === 'detected' ? 'detected' : 'confirmed'
+		if (data && (data.expired || (data.error === 400 && /expired/i.test(data.message || '')))) state = 'expired'
+
+		return Object.assign({}, data || {}, { state })
+	},
+
+	async monitorPayment(payment, options) {
+		options = options || {}
+		const interval = Math.max(100, Number(options.interval || 5000))
+		const timeout = Math.max(0, Number(options.timeout || 0))
+		const signal = options.signal
+		const onStatus = typeof options.onStatus === 'function' ? options.onStatus : null
+		const startedAt = Date.now()
+		let lastState = null
+
+		const wait = () => new Promise((resolve, reject) => {
+			if (signal && signal.aborted) {
+				const error = new Error('Payment monitoring was aborted.')
+				error.code = 'ABORT_ERR'
+				reject(error)
+				return
+			}
+
+			const timer = setTimeout(resolve, interval)
+			const abort = () => {
+				clearTimeout(timer)
+				const error = new Error('Payment monitoring was aborted.')
+				error.code = 'ABORT_ERR'
+				reject(error)
+			}
+			if (signal) signal.addEventListener('abort', abort, { once: true })
+		})
+
+		while (true) {
+			if (signal && signal.aborted) {
+				const error = new Error('Payment monitoring was aborted.')
+				error.code = 'ABORT_ERR'
+				throw error
+			}
+			if (timeout && Date.now() - startedAt >= timeout) {
+				const error = new Error('Payment monitoring timed out.')
+				error.code = 'PAYMENT_MONITOR_TIMEOUT'
+				throw error
+			}
+
+			let status
+			try {
+				status = await this.getPaymentStatus(payment)
+			} catch (error) {
+				if (error.code === 'ABORT_ERR' || error.code === 'PAYMENT_MONITOR_TIMEOUT') throw error
+				await wait()
+				continue
+			}
+
+			if (status.state !== lastState) {
+				lastState = status.state
+				if (onStatus) await onStatus(status)
+			}
+			if (status.state === 'confirmed' || status.state === 'expired') return status
+
+			await wait()
+		}
+	},
+
 	async confirm(checkout, timeout) {
 		if (!checkout || !checkout.check) {
 			var error = { error: "Invalid checkout object." }
