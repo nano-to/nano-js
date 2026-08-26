@@ -66,13 +66,17 @@ nano.app({
 
 ;(async () => {
 
-    // Create checkout
-    var payment = await nano.checkout({ amount: '0.00133' })
+    // Create a payment request
+    var payment = await nano.paymentRequest({ amount: '0.00133' })
 
     console.log(payment.browser)
 
-    // Wait for payment
-    var success = await nano.waitFor(payment)
+    // Monitor payment with timeout and status callbacks
+    var success = await nano.monitorPayment(payment, {
+        interval: 5000,
+        timeout: 10 * 60 * 1000,
+        onStatus: status => console.log('Payment:', status.state)
+    })
 
     // Receive pending
     var receive = await nano.receive()
@@ -87,6 +91,14 @@ nano.app({
 
 })()
 ```
+
+`paymentRequest()` creates a new opt-in payment-monitor checkout without
+changing the legacy `checkout()` flow. `monitorPayment()` polls the checkout
+status endpoint and returns when
+the payment is `confirmed` or `expired`. It supports `interval`, `timeout`,
+`AbortSignal`, and an `onStatus` callback. For production merchant systems,
+prefer the signed backend webhook delivered by rpc.nano.to and use the client
+monitor as a user-facing fallback.
 
 ![line](https://github.com/nano-currency/node-cli/raw/main/.github/line.png)
 

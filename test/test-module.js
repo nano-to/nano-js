@@ -19,6 +19,7 @@ describe('Module Loading', () => {
 				'decrypt', 'accounts', 'save', 'offline', 'add_account',
 				'import', 'migrate', 'balances', 'pending', 'generate', 'findAccount',
 				'get', 'rpc', 'checkout', 'confirm', 'qrcode', 'pow',
+				'paymentRequest', 'getPaymentStatus', 'monitorPayment',
 				'wallet', 'receive', 'send', 'change_rep', 'sign', 'process', 'export',
 				'balance', 'app', 'waitFor'
 			];
