@@ -403,6 +403,33 @@ console.log( payment )
 // }
 ```
 
+### Payment Monitoring
+
+Use `paymentRequest()` when your application needs durable payment monitoring.
+It opts into the payment-monitor lifecycle while leaving the legacy `checkout()`
+method unchanged.
+
+```js
+var payment = await nano.paymentRequest({
+    address: 0,
+    amount: '0.00133',
+    metadata: { orderId: 'order_123' }
+})
+
+var result = await nano.monitorPayment(payment, {
+    interval: 5000,
+    timeout: 10 * 60 * 1000,
+    onStatus: status => console.log(status.state)
+})
+
+// result.state is "confirmed" or "expired"
+// result.block is available after confirmation
+```
+
+`monitorPayment()` supports `interval`, `timeout`, `AbortSignal`, and
+`onStatus`. For production fulfillment, use the signed backend webhook from
+`rpc.nano.to`; the client monitor is useful for updating the customer-facing UI.
+
 ## Manual Signing
 
 **SEND**
