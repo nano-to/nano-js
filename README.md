@@ -403,6 +403,25 @@ console.log( payment )
 // }
 ```
 
+For a fresh receiving address per order, use an ephemeral checkout. The address
+is derived from and persisted in the locally loaded seed wallet; only the public
+address is sent to the checkout service.
+
+```js
+var checkout = await nano.checkout({
+    ephemeral: true,
+    amount: '0.001',
+    metadata: { order_id: 'book_123' }
+})
+
+console.log(checkout.address)
+var payment = await nano.waitFor(checkout)
+await nano.receive({ address: checkout.address })
+```
+
+Ephemeral checkout requires a seed-backed local wallet and sends the exact
+requested amount without the legacy unique-amount suffix.
+
 ### Payment Monitoring
 
 Use `paymentRequest()` when your application needs durable payment monitoring.

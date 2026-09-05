@@ -230,6 +230,32 @@ let nano = {
 		return this.wallets
 	},
 
+	_allocateEphemeralAccount(metadata) {
+		const existing = this.wallet()
+		if (!existing || !existing.accounts || !existing.accounts.length) {
+			throw new Error('No local wallet is loaded.')
+		}
+		if (!existing.seed) {
+			throw new Error('Ephemeral checkout requires a wallet with a seed.')
+		}
+
+		const nextIndex = existing.accounts.reduce((max, account) => {
+			return Math.max(max, Number(account.accountIndex) || 0)
+		}, -1) + 1
+		const generated = _NanocurrencyWeb.wallet.accounts(existing.seed, nextIndex - 1, nextIndex + 1)
+		const account = generated[generated.length - 1]
+		if (metadata) account.metadata = metadata
+		existing.accounts.push(account)
+		this.aes256 = encrypt(JSON.stringify(existing), this.pw_cache)
+		this.save()
+		this.wallets = existing.accounts.map(a => ({
+			index: a.accountIndex,
+			address: a.address,
+			metadata: a.metadata || false
+		}))
+		return account
+	},
+
 	import_seed(seeds, password) {
 		if (!seeds) return Error("No seed data provided.")
 		if (!password && !this.pw_cache) return Error("No password provided.")
@@ -502,34 +528,37 @@ let nano = {
 
 	},
 
-	checkout(body) {
-		return new Promise(async (resolve) => {
-			var wallet = this.wallet()
-			if (!body) {
-				var error = { error: "Missing checkout body.", example: { address: 0, amount: '0.005' } }
-			    console.error(error)
-			    throw new Error(error.error)
-			    return 
-			}
-			// if (body && body.address && !body.action) body.action = "checkout"
-			if (body.address && typeof body.address === 'object') {
-				source = this.findAccount(wallet, body.address)
-				if (!source) {
-					var error = { error: `Account with metadata ${JSON.stringify(body.address)} not found` }
-					console.error(error)
-					throw new Error(error.error)
-					return 
-				}
-				body.address = source.address
-			}
-			if (!body.action) {
-				body.action = "checkout"
-			}
-			if (!body.address) {
-				body.address = this.wallets[0].address
-			}
-			resolve( (await this.rpc(body)) )
-		})
+	async checkout(body) {
+		if (!body || typeof body !== 'object') {
+			throw new Error('Missing checkout body.')
+		}
+
+		const request = Object.assign({}, body)
+		if (request.ephemeral) {
+			if (request.address) throw new Error('Ephemeral checkout allocates its own address.')
+			const checkoutId = `ephemeral_${Date.now()}_${Math.random().toString(36).slice(2)}`
+			const account = this._allocateEphemeralAccount({
+				...(request.metadata && typeof request.metadata === 'object' ? request.metadata : {}),
+				ephemeral_checkout: checkoutId
+			})
+			request.address = account.address
+			request.mode = 'unique_address'
+			request.payment_monitor = true
+			delete request.ephemeral
+		}
+
+		const wallet = this.wallet()
+		if (request.address && typeof request.address === 'object') {
+			const source = this.findAccount(wallet, request.address)
+			if (!source) throw new Error(`Account with metadata ${JSON.stringify(request.address)} not found`)
+			request.address = source.address
+		}
+		if (!request.action) request.action = 'checkout'
+		if (!request.address) request.address = this.wallets[0].address
+
+		const result = await this.rpc(request)
+		if (body.ephemeral && result && !result.address) result.address = request.address
+		return result
 	},
 
 	// Payment-request alias for applications that do not need wallet checkout wording.
@@ -622,7 +651,7 @@ let nano = {
 			try {
 			  const data = await this.get(checkout.check);
 			  if (data.block) {
-			  	return data
+				return Object.assign({}, data, { address: data.address || checkout.address })
 			    break;
 			  }
 			  console.log('Payment not found. Waiting 5 seconds before rechecking.');
