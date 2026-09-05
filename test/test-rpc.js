@@ -256,6 +256,60 @@ describe('Mocked RPC Operations', () => {
 			assert.ok(result.check, 'should have check url');
 		});
 
+		it('should allocate and persist an ephemeral address without sending private material', async () => {
+			const nano = freshNano();
+			nano.offline({ database: TEST_WALLET, secret: 'pw' });
+			const original = { ephemeral: true, amount: '0.001', metadata: { order_id: 'book_123' } };
+			const requests = [];
+			nano.rpc = data => {
+				requests.push(data);
+				return Promise.resolve({ check: 'https://example.test/check/1', address: data.address });
+			};
+
+			const result = await nano.checkout(original);
+			const second = await nano.checkout({ ephemeral: true, amount: '0.002' });
+			assert.equal(original.address, undefined);
+			assert.equal(original.ephemeral, true);
+			assert.equal(requests[0].mode, 'unique_address');
+			assert.equal(requests[0].payment_monitor, true);
+			assert.equal(requests[0].amount, '0.001');
+			assert.match(result.address, /^nano_/);
+			assert.notEqual(result.address, second.address);
+			assert.ok(!JSON.stringify(requests[0]).includes('private'));
+			assert.ok(!JSON.stringify(requests[0]).includes('seed'));
+		});
+
+		it('should return the ephemeral address from waitFor', async () => {
+			const nano = freshNano();
+			nano.offline({ database: TEST_WALLET, secret: 'pw' });
+			const address = nano.accounts()[0].address;
+			nano.get = async () => ({ block: { hash: 'BLOCK' } });
+			const result = await nano.waitFor({ check: 'https://example.test/check/1', address });
+			assert.equal(result.address, address);
+		});
+
+		it('should persist an allocated address across wallet reloads', async () => {
+			const nano = freshNano();
+			nano.offline({ database: TEST_WALLET, secret: 'pw' });
+			nano.rpc = data => Promise.resolve({ check: 'https://example.test/check/1', address: data.address });
+			const result = await nano.checkout({ ephemeral: true, amount: '0.001' });
+
+			const reloaded = freshNano();
+			reloaded.offline({ database: TEST_WALLET, secret: 'pw' });
+			assert.ok(reloaded.accounts().some(account => account.address === result.address));
+		});
+
+		it('should keep the allocated address when checkout creation fails', async () => {
+			const nano = freshNano();
+			nano.offline({ database: TEST_WALLET, secret: 'pw' });
+			nano.rpc = () => Promise.reject(new Error('network unavailable'));
+
+			await assert.rejects(nano.checkout({ ephemeral: true, amount: '0.001' }), /network unavailable/);
+			const reloaded = freshNano();
+			reloaded.offline({ database: TEST_WALLET, secret: 'pw' });
+			assert.equal(reloaded.accounts().length, 2);
+		});
+
 		it('should require body parameter', () => {
 			const nano = freshNano();
 			assert.equal(typeof nano.checkout, 'function', 'checkout should be a function');
