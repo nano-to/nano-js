@@ -1,4 +1,4 @@
-// @nano/wallet 3.1.0
+// @nano/wallet 3.6.0
 // https://github.com/fwd/nano-js
 // (c) @nano2dev <support@nano.to>
 // Released under MIT License

@@ -89,7 +89,7 @@ describe('Module Loading', () => {
 
 		it('should have correct version', () => {
 			const pkg = require('../package.json');
-			assert.equal(pkg.version, '3.5.0');
+			assert.equal(pkg.version, '3.6.0');
 		});
 
 		it('should have zero dependencies', () => {
